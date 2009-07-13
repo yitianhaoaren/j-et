@@ -69,7 +69,70 @@ isNotNumber isNan
  # 逗号（,） 建议 使用空白隔开。
  # 不允许频繁使用 previousSibling 和 nextSibling
 
-= 规范理念 =
-
+== 词法结构 ==
+ # 普通代码段应该看起来如下：
+{{{
+while(!isDone){
+      doSomething();
+      isDone = moreToDo();
+}
+}}}
+ # IF 语句应该看起来像这样：
+{{{
+if(someCondition){
+        statements;
+}elseif(someOtherCondition){
+    statements;
+}else{
+    statements;
+}
+}}}
+ # FOR 语句应该看起来像这样：
+{{{
+for(initialization; condition; update){
+        statements;
+}
+ # WHILE 语句应该看起来像这样：
+{{{
+while(!isDone){
+        doSomething();
+    isDone = moreToDo();
+}
+}}}
+ # DO ... WHILE 语句应该看起来像这样：
+do{
+        statements;
+}while(condition);
+}}}
+ # SWITCH 语句应该看起来像这样：
+{{{
+switch(condition){
+case ABC:
+    statements;
+    //  fallthrough
+case DEF:
+    statements;
+    break;
+default:
+        statements;
+    break;
+}
+}}}
+ # TRY ... CATCH 语句应该看起来像这样：
+{{{
+try{
+    statements;
+}catch(ex){
+    statements;
+}finally{
+    statements;
+}
+}}}
+ # 单行的 IF - ELSE，WHILE 或者 FOR 语句也必须加入括号：
+{{{
+if(condition){ statement;}
+while(condition){ statement;}
+for(intialization; condition; update){ statement;}
+}}}
 
 = 规范理念 =
