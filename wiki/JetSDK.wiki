@@ -1,4 +1,4 @@
-#summary Jos SDK 开发工具包说明
+#summary Jet SDK 开发工具包说明
 
 = 简洁 =
 
