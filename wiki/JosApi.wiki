@@ -1,4 +1,4 @@
-#summary Jos Api 摘要.
+#summary Jet Api 摘要.
 
 = 团队 =
 
