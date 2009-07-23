@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="a">aaaaaa</div>
+	<div id="b">bbbbbb</div>
+	<div id="c">ccccccc</div>
+
+
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.i18n.zh-cn.js"></script>
+
+	
+	<script type="text/javascript">
+		Jet().$package(function(J){
+
+	        J.Event.onDOMReady(function() {
+	            J.out(J.I18n.text.helloWorld);
+	            
+	            J.I18n.set("zh-cn");
+	            J.out(J.I18n.text.helloWorld);
+
+	        });
+	    });
+
+    </script>
+</body>
+</html>
