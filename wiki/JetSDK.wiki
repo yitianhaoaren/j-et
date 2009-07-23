@@ -1,0 +1,41 @@
+#summary Jos SDK 开发工具包说明
+
+= 简洁 =
+
+暂无
+
+
+= 使用详解 =
+== YUI Compressor 压缩工具 ==
+下载地址：
+http://yuilibrary.com/projects/yuicompressor
+
+
+== jsdoc-toolkit 文档生成工具 ==
+下载地址：
+http://code.google.com/p/jsdoc-toolkit/
+
+
+== YUIDoc 文档生成工具 ==
+
+下载地址：
+http://github.com/yui/yuidoc/downloads
+
+
+
+yuidoc 集成版使用指南 for Win
+
+(基于 yuidoc 2009-05-20 版本：http://github.com/yui/yuidoc/downloads)
+
+ * 下载 python for win ：http://www.python.org/download/releases/2.5.2/ (建议2.5.2版本，可同时适用 Google App)
+ * 下载 安装 setuptools ：http://pypi.python.org/pypi/setuptools
+ * 依次执行：
+{{{
+    %PYTHON_HOME%\Scripts\easy_install pygments
+    %PYTHON_HOME%\Scripts\easy_install Cheetah
+    %PYTHON_HOME%\Scripts\easy_install simplejson
+}}}
+
+ * 复制 yuidoc\ext\_namemapper.pyd 文件到 %PYTHON_HOME%\Lib\site-packages\cheetah-2.x.x-py2.5.egg\Cheetah 目录下，_namemapper.pyd下载地址：http://cheetahtemplate.org/_namemapper.pyd2.5 ，去掉后缀2.5，yuidoc自带的namemapper版本对应python2.4，直接拷贝过去会报python24.dll未找到。
+ * 修改 yuidoc\template\ 目录下的模板及资源文件（慎!）
+ * 运行 yuidoc\bin\yui_2.7.0b.bat 构建相应版本的yui文档
