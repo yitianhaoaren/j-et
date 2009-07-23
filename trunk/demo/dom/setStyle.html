@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="a">
+		<input id="styleName" type="text" size="25" value="backgroundColor" />
+		<input id="styleValue" type="text" size="35" value="black" />
+		<input id="getButton" type="button" size="35" value="读取样式" />
+	</div>
+	<div id="b">bbbbbb</div>
+	<div id="c">ccccccc</div>
+
+
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.exp.js"></script>
+	<script>
+		Jet().$package(function(J){
+			var $=J.Dom.id;
+			var $D=J.Dom;
+			var $E=J.Event;
+			
+			var styleName = $("styleName");
+			var styleValue = $("styleValue");
+			var getButton = $("getButton");
+			
+			
+			var b = $("b");
+			
+			var fn1 = function(e){
+				if(e.keyCode == 13){
+					//e.preventDefault();
+					$D.setStyle(b, styleName.value, styleValue.value);
+				}
+			};
+			var fn2 = function(e){
+				//e.preventDefault();
+				J.out($D.getStyle(b, styleName.value));
+				
+			};
+			
+			$E.on(styleValue, "keypress", fn1);
+			$E.on(getButton, "click", fn2);
+			
+
+			
+
+
+
+		});
+
+	</script>
+</body>
+</html>

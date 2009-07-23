@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="a">aaaaaa</div>
+	<div id="b">bbbbbb</div>
+	<div id="c">ccccccc</div>
+
+
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script>
+		Jet().$package(function(J){
+			var $=J.Dom.id;
+			var $D=J.Dom;
+			var $E=J.Event;
+			
+			
+			var fn1=function(){
+				J.out("A:" + this.innerHTML);
+			};
+			var fn2=function(e,a,b){
+				J.out("B:" + this.innerHTML+"\n"+e+"\n"+a+"\n"+b);
+			};
+			var k_fn = function(e){
+				if(e.keyCode == 83){
+					e.preventDefault();
+					J.out("p");
+				}
+				
+			}
+			
+			var o={};
+			o.innerHTML="object";
+			
+			$E.on($("a"),"click",fn1);
+			$E.on($("a"),"click",fn2);
+			
+			$E.on($("b"),"click",fn1);
+			
+			$E.on($("c"),"click",fn2.bind(o, "a_string","b"));
+			
+			$E.on(document,"keydown",k_fn);
+
+
+
+
+		});
+
+	</script>
+</body>
+</html>

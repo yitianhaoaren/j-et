@@ -1,0 +1,49 @@
+﻿<html>
+<head>
+	<title>Hello, DOM 3 XPath!</title>
+
+	<!-- import JavaScript-XPath width JET -->
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.mod.xpath.js.js"></script>
+	
+	<!-- import JavaScript-XPath only -->
+	<!--script type="text/javascript" src="../../source/javascript-xpath-latest.js"></script-->
+
+	<!-- use XPath -->
+	<script type="text/javascript">
+	// <![CDATA[
+	function main() {
+
+	  // -- First case --
+	  // Evaluate a XPath expression string
+	  var result = document.evaluate('/html/body/ul/li', document, null, 7, null);
+	  // Display the result
+	  var h1 = result.snapshotItem(1);
+	  alert(h1.innerHTML);
+	  alert(result.snapshotItem); // Hello, DOM 3 XPath!
+/*
+	  // -- Second case --
+	  // Create a XPath expression object
+	  var expr = document.createExpression('//h1', null);
+	  // Evaluate a XPath expression object
+	  result = expr.evaluate(document, 7, null);
+	  // Display the result
+	  h1 = result.snapshotItem(0);
+	  alert(h1.innerHTML); // Hello, DOM 3 XPath!
+	  
+	  */
+	};
+	// ]]>
+	</script>
+
+</head>
+
+<body onload="main()">
+	<h1>Hello, DOM 3 XPath!</h1>
+	<ul>
+		<li id="A">aa</li>
+		<li id="B">bb</li>
+		<li id="C">cc</li>
+	</ul>
+</body>
+</html>

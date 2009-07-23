@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题 1</title>
+<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="template">
+		<ul>
+			<li>${title}</li>
+			<li>${name}</li>
+			<li>${address}</li>
+			<li>${tel}</li>
+		</ul>
+	</div>
+	
+	<div id="out"></div>
+
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.exp.js"></script>
+
+	<script type="text/javascript">
+
+		/**
+		 * [JET demo]: JET template演示
+		 */
+		Jet().$package(function(J){
+		
+		
+			var html=J.Dom.id("template").innerHTML;
+			
+			html = J.template(html, {
+				title:"联系人薄",
+				name:"Jetyu",
+				address:"Shenzhen",
+				tel:"88888888"
+			});
+			
+			J.Dom.id("out").innerHTML=html;
+		
+		
+		});
+	</script>
+
+</body>
+
+</html>
