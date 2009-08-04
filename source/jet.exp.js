@@ -1,13 +1,13 @@
 /**	
- * JOS (Javascript Operating System) 
+ * JET (Javascript Extension Tools) 
  * Copyright (c) 2009, KDV.cn, All rights reserved.
  * Code licensed under the BSD License:
- * http://developer.kdv.cn/jos/license.txt
+ * http://developer.kdv.cn/jet/license.txt
  *
- * @fileOverview All Jos in one!
+ * @fileOverview All Jet in one!
  * @version	1.0
  * @author	Kinvix(<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>)
- * @title  Jos Global
+ * @title  Jet Global
  * @description This is Javascript's original form.
  * 
  */
@@ -17,9 +17,9 @@
 
 
 /**
- * [Jos demo]: Jos 演示
+ * [Jet demo]: Jet 演示
  */
-Jos().$package(function(J){
+Jet().$package(function(J){
 
 
 	var string="sdf${title},dfsdfsd${name},dkfkksdf!";
@@ -38,7 +38,7 @@ Jos().$package(function(J){
 
 
 
-Jos().$package(function(J){
+Jet().$package(function(J){
 	var $ = J.Dom.id,
 		$D = J.Dom,
 		$E = J.Event;
