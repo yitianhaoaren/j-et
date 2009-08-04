@@ -1,3 +1,7 @@
+
+Jet().$package(function(J){
+
+
 /*!
  * jQuery JavaScript Library v1.3.2
  * http://jquery.com/
@@ -4374,3 +4378,17 @@ jQuery.each([ "Height", "Width" ], function(i, name){
 
 });
 })();
+
+
+	/*
+	 * ////////////////////////////////////////////////////////////////
+	 * 
+	 * Adapter to JET
+	 * 
+	 * ////////////////////////////////////////////////////////////////
+	 */
+	J.jQuery = jQuery.noConflict();  
+
+
+
+});

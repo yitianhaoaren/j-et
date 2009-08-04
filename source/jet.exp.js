@@ -7,7 +7,6 @@
  * @fileOverview All Jet in one!
  * @version	1.0
  * @author	Kinvix(<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>)
- * @title  Jet Global
  * @description This is Javascript's original form.
  * 
  */
