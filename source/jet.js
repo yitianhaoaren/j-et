@@ -9,7 +9,6 @@
  * @fileOverview All JET base in one!
  * @version	1.0
  * @author	Kinvix(<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>)
- * @title  JET Global
  * @description This is Javascript's original form.
  * 
  */
@@ -376,19 +375,25 @@ Jet().$package(function(J){
 		isArguments,
 		isFunction,
 		$typeof,
+		
 		random,
-		$return,
-		$try,
 		extend,
 		forEach,
 		getLength,
 		Interface,
 		toArray,
 		clone,
-
-		template,
-		isURL,
-		mapQuery;
+		$return,
+		$try,
+		
+		removeArr,
+		replaceArr,
+		rebuild,
+		pass,
+		bind,
+		bindNoEvent,
+		
+		formatDate;
 
 	/**
 	 * 判断变量的值是否是 undefined
@@ -626,97 +631,7 @@ Jet().$package(function(J){
 	
 	
 	
-	/**
-	 * 多行或单行字符串模板处理
-	 * 
-	 * @method template
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {String} str 模板字符串
-	 * @param {Object} obj 要套入的数据对象
-	 * @return {String} 返回与数据对象合成后的字符串
-	 * 
-	 * @example
-	 * Jet().$package(function(J){
-	 * 	// 用 obj 对象的数据合并到字符串模板中
-	 * 	J.template("Hello, {name}!", {
-	 * 		name:"Kinvix"
-	 * 	});
-	 * };
-	 */
-	template = function(str, obj){
-		var p,
-			RE;
 	
-		for(p in obj){
-			if(obj.hasOwnProperty(p)){
-				// RE = new RegExp("\\${" + p + "}","g");
-				// str = str.replace(RE, o[p]);
-				str = str.split("${" + p + "}").join(obj[p]);
-			}
-		}
-		return str;
-	}
-
-	/**
-	 * 判断是否是一个可接受的 url 串
-	 * 
-	 * @method isURL
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {String} str 要检测的字符串
-	 * @return {Boolean} 如果是可接受的 url 则返回 true
-	 */
-	isURL = function(str) {
-		return isURL.RE.test(str);
-	};
-	
-	/**
-	 * @ignore
-	 */
-	isURL.RE = /^(?:ht|f)tp(?:s)?\:\/\/(?:[\w\-\.]+)\.\w+/i;
-	
-	/**
-	 * 将 uri 的查询字符串参数映射成对象
-	 * 
-	 * @method mapQuery
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {String} uri 要映射的 uri
-	 * @return {Object} 按照 uri 映射成的对象
-	 * 
-	 * @example
-	 * Jet().$package(function(J){
-	 * 	var url = "http://web.qq.com/?qq=4765078&style=blue";
-	 * 	// queryObj 则得到一个{qq:"4765078", style:"blue"}的对象。
-	 * 	var queryObj = J.mapQuery(url);
-	 * };
-	 */
-	mapQuery = function(uri){
-		//window.location.search
-		var i,
-			key,
-			value,
-			uri = uri || window.location.href,
-			index = uri.indexOf("?"),
-			pieces = uri.substring(index + 1).split("&"),
-			params = {};
-			
-		for(i=0; i<pieces.length; i++){
-			try{
-				index = pieces[i].indexOf("=");
-				key = pieces[i].substring(0,index);
-				value = pieces[i].substring(index+1);
-				if(!(params[key] = unescape(value))){
-					throw new Error("uri has wrong query string.");
-				}
-			}
-			catch(e){
-				J.out(e);
-			}
-		}
-		return params;
-	};
 	
 	/**
 	 * 生成一个返回值是传入的 value 值的函数
@@ -881,9 +796,177 @@ Jet().$package(function(J){
     Interface = function(){
     	return function(){};
     };
-	
+    
 
+    
+    /**
+	 * 从数组中移除一个或多个数组成员
+	 * 
+	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
+	 */
+	removeArr = function(arr, members){
+		var members = J.toArray(members),
+			i,
+			j;
+		for(i=0; i<members.length; i++){
+			for(j=0; j<arr.length; j++){
+				if(arr[j] === members[i]){
+					arr.splice(j,1);
+				}
+			}
+		}
+		return true;
+	};
 	
+	/**
+	 * 替换一个数组成员
+	 * 
+	 * @param {Object} oldValue 当前数组成员
+	 * @param {Object} newValue 要替换成的值
+	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
+	 */
+	replaceArr = function(arr, oldValue, newValue){
+		var i;
+		for(i=0; i<arr.length; ij++){
+			if(arr[i] === oldValue){
+				arr[i] = newValue;
+				return true;
+			}else{
+				return false;
+			}
+		}
+	};
+		
+		
+	/**
+	 * 函数的重构方法
+	 * 
+	 * @private
+	 * 
+	 * @param {Object} option 选项对象
+	 * @return {Function} 返回重构后的函数的执行结果
+	 */
+	rebuild = function(func, option){
+		var self = func;
+		option = option || {};
+		
+		self.$$rebuildedFunc = function(){
+			var self2 = this,
+				scope,
+				args,
+				returns;
+			scope = option.contextObj || self2;
+			args = Array.prototype.slice.call(arguments, 0);
+
+			if(args !== undefined){
+				args = args.concat(option.arguments);
+			}
+			if(option.event === false){
+				args = args.slice(1);
+			}
+
+			return self.apply(scope, args);
+		};
+
+		return self.$$rebuildedFunc;
+	};
+	
+	/**
+	 * 给函数传入参数并执行
+	 * 
+	 * @param {Mixed} args 参数列表
+	 * @return {Mixed} 返回函数执行结果
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	// 将"a"、"b"两个字符串传入funcA函数并执行
+	 * 	funcA.pass("a","b");
+	 * };
+	 * 
+	 */
+	pass = function(func){
+		var args = Array.prototype.slice.call(arguments, 1);
+		return rebuild(func, {contextObj: null, arguments: args});
+	};
+	
+	/**
+	 * 给函数绑定一个上下文对象再执行
+	 * 
+	 * @param {Object} contextObj 要绑定的上下文对象
+	 * @param {Mixed} args 参数列表
+	 * @return {Mixed} 返回函数执行结果
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	// 以 contextObjB 对象为上下文对象 this 来执行funcA函数
+	 * 	funcA.bind(contextObjB);
+	 * };
+	 * 
+	 */
+	bind = function(func, contextObj){
+		var args = Array.prototype.slice.call(arguments, 2);
+		//args = [this].extend(args);
+		return rebuild(func, {contextObj: contextObj, arguments: args});
+	};
+
+	/**
+	 * 给函数绑定一个上下文对象,并剔除 event 事件对象参数后再执行
+	 * 
+	 * @param {Object} contextObj 要绑定的上下文对象
+	 * @param {Mixed} args 参数列表
+	 * @return {Mixed} 返回函数执行结果
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	// 以 contextObjB 对象为上下文对象 this 来执行funcA函数，如果过函数被传入了 event 对象则会被去掉
+	 * 	funcA.bindNoEvent(contextObjB);
+	 * };
+	 */
+	bindNoEvent = function(func, contextObj){
+		var args = Array.prototype.slice.call(arguments, 2);
+		//args = [this].extend(args);
+		return rebuild(func, {contextObj: contextObj, arguments: args, event: false});
+	};
+	
+	/**
+	 * 让日期和时间按照指定的格式显示的方法
+	 * 
+	 * @param {String} format 格式字符串
+	 * @return {String} 返回生成的日期时间字符串
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	var d = new Date();
+	 * 	// 以 YYYY-MM-dd hh:mm:ss 格式输出 d 的时间字符串
+	 * 	J.formatDate(d, "YYYY-MM-dd hh:mm:ss");
+	 * };
+	 * 
+	 */
+	formatDate = function(date, format){
+		/*
+		 * eg:format="YYYY-MM-dd hh:mm:ss";
+		 */
+		var o = {
+		"M+" :  date.getMonth()+1,  //month
+		"d+" :  date.getDate(),     //day
+		"h+" :  date.getHours(),    //hour
+		"m+" :  date.getMinutes(),  //minute
+		"s+" :  date.getSeconds(),	//second
+		"q+" :  Math.floor((date.getMonth()+3)/3),  //quarter
+		"S"  :  date.getMilliseconds() //millisecond
+		}
+	
+		if(/(y+)/.test(format)){
+			format = format.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+		}
+	
+		for(var k in o){
+			if(new RegExp("("+ k +")").test(format)){
+				format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+			}
+		}
+		return format;
+	};
 	
 	
 	J.isUndefined = isUndefined;
@@ -895,26 +978,26 @@ Jet().$package(function(J){
 	J.isArray = isArray;
 	J.isFunction = isFunction;
 	J.$typeof = $typeof;
-	
-	J.random = random;
-	J.toArray = toArray;
+
 	J.clone = clone;
-
-
-
-	J.template = template;
-	
-	J.isURL = isURL;
-	J.mapQuery = mapQuery;
-	
-	
-	J.$return = $return;
-	J.$try = $try;
-	J.extend = extend;
 	J.forEach = forEach;
 	J.getLength = getLength;
-	
+	J.random = random;
+	J.extend = extend;
 	J.Interface = Interface;
+	J.$return = $return;
+	J.$try = $try;
+	
+	J.toArray = toArray;
+	J.removeArr = removeArr;
+	J.replaceArr = replaceArr;
+	
+	J.rebuild = rebuild;
+	J.pass = pass;
+	J.bind = bind;
+	J.bindNoEvent = bindNoEvent;
+	
+	J.formatDate = formatDate;
 
 });
 
@@ -926,193 +1009,7 @@ Jet().$package(function(J){
  * [Javascript core]: Native 对象扩展
  */
 Jet().$package(function(J){
-	
-	/**
-	 * @class String
-	 * @name String
-	 */
-    J.extend(String.prototype,
-    
-	/**
-	 * @lends String.prototype
-	 */	
-    {
-    	/**
-		 * 
-		 * test的方法
-		 * 
-		 * @param {String, RegExp} regex 正则表达式，或者正则表达式的字符串
-		 * @param {String} params 正则的参数
-		 * @return {Boolean} 返回结果
-		 */
-		test: function(regex, params){
-			return ((typeof regex == 'string') ? new RegExp(regex, params) : regex).test(this);
-		},
 
-		/**
-		 * 判断是否含有指定的字符串
-		 * 
-		 * @param {String} string 是否含有的字符串
-		 * @param {String} separator 分隔符，可选
-		 * @return {Boolean} 如果含有，返回 true，否则返回 false
-		 */
-		contains: function(string, separator){
-			return (separator) ? (separator + this + separator).indexOf(separator + string + separator) > -1 : this.indexOf(string) > -1;
-		},
-
-		/**
-		 * 清除字符串开头和结尾的空格
-		 * 
-		 * @return {String} 返回清除后的字符串
-		 */
-		trim: function(){
-			return this.replace(/^\s+|\s+$/g, '');
-		},
-	
-		/**
-		 * 清除字符串开头和结尾的空格，并把字符串之间的多个空格转换为一个空格
-		 * 
-		 * @return {String} 返回清除后的字符串
-		 */
-		clean: function(){
-			return this.replace(/\s+/g, ' ').trim();
-		},
-	
-		/**
-		 * 将“-”连接的字符串转换成驼峰式写法
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		camelCase: function(){
-			return this.replace(/-\D/g, function(match){
-				return match.charAt(1).toUpperCase();
-			});
-		},
-		
-		/**
-		 * 将驼峰式写法字符串转换成“-”连接的
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		hyphenate: function(){
-			return this.replace(/[A-Z]/g, function(match){
-				return ('-' + match.charAt(0).toLowerCase());
-			});
-		},
-	
-		/**
-		 * 将字符串转换成全大写字母
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		capitalize: function(){
-			return this.replace(/\b[a-z]/g, function(match){
-				return match.toUpperCase();
-			});
-		},
-	
-		/**
-		 * 转换 RegExp 正则表达式
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		escapeRegExp: function(){
-			return this.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
-		},
-	
-		/**
-		 * 将字符串转换成整数
-		 * 
-		 * @return {Number} 返回转换后的整数
-		 */
-		toInt: function(base){
-			return parseInt(this, base || 10);
-		},
-	
-		/**
-		 * 将字符串转换成浮点数
-		 * 
-		 * @return {Number} 返回转换后的浮点数
-		 */
-		toFloat: function(){
-			return parseFloat(this);
-		},
-	
-		/**
-		 * 将颜色 Hex 写法转换成 RGB 写法
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		hexToRgb: function(array){
-			var hex = this.match(/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/);
-			return (hex) ? hex.slice(1).hexToRgb(array) : null;
-		},
-	
-		/**
-		 * 将颜色 RGB 写法转换成 Hex 写法
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		rgbToHex: function(array){
-			var rgb = this.match(/\d{1,3}/g);
-			return (rgb) ? rgb.rgbToHex(array) : null;
-		},
-	
-		/**
-		 * 脱去script标签
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		stripScripts: function(option){
-			var scripts = '';
-			var text = this.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function(){
-				scripts += arguments[1] + '\n';
-				return '';
-			});
-			if (option === true){
-				$exec(scripts);
-			}else if($type(option) == 'function'){
-				option(scripts, text);
-			}
-			return text;
-		},
-	
-		/**
-		 * 。。。。
-		 * 
-		 * @return {String} 返回转换后的字符串
-		 */
-		substitute: function(object, regexp){
-			return this.replace(regexp || (/\\?\{([^{}]+)\}/g), function(match, name){
-				if (match.charAt(0) == '\\') return match.slice(1);
-				return (object[name] != undefined) ? object[name] : '';
-			});
-		},
-		
-		/**
-		 * 全局替换指定的字符串
-		 * 
-		 * @return {String} 返回替换后的字符串
-		 */
-		replaceAll: function(reallyDo, replaceWith, ignoreCase) {
-		    if (!RegExp.prototype.isPrototypeOf(reallyDo)) {
-		        return this.replace(new RegExp(reallyDo, (ignoreCase ? "gi": "g")), replaceWith);
-		    } else {
-		        return this.replace(reallyDo, replaceWith);
-		    }
-		},
-		
-		/**
-		 * 计算字符串的字节长度
-		 * 
-		 * @return {String} 返回自己长度
-		 */
-		byteLength: function(){
-			return this.length+(this.match(/[^\x00-\xff]/g)).length;
-		}
-	});
-
-	
 	/**
 	 * @class Array
 	 * @name Array
@@ -1361,177 +1258,337 @@ Jet().$package(function(J){
 	});
 
 
-	/**
-	 * @class Function
-	 * @name Function
-	 */
-    J.extend(Function.prototype,
-    
-	/**
-	 * @lends Function.prototype
-	 */
-	{
-
-    	/**
-		 * 函数的重构方法
-		 * 
-		 * @private
-		 * 
-		 * @param {Object} option 选项对象
-		 * @return {Function} 返回重构后的函数的执行结果
-		 */
-		rebuild: function(option){
-			var self = this;
-			option = option || {};
-			
-			self.$$rebuildedFn = function(){
-				var self2 = this,
-					scope,
-					args,
-					returns;
-				scope = option.contextObj || self2;
-				args = Array.prototype.slice.call(arguments, 0);
-
-				if(args !== undefined){
-					args = args.concat(option.arguments);
-				}
-				if(option.event === false){
-					args = args.slice(1);
-				}
-
-				return self.apply(scope, args);
-			};
-
-			return self.$$rebuildedFn;
-		},
-		
-		/**
-		 * 给函数传入参数并执行
-		 * 
-		 * @param {Mixed} args 参数列表
-		 * @return {Mixed} 返回函数执行结果
-		 * 
-		 * @example
-		 * Jet().$package(function(J){
-		 * 	// 将"a"、"b"两个字符串传入funcA函数并执行
-		 * 	funcA.pass("a","b");
-		 * };
-		 * 
-		 */
-		pass: function(){
-			var args = arguments;
-			return this.rebuild({contextObj: null, arguments: args});
-		},
-		
-		/**
-		 * 给函数绑定一个上下文对象再执行
-		 * 
-		 * @param {Object} contextObj 要绑定的上下文对象
-		 * @param {Mixed} args 参数列表
-		 * @return {Mixed} 返回函数执行结果
-		 * 
-		 * @example
-		 * Jet().$package(function(J){
-		 * 	// 以 contextObjB 对象为上下文对象 this 来执行funcA函数
-		 * 	funcA.bind(contextObjB);
-		 * };
-		 * 
-		 */
-		bind: function(contextObj){
-			var args = Array.prototype.slice.call(arguments, 1);
-			//args = [this].extend(args);
-			return this.rebuild({contextObj: contextObj, arguments: args});
-		},
-
-		/**
-		 * 给函数绑定一个上下文对象,并剔除 event 事件对象参数后再执行
-		 * 
-		 * @param {Object} contextObj 要绑定的上下文对象
-		 * @param {Mixed} args 参数列表
-		 * @return {Mixed} 返回函数执行结果
-		 * 
-		 * @example
-		 * Jet().$package(function(J){
-		 * 	// 以 contextObjB 对象为上下文对象 this 来执行funcA函数，如果过函数被传入了 event 对象则会被去掉
-		 * 	funcA.bindNoEvent(contextObjB);
-		 * };
-		 */
-		bindNoEvent: function(contextObj){
-			var args = Array.prototype.slice.call(arguments, 1);
-			//args = [this].extend(args);
-			return this.rebuild({contextObj: contextObj, arguments: args, event: false});
-		}
-		
-	});
-	
-	
-	
-	
-	
-	/**
-	 * 时间对象的格式化;
-	 * 使用方法:
-	 * var testDate = new Date();
-	 * var testStr = testDate.format("yyyy年MM月dd日hh小时mm分ss秒");
-	 * 
-	 */
-	
-	/**
-	 * @class Date
-	 * @name Date
-	 */
-	J.extend(Date.prototype,
-
-	/**
-	 * @lends Date.prototype
-	 */
-	{
-		
-		/**
-		 * 让日期和时间按照指定的格式显示的方法
-		 * 
-		 * @param {String} format 格式字符串
-		 * @return {String} 返回生成的日期时间字符串
-		 * 
-		 * @example
-		 * Jet().$package(function(J){
-		 * 	var d = new Date();
-		 * 	// 以 YYYY-MM-dd hh:mm:ss 格式输出 d 的时间字符串
-		 * 	d.format("YYYY-MM-dd hh:mm:ss");
-		 * };
-		 * 
-		 */
-		format: function(format){
-			/*
-			 * eg:format="YYYY-MM-dd hh:mm:ss";
-			 */
-			var o = {
-			"M+" :  this.getMonth()+1,  //month
-			"d+" :  this.getDate(),     //day
-			"h+" :  this.getHours(),    //hour
-			"m+" :  this.getMinutes(),  //minute
-			"s+" :  this.getSeconds(),	//second
-			"q+" :  Math.floor((this.getMonth()+3)/3),  //quarter
-			"S"  :  this.getMilliseconds() //millisecond
-			}
-		
-			if(/(y+)/.test(format)){
-				format = format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-			}
-		
-			for(var k in o){
-				if(new RegExp("("+ k +")").test(format)){
-					format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
-				}
-			}
-			return format;
-		}
-	});
-
-
 		
 
 });
+
+
+
+
+
+/**
+ * [Javascript core]: String 字符串处理
+ */
+Jet().$package(function(J){
+
+	J.String = J.String || {};
+	var $S = J.String,
+		template,
+		isURL,
+		mapQuery,
+		test,
+		contains,
+		trim,
+		clean,
+		camelCase,
+		hyphenate,
+		capitalize,
+		escapeRegExp,
+		toInt,
+		toFloat,
+		hexToRgb,
+		rgbToHex,
+		stripScripts,
+		substitute,
+		replaceAll,
+		byteLength;
+	
+
+	/**
+	 * 多行或单行字符串模板处理
+	 * 
+	 * @method template
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {String} str 模板字符串
+	 * @param {Object} obj 要套入的数据对象
+	 * @return {String} 返回与数据对象合成后的字符串
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	// 用 obj 对象的数据合并到字符串模板中
+	 * 	J.template("Hello, {name}!", {
+	 * 		name:"Kinvix"
+	 * 	});
+	 * };
+	 */
+	template = function(str, obj){
+		var p,
+			RE;
+	
+		for(p in obj){
+			if(obj.hasOwnProperty(p)){
+				// RE = new RegExp("\\${" + p + "}","g");
+				// str = str.replace(RE, o[p]);
+				str = str.split("${" + p + "}").join(obj[p]);
+			}
+		}
+		return str;
+	};
+
+	/**
+	 * 判断是否是一个可接受的 url 串
+	 * 
+	 * @method isURL
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {String} str 要检测的字符串
+	 * @return {Boolean} 如果是可接受的 url 则返回 true
+	 */
+	isURL = function(str) {
+		return isURL.RE.test(str);
+	};
+	
+	/**
+	 * @ignore
+	 */
+	isURL.RE = /^(?:ht|f)tp(?:s)?\:\/\/(?:[\w\-\.]+)\.\w+/i;
+	
+	/**
+	 * 将 uri 的查询字符串参数映射成对象
+	 * 
+	 * @method mapQuery
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {String} uri 要映射的 uri
+	 * @return {Object} 按照 uri 映射成的对象
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	var url = "http://web.qq.com/?qq=4765078&style=blue";
+	 * 	// queryObj 则得到一个{qq:"4765078", style:"blue"}的对象。
+	 * 	var queryObj = J.mapQuery(url);
+	 * };
+	 */
+	mapQuery = function(uri){
+		//window.location.search
+		var i,
+			key,
+			value,
+			uri = uri || window.location.href,
+			index = uri.indexOf("?"),
+			pieces = uri.substring(index + 1).split("&"),
+			params = {};
+			
+		for(i=0; i<pieces.length; i++){
+			try{
+				index = pieces[i].indexOf("=");
+				key = pieces[i].substring(0,index);
+				value = pieces[i].substring(index+1);
+				if(!(params[key] = unescape(value))){
+					throw new Error("uri has wrong query string.");
+				}
+			}
+			catch(e){
+				J.out(e);
+			}
+		}
+		return params;
+	};
+	
+	/**
+	 * 
+	 * test的方法
+	 * 
+	 * @param {String, RegExp} regex 正则表达式，或者正则表达式的字符串
+	 * @param {String} params 正则的参数
+	 * @return {Boolean} 返回结果
+	 */
+	test = function(string, regex, params){
+		return ((typeof regex == 'string') ? new RegExp(regex, params) : regex).test(string);
+	};
+
+	/**
+	 * 判断是否含有指定的字符串
+	 * 
+	 * @param {String} string 是否含有的字符串
+	 * @param {String} separator 分隔符，可选
+	 * @return {Boolean} 如果含有，返回 true，否则返回 false
+	 */
+	contains = function(string1, string2, separator){
+		return (separator) ? (separator + string1 + separator).indexOf(separator + string2 + separator) > -1 : string1.indexOf(string2) > -1;
+	};
+
+	/**
+	 * 清除字符串开头和结尾的空格
+	 * 
+	 * @return {String} 返回清除后的字符串
+	 */
+	trim = function(string){
+		return string.replace(/^\s+|\s+$/g, '');
+	};
+
+	/**
+	 * 清除字符串开头和结尾的空格，并把字符串之间的多个空格转换为一个空格
+	 * 
+	 * @return {String} 返回清除后的字符串
+	 */
+	clean = function(string){
+		return string.replace(/\s+/g, ' ').trim();
+	};
+
+	/**
+	 * 将“-”连接的字符串转换成驼峰式写法
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	camelCase = function(string){
+		return string.replace(/-\D/g, function(match){
+			return match.charAt(1).toUpperCase();
+		});
+	};
+	
+	/**
+	 * 将驼峰式写法字符串转换成“-”连接的
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	hyphenate = function(string){
+		return string.replace(/[A-Z]/g, function(match){
+			return ('-' + match.charAt(0).toLowerCase());
+		});
+	};
+
+	/**
+	 * 将字符串转换成全大写字母
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	capitalize = function(string){
+		return string.replace(/\b[a-z]/g, function(match){
+			return match.toUpperCase();
+		});
+	};
+
+	/**
+	 * 转换 RegExp 正则表达式
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	escapeRegExp = function(string){
+		return string.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
+	};
+
+	/**
+	 * 将字符串转换成整数
+	 * 
+	 * @return {Number} 返回转换后的整数
+	 */
+	toInt = function(string, base){
+		return parseInt(string, base || 10);
+	};
+
+	/**
+	 * 将字符串转换成浮点数
+	 * 
+	 * @return {Number} 返回转换后的浮点数
+	 */
+	toFloat = function(string){
+		return parseFloat(string);
+	};
+
+	/**
+	 * 将颜色 Hex 写法转换成 RGB 写法
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	hexToRgb = function(string, array){
+		var hex = string.match(/^#?(\w{1,2})(\w{1,2})(\w{1,2})$/);
+		return (hex) ? hex.slice(1).hexToRgb(array) : null;
+	};
+
+	/**
+	 * 将颜色 RGB 写法转换成 Hex 写法
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	rgbToHex = function(string, array){
+		var rgb = string.match(/\d{1,3}/g);
+		return (rgb) ? rgb.rgbToHex(array) : null;
+	};
+
+	/**
+	 * 脱去script标签
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	stripScripts = function(string, option){
+		var scripts = '';
+		var text = string.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function(){
+			scripts += arguments[1] + '\n';
+			return '';
+		});
+		if (option === true){
+			$exec(scripts);
+		}else if($type(option) == 'function'){
+			option(scripts, text);
+		}
+		return text;
+	};
+
+	/**
+	 * 。。。。
+	 * 
+	 * @return {String} 返回转换后的字符串
+	 */
+	substitute = function(string, object, regexp){
+		return string.replace(regexp || (/\\?\{([^{}]+)\}/g), function(match, name){
+			if (match.charAt(0) == '\\') return match.slice(1);
+			return (object[name] != undefined) ? object[name] : '';
+		});
+	};
+	
+	/**
+	 * 全局替换指定的字符串
+	 * 
+	 * @return {String} 返回替换后的字符串
+	 */
+	replaceAll = function(string, reallyDo, replaceWith, ignoreCase) {
+	    if (!RegExp.prototype.isPrototypeOf(reallyDo)) {
+	        return string.replace(new RegExp(reallyDo, (ignoreCase ? "gi": "g")), replaceWith);
+	    } else {
+	        return string.replace(reallyDo, replaceWith);
+	    }
+	};
+	
+	/**
+	 * 计算字符串的字节长度
+	 * 
+	 * @return {String} 返回自己长度
+	 */
+	byteLength = function(string){
+		var u = string.match(/[^\x00-\xff]/g);
+		return string.length+(u ? u.length : 0);
+	};
+		
+		
+
+	$S.template = template;
+	$S.isURL = isURL;
+	$S.mapQuery = mapQuery;
+	$S.test = test;
+	$S.contains = contains;
+	$S.trim = trim;
+	$S.clean = clean;
+	$S.camelCase = camelCase;
+	$S.hyphenate = hyphenate;
+	$S.capitalize = capitalize;
+	$S.escapeRegExp = escapeRegExp;
+	$S.toInt = toInt;
+	$S.toFloat = toFloat;
+	$S.hexToRgb = hexToRgb;
+	$S.rgbToHex = rgbToHex;
+	$S.stripScripts = stripScripts;
+	$S.substitute = substitute;
+	$S.replaceAll = replaceAll;
+	$S.byteLength = byteLength;
+
+
+});
+
+
+
+
 
 /**
  * [Javascript core]: I18n 国际化扩展
@@ -1696,7 +1753,7 @@ Jet().$package(function(J){
 		 * 
 		 */
 		date: function(date){
-			return date.format(J.I18n.currentLang.date);
+			return J.formatDate(date, J.I18n.currentLang.date);
 		},
 		
 		/**
@@ -1706,7 +1763,7 @@ Jet().$package(function(J){
 		 * @returns {String} 返回按当前语言输出的长日期字符串
 		 */
 		longDate: function(date){
-			return date.format(J.I18n.currentLang.longDate);
+			return J.formatDate(date, J.I18n.currentLang.longDate);
 		},
 		
 		/**
@@ -1716,7 +1773,7 @@ Jet().$package(function(J){
 		 * @returns {String} 返回按当前语言输出的时间字符串
 		 */
 		time: function(time){
-			return date.format(J.I18n.currentLang.time);
+			return J.formatDate(date, J.I18n.currentLang.time);
 		},
 		
 		/**
@@ -2121,7 +2178,7 @@ Jet().$package(function(J){
 	J.Browser.Support = Support;
 	
 	J.loadBootOptions = loadBootOptions;
-	J.query = J.mapQuery(window.location.search);
+	J.query = J.String.mapQuery(window.location.search);
 	J.bootOptions = J.loadBootOptions();
 	
 });
@@ -2450,7 +2507,7 @@ Jet().$package(function(J){
 	 * @param {String} className class 名称
 	 */
     hasClass = function(el, className){
-		return el.className.contains(className, ' ');
+		return J.String.contains(el.className, className, ' ');
 	};
 
 	/**
@@ -2465,7 +2522,7 @@ Jet().$package(function(J){
 	 */
 	addClass = function(el, className){
 		if (!hasClass(el, className)){
-			el.className = (el.className + " " + className).clean();
+			el.className = J.String.clean(el.className + " " + className);
 		}
 	};
 
@@ -3881,7 +3938,7 @@ Jet().$package(function(J){
 			this._main.style.display = "block";
 			//输入焦点过来
 			var _self = this;
-			window.setTimeout(this.focusCommandLine.bind(this),0);
+			window.setTimeout(J.bind(this.focusCommandLine, this), 0);
 			
 			this._opened = true;
 		},
@@ -3922,7 +3979,7 @@ Jet().$package(function(J){
 			// 输入焦点过来
 			// $E.on(this._main, "dblclick", this.focusCommandLine.bind(this));
 			// 快捷键显示
-			$E.on(document, "keydown", this.handleDocumentKeydown.bind(this));
+			$E.on(document, "keydown", J.bind(this.handleDocumentKeydown, this));
 
 			
 			this.print = this.out;

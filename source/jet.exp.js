@@ -23,7 +23,7 @@ Jet().$package(function(J){
 
 
 	var string="sdf${title},dfsdfsd${name},dkfkksdf!";
-	var p = J.template(string, {
+	var p = J.String.template(string, {
 		title: "1111",
 		tel: "22",
 		name: "3"
