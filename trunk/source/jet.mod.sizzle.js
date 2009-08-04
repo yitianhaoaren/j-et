@@ -1,5 +1,5 @@
 
-Jos().$package(function(J){
+Jet().$package(function(J){
 	var adapterSizzle;
 	
 
@@ -998,7 +998,7 @@ adapterSizzle = Sizzle;
 	/*
 	 * ////////////////////////////////////////////////////////////////
 	 * 
-	 * Adapter to Jos
+	 * Adapter to JET
 	 * 
 	 * ////////////////////////////////////////////////////////////////
 	 */

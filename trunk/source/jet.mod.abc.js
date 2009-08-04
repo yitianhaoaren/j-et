@@ -1,13 +1,14 @@
 /**	
- * JOS (Javascript Operating System) 
+ * JET (Javascript Extend Tools) 
  * Copyright (c) 2009, KDV.cn, All rights reserved.
+ * http://code.google.com/p/j-et/
+ * 
  * Code licensed under the BSD License:
- * http://developer.kdv.cn/jos/license.txt
+ * http://developer.kdv.cn/jet/license.txt
  *
- * @fileOverview All Jos in one!
+ * @fileOverview All JET base in one!
  * @version	1.0
- * @author	<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>
- * @title  Jos Global
+ * @author	Kinvix(<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>)
  * @description This is Javascript's original form.
  * 
  */
@@ -17,7 +18,7 @@
 /**
  * [Javascript core part]: Javascript自身扩展
  */
-Jos().$package(function(J){
+Jet().$package(function(J){
 
 	
 
