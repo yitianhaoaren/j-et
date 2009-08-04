@@ -99,12 +99,13 @@
 					this._init();
 				}else{
 					if(ver){
+						ver = String(ver);
 						try{
 							if(Jet.VERSIONS[ver]){
 								J = Jet.VERSIONS[ver];
 							}else{
 								J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
-								throw new Error("No Jet version " + ver.toFixed(2) + ", so return Jet version " + Jet.DEFAULT_VERSION.toFixed(2) + "!");
+								throw new Error("No Jet version " + ver + ", so return Jet version " + Jet.DEFAULT_VERSION + "!");
 							}
 						}catch(e){
 							J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
@@ -2202,7 +2203,7 @@ Jet().$package(function(J){
 	 * @memberOf Dom
 	 */
 	getDoc = function(element) {
-		element = element || {};
+		element = element || window.document;
 		return (element["nodeType"] === 9) ? element : element["ownerDocument"]
 			|| $D.doc;
 	};
@@ -2216,7 +2217,7 @@ Jet().$package(function(J){
 	 * @param {HTMLElement} element optional Target element.
 	 * @return {Object} The window for the given element or the default window. 
 	 */
-	getWin= function(element) {
+	getWin = function(element) {
 		var doc = getDoc(element);
 		return (element.document) ? element : doc["defaultView"] ||
 			doc["parentWindow"] || $D.win;
@@ -2252,7 +2253,7 @@ Jet().$package(function(J){
 	 * @return {Element} 返回元素
 	 */
 	name = function(name, doc) {
-		var el=(doc);
+		var el = doc;
 		return getDoc(doc).getElementsByName(name);
 	};
 	
@@ -2266,8 +2267,9 @@ Jet().$package(function(J){
 	 * @param {Element} doc 元素所属的文档对象，默认为当前文档
 	 * @return {Element} 返回元素
 	 */
-	tagName = function(tagName, doc) {
-		return doc.getElementsByTagName(tagName);
+	tagName = function(tagName, el) {
+		var el = el || getDoc();
+		return el.getElementsByTagName(tagName);
 	};
 	
 	/**
@@ -2666,6 +2668,13 @@ Jet().$package(function(J){
     	setStyle(el, "display", "none");
     };
 	
+    
+    
+    var scripts = tagName("script");
+	J.src = scripts[scripts.length-1].src;
+	J.filename = "jet.js";
+	J.path = J.src.split(J.filename)[0];
+	//J.out(J.path)
 	
 	$D.id = id;
 	$D.name = name;
@@ -3891,8 +3900,8 @@ Jet().$package(function(J){
 		 * @ignore
 		 */
 		_init : function() {
-			//$H.loadCss("./js/jet.css");
-			$H.loadCss("../../../source/jet.css");
+			//$H.loadCss(J.path+"assets/jet.css");
+			$H.loadCss(J.path+"assets/jet.css");
 			this._main = document.createElement("div");
 			window.document.body.appendChild(this._main);
 			this._main.className = "console_log";
@@ -4388,6 +4397,7 @@ Jet().$package(function(J){
  */
 Jet().$package(function(J){
 	var $B = J.Browser,
+		$D = J.Dom,
 		$E = J.Event;
 		
 	$E.onDOMReady(function(){
