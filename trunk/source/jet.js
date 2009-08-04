@@ -1965,6 +1965,25 @@ Jet().$package(function(J){
     
     
 	
+    
+    
+    /**
+	 * 调整浏览器行为
+	 * 
+	 * @ignore
+	 */
+	var adjustBehaviors = function() {
+		// ie6 背景图片不能被缓存的问题
+		if (Engine.trident && Engine.version < 7) {
+			try {
+				document.execCommand('BackgroundImageCache', false, true);
+			}catch(e){}
+		}
+	}
+    adjustBehaviors();
+    
+    
+    
 	
 	//Support
 	var root = document.documentElement,
@@ -3901,7 +3920,7 @@ Jet().$package(function(J){
 			
 			this._inited = true;
 			this.setToDebug();
-			this.out("Welcome to Javascript Operating System...", this.TYPE.INFO)
+			this.out("Welcome to JET(Javascript Extension Tools)...", this.TYPE.INFO)
 		},
 		
 		handleDocumentKeydown: function(e){

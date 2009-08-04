@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>运行代码 - Code Playground</title>
+<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+	<div id="Content">
+		<div id="Title">
+			<h3>Code Playground</h3>
+		</div> 
+		<textarea id="CodeEditor" name="CodeEditor" class="Javascript" style="width:100%;height:300px;">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>运行结果</title>
+	<link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="Content">Loading...</div>
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.exp.js"></script>
+	<script>
+		//打开控制台
+		J.Console.show();
+
+		//关闭控制台
+		J.Console.hide();
+			
+		//演示
+		//格式 J.Console.print(信息,信息类型)
+		J.Console.print("ERROR",J.Console.TYPE.ERROR);
+		J.Console.print("WARNING",J.Console.TYPE.WARNING);
+		J.Console.print("INFO",J.Console.TYPE.INFO);
+		J.Console.print("DEBUG",J.Console.TYPE.DEBUG);
+		J.Console.print("PROFILE",J.Console.TYPE.PROFILE);
+	</script>
+</body>
+</html>
+
+		</textarea>
+		<div class="exampleContainer"> 
+			<button id="Button_1" onclick="J.Console.showHTMLCode()">HTML代码</button>
+			<button id="Button_2" onclick="J.Console.showJsCode()">Javascript代码</button>
+			<button id="Button_3" onclick="Playground.runCode()">运行</button>
+		</div>
+		<div >
+			<iframe id="CodeRunContainer" name="CodeRunContainer" src="about:blank" style="width:100%;height:300px;border:1px solid #cccccc;"></iframe>
+		</div>
+	 
+	</div> 
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.exp.js"></script>
+	<script>
+		Jet().$package("Playground",function(J){
+			var $D = J.Dom;
+			var CodeEditor = $D.id("CodeEditor");
+			var CodeRunContainer = window.frames["CodeRunContainer"];
+			
+			this.runCode = function(htmlCode){
+				htmlCode = htmlCode || CodeEditor.value;
+				CodeRunContainer.document.open("text/html","replace"); 
+				CodeRunContainer.document.write(htmlCode) 
+				CodeRunContainer.document.close(); 
+			};
+		});
+
+	</script>
+</body>
+</html>
