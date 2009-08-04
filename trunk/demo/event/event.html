@@ -41,9 +41,10 @@
 			$E.on($("a"),"click",fn1);
 			$E.on($("a"),"click",fn2);
 			
-			$E.on($("b"),"click",fn1);
+			$E.on($("b"),"click",J.pass(fn2,1,2));
 			
-			$E.on($("c"),"click",fn2.bind(o, "a_string","b"));
+			//$E.on($("c"),"click",fn2.bind(o, "a_string","b"));
+			$E.on($("c"),"click",J.bind(fn2,o, "a_string","b"));
 			
 			$E.on(document,"keydown",k_fn);
 
