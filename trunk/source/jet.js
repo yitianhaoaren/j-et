@@ -2821,6 +2821,7 @@ Jet().$package(function(J){
 		http://en.wikipedia.org/wiki/Konami_Code
 	 */
 	
+	// From: David Flanagan.
 	// In DOM-compliant browsers, our functions are trivial wrappers around
 	// addEventListener( ) and removeEventListener( ).
 	if (document.addEventListener) {
