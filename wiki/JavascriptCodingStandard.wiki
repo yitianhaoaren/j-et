@@ -155,7 +155,7 @@ for(intialization; condition; update){ statement;}
 == 其他 ==
 
  # String 优化
-循环体内的字符串累加使用join方式。 例如:
+  循环体内的字符串累加使用join方式。 例如:
 {{{
 	var r = [];
 	for (var i=0;i<100;i++){
@@ -164,7 +164,7 @@ for(intialization; condition; update){ statement;}
 	var k = r.join("");
 }}}
  # Switch 建议采用hash-table
-switch 可以才用 Object代替 例如:
+  switch 可以才用 Object代替 例如:
 {{{
 	var a = {
 		"1":doAction1,
@@ -181,6 +181,6 @@ switch 可以才用 Object代替 例如:
  
 	a[1]();
 }}}
- # 不建议使用eval 
-不推荐使用eval来执行脚本。除非用来解释json数据。
+ # 不建议使用eval
+  不推荐使用eval来执行脚本。除非用来解释json数据。
  # 注意 IE 的内存泄露问题
