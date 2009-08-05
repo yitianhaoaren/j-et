@@ -810,7 +810,7 @@ Jet().$package(function(J){
 	 * 一个默认初始化的接口函数
 	 * 
 	 * @class Interface
-	 * @lends Jet.prototype
+	 * @memberOf Jet.prototype
 	 */
     Interface = function(){
     	return function(){};
@@ -821,6 +821,7 @@ Jet().$package(function(J){
     /**
 	 * 从数组中移除一个或多个数组成员
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
 	 */
 	removeArr = function(arr, members){
@@ -840,6 +841,7 @@ Jet().$package(function(J){
 	/**
 	 * 替换一个数组成员
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {Object} oldValue 当前数组成员
 	 * @param {Object} newValue 要替换成的值
 	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
@@ -860,8 +862,9 @@ Jet().$package(function(J){
 	/**
 	 * 函数的重构方法
 	 * 
-	 * @private
 	 * 
+	 * @private
+	 * @memberOf Jet.prototype
 	 * @param {Object} option 选项对象
 	 * @return {Function} 返回重构后的函数的执行结果
 	 */
@@ -893,6 +896,7 @@ Jet().$package(function(J){
 	/**
 	 * 给函数传入参数并执行
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {Mixed} args 参数列表
 	 * @return {Mixed} 返回函数执行结果
 	 * 
@@ -911,6 +915,7 @@ Jet().$package(function(J){
 	/**
 	 * 给函数绑定一个上下文对象再执行
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {Object} contextObj 要绑定的上下文对象
 	 * @param {Mixed} args 参数列表
 	 * @return {Mixed} 返回函数执行结果
@@ -931,6 +936,7 @@ Jet().$package(function(J){
 	/**
 	 * 给函数绑定一个上下文对象,并剔除 event 事件对象参数后再执行
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {Object} contextObj 要绑定的上下文对象
 	 * @param {Mixed} args 参数列表
 	 * @return {Mixed} 返回函数执行结果
@@ -950,6 +956,7 @@ Jet().$package(function(J){
 	/**
 	 * 让日期和时间按照指定的格式显示的方法
 	 * 
+	 * @memberOf Jet.prototype
 	 * @param {String} format 格式字符串
 	 * @return {String} 返回生成的日期时间字符串
 	 * 
@@ -1035,19 +1042,20 @@ Jet().$package(function(J){
 	 */
 
 	//标准方法跨浏览器统一
-	/**
-	 * 正向查找数组元素在数组中的索引下标
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
-	 * @lends Array.prototype
-	 * @name indexOf
-	 * 
-	 * @param {Object} obj 要查找的数组元素
-	 * @param {Number} fromIndex 开始的索引编号
-	 * 
-	 * @return {Number}返回正向查找的索引编号
-	 */
+	
 	if (!Array.prototype.indexOf) {
+		/**
+		 * 正向查找数组元素在数组中的索引下标
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
+		 * @memberOf Array.prototype
+		 * @name indexOf
+		 * 
+		 * @param {Object} obj 要查找的数组元素
+		 * @param {Number} fromIndex 开始的索引编号
+		 * 
+		 * @return {Number}返回正向查找的索引编号
+		 */
 	    Array.prototype.indexOf = function (obj, fromIndex) {
 	        if (fromIndex == null) {
 	            fromIndex = 0;
@@ -1062,18 +1070,19 @@ Jet().$package(function(J){
 	    };
 	}
 	
-	/**
-	 * 反向查找数组元素在数组中的索引下标
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
-	 * @lends Array.prototype
-	 * 
-	 * @param {Object} obj 要查找的数组元素
-	 * @param {Number} fromIndex 开始的索引编号
-	 * 
-	 * @return {Number}返回反向查找的索引编号
-	 */
+	
 	if (!Array.prototype.lastIndexOf) {
+		/**
+		 * 反向查找数组元素在数组中的索引下标
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Object} obj 要查找的数组元素
+		 * @param {Number} fromIndex 开始的索引编号
+		 * 
+		 * @return {Number}返回反向查找的索引编号
+		 */
 	    Array.prototype.lastIndexOf = function (obj, fromIndex) {
 	        if (fromIndex == null) {
 	            fromIndex = this.length - 1;
@@ -1089,17 +1098,18 @@ Jet().$package(function(J){
 	}
 	
 	
-	/**
-	 * 遍历数组，把每个数组元素作为第一个参数来执行函数
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 要执行的函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 */
+	
 	if (!Array.prototype.forEach) {
+		/**
+		 * 遍历数组，把每个数组元素作为第一个参数来执行函数
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Function} fun 要执行的函数
+		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+		 * 
+		 */
 	    Array.prototype.forEach = function(fun /*, thisp*/) {
 	        var len = this.length;
 	        if (typeof fun != "function") {
@@ -1114,18 +1124,19 @@ Jet().$package(function(J){
 	    };
 	}
 	
-	/**
-	 * 用一个自定义函数来过滤数组
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 过滤函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 * @return {Array}返回筛选出的新数组
-	 */
+	
 	if (!Array.prototype.filter) {
+		/**
+		 * 用一个自定义函数来过滤数组
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Function} fun 过滤函数
+		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+		 * 
+		 * @return {Array}返回筛选出的新数组
+		 */
 	    Array.prototype.filter = function(fun) {
 	        var len = this.length;
 	        if (typeof fun != "function") {
@@ -1147,18 +1158,19 @@ Jet().$package(function(J){
 	
 	
 
-	/**
-	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，并把函数的返回结果以映射的方式存入到返回的数组中
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 过滤函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 * @return {Array}返回映射后的新数组
-	 */
+	
 	if (!Array.prototype.map) {
+		/**
+		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，并把函数的返回结果以映射的方式存入到返回的数组中
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Function} fun 过滤函数
+		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+		 * 
+		 * @return {Array}返回映射后的新数组
+		 */
 	    Array.prototype.map = function(fun /*, thisp*/) {
 	        var len = this.length;
 	        if (typeof fun != "function") {
@@ -1176,18 +1188,19 @@ Jet().$package(function(J){
 	    };
 	}
 	
-	/**
-	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果有任意一个或多个数组成员使得函数执行结果返回 true，则最终返回 true，否则返回 false
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 要执行的函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 * @return {Boolean}
-	 */
+
 	if (!Array.prototype.some) {
+		/**
+		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果有任意一个或多个数组成员使得函数执行结果返回 true，则最终返回 true，否则返回 false
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Function} fun 要执行的函数
+		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+		 * 
+		 * @return {Boolean}
+		 */
 	    Array.prototype.some = function(fun /*, thisp*/) {
 	        var len = this.length;
 	        if (typeof fun != "function") {
@@ -1205,18 +1218,19 @@ Jet().$package(function(J){
 	    };
 	}
 
-	/**
-	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 要执行的函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 * @return {Boolean}
-	 */
+
 	if (!Array.prototype.every) {
+		/**
+		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
+		 * 
+		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
+		 * @memberOf Array.prototype
+		 * 
+		 * @param {Function} fun 要执行的函数
+		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+		 * 
+		 * @return {Boolean}
+		 */
 	    Array.prototype.every = function(fun) {
 	        var len = this.length;
 	        if (typeof fun != "function") {
@@ -1232,52 +1246,7 @@ Jet().$package(function(J){
 	    };
 	}
 	
-	J.extend(Array.prototype,
-	/**
-	 * @lends Array.prototype
-	 */	
-	{
-
-		/**
-		 * 从数组中移除一个或多个数组成员
-		 * 
-		 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
-		 */
-		remove: function(arr){
-			var arr = J.toArray(arr),
-				i,
-				j;
-			for(i=0; i<arr.length; i++){
-				for(j=0; j<this.length; j++){
-					if(this[j] === arr[i]){
-						this.splice(j,1);
-					}
-				}
-			}
-			return true;
-		},
-		/**
-		 * 替换一个数组成员
-		 * 
-		 * @param {Object} oldValue 当前数组成员
-		 * @param {Object} newValue 要替换成的值
-		 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
-		 */
-		replace: function(oldValue, newValue){
-			var i;
-			for(i=0; i<this.length; ij++){
-				if(this[i] === oldValue){
-					this[i] = newValue;
-					return true;
-				}else{
-					return false;
-				}
-			}
-		}
-	});
-
-
-		
+	
 
 });
 
@@ -1289,7 +1258,13 @@ Jet().$package(function(J){
  * [Javascript core]: String 字符串处理
  */
 Jet().$package(function(J){
-
+	
+	/**
+	 * String 名字空间
+	 * 
+	 * @namespace
+	 * @name String
+	 */
 	J.String = J.String || {};
 	var $S = J.String,
 		template,
@@ -1317,7 +1292,7 @@ Jet().$package(function(J){
 	 * 多行或单行字符串模板处理
 	 * 
 	 * @method template
-	 * @memberOf Jet.prototype
+	 * @memberOf String
 	 * 
 	 * @param {String} str 模板字符串
 	 * @param {Object} obj 要套入的数据对象
@@ -1349,7 +1324,7 @@ Jet().$package(function(J){
 	 * 判断是否是一个可接受的 url 串
 	 * 
 	 * @method isURL
-	 * @memberOf Jet.prototype
+	 * @memberOf String
 	 * 
 	 * @param {String} str 要检测的字符串
 	 * @return {Boolean} 如果是可接受的 url 则返回 true
@@ -1367,7 +1342,7 @@ Jet().$package(function(J){
 	 * 将 uri 的查询字符串参数映射成对象
 	 * 
 	 * @method mapQuery
-	 * @memberOf Jet.prototype
+	 * @memberOf String
 	 * 
 	 * @param {String} uri 要映射的 uri
 	 * @return {Object} 按照 uri 映射成的对象
@@ -1409,6 +1384,8 @@ Jet().$package(function(J){
 	 * 
 	 * test的方法
 	 * 
+	 * @memberOf String
+	 * 
 	 * @param {String, RegExp} regex 正则表达式，或者正则表达式的字符串
 	 * @param {String} params 正则的参数
 	 * @return {Boolean} 返回结果
@@ -1419,6 +1396,8 @@ Jet().$package(function(J){
 
 	/**
 	 * 判断是否含有指定的字符串
+	 * 
+	 * @memberOf String
 	 * 
 	 * @param {String} string 是否含有的字符串
 	 * @param {String} separator 分隔符，可选
@@ -1431,6 +1410,8 @@ Jet().$package(function(J){
 	/**
 	 * 清除字符串开头和结尾的空格
 	 * 
+	 * @memberOf String
+	 * 
 	 * @return {String} 返回清除后的字符串
 	 */
 	trim = function(string){
@@ -1440,6 +1421,8 @@ Jet().$package(function(J){
 	/**
 	 * 清除字符串开头和结尾的空格，并把字符串之间的多个空格转换为一个空格
 	 * 
+	 * @memberOf String
+	 * 
 	 * @return {String} 返回清除后的字符串
 	 */
 	clean = function(string){
@@ -1448,6 +1431,8 @@ Jet().$package(function(J){
 
 	/**
 	 * 将“-”连接的字符串转换成驼峰式写法
+	 * 
+	 * @memberOf String
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1460,6 +1445,8 @@ Jet().$package(function(J){
 	/**
 	 * 将驼峰式写法字符串转换成“-”连接的
 	 * 
+	 * @memberOf String
+	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
 	hyphenate = function(string){
@@ -1470,6 +1457,8 @@ Jet().$package(function(J){
 
 	/**
 	 * 将字符串转换成全大写字母
+	 * 
+	 * @memberOf String
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1482,6 +1471,8 @@ Jet().$package(function(J){
 	/**
 	 * 转换 RegExp 正则表达式
 	 * 
+	 * @memberOf String
+	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
 	escapeRegExp = function(string){
@@ -1490,6 +1481,8 @@ Jet().$package(function(J){
 
 	/**
 	 * 将字符串转换成整数
+	 * 
+	 * @memberOf String
 	 * 
 	 * @return {Number} 返回转换后的整数
 	 */
@@ -1500,6 +1493,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成浮点数
 	 * 
+	 * @memberOf String
 	 * @return {Number} 返回转换后的浮点数
 	 */
 	toFloat = function(string){
@@ -1509,6 +1503,7 @@ Jet().$package(function(J){
 	/**
 	 * 将颜色 Hex 写法转换成 RGB 写法
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回转换后的字符串
 	 */
 	hexToRgb = function(string, array){
@@ -1519,6 +1514,7 @@ Jet().$package(function(J){
 	/**
 	 * 将颜色 RGB 写法转换成 Hex 写法
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回转换后的字符串
 	 */
 	rgbToHex = function(string, array){
@@ -1529,6 +1525,7 @@ Jet().$package(function(J){
 	/**
 	 * 脱去script标签
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回转换后的字符串
 	 */
 	stripScripts = function(string, option){
@@ -1548,6 +1545,7 @@ Jet().$package(function(J){
 	/**
 	 * 。。。。
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回转换后的字符串
 	 */
 	substitute = function(string, object, regexp){
@@ -1560,6 +1558,7 @@ Jet().$package(function(J){
 	/**
 	 * 全局替换指定的字符串
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回替换后的字符串
 	 */
 	replaceAll = function(string, reallyDo, replaceWith, ignoreCase) {
@@ -1573,6 +1572,7 @@ Jet().$package(function(J){
 	/**
 	 * 计算字符串的字节长度
 	 * 
+	 * @memberOf String
 	 * @return {String} 返回自己长度
 	 */
 	byteLength = function(string){
@@ -1944,7 +1944,8 @@ Jet().$package(function(J){
 		 * 设置浏览器类型和版本
 		 * 
 		 * @ignore
-		 * @lends Browser
+		 * @private
+		 * @memberOf Browser
 		 * 
 		 */
 		set: function(name, ver){
@@ -2023,7 +2024,8 @@ Jet().$package(function(J){
 		 * 设置浏览器引擎的类型和版本
 		 * 
 		 * @ignore
-		 * @lends Engine
+		 * @private
+		 * @memberOf Browser.Engine
 		 * 
 		 */
 		set: function(name, ver){
@@ -2051,7 +2053,7 @@ Jet().$package(function(J){
 	 */
 	var adjustBehaviors = function() {
 		// ie6 背景图片不能被缓存的问题
-		if (Engine.trident && Engine.version < 7) {
+		if (Engine.trident && Engine.version < 5) {
 			try {
 				document.execCommand('BackgroundImageCache', false, true);
 			}catch(e){}
@@ -2061,8 +2063,8 @@ Jet().$package(function(J){
     
     
     
-	
-	//Support
+	// From: Jhon Resig
+	// Support
 	var root = document.documentElement,
 		script = document.createElement("script"),
 		div = document.createElement("div"),
@@ -4063,16 +4065,18 @@ Jet().$package(function(J){
 		 * @return {String} 返回要输出的信息
 		 */
 		outConsole: function(msg, type) {
+			type = type || 3;
 			this.log(msg, type);
-			
-			var _item = document.createElement("li");
-			this._list.appendChild(_item);
-			
-			var _ti = J.Console._typeInfo[type] || J.Console._typeInfo[0];
-			_item.className = _ti[0];
-			_item.innerHTML = '<span class="log_icon">' + _ti[1] + '</span>' + msg;
-	
-			this._list.scrollTop = this._list.scrollHeight;
+			if(type < J.option.debug){
+				var _item = document.createElement("li");
+				this._list.appendChild(_item);
+				
+				var _ti = J.Console._typeInfo[type] || J.Console._typeInfo[0];
+				_item.className = _ti[0];
+				_item.innerHTML = '<span class="log_icon">' + _ti[1] + '</span>' + msg;
+		
+				this._list.scrollTop = this._list.scrollHeight;
+			}
 		},
 		
 		/**
