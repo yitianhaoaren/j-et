@@ -22,6 +22,16 @@
 		mark = "JetMark",
 		VERSIONS = {},
 		PACKAGES = {},
+		DEBUG = {
+			NO_DEBUG: 0,
+			SHOW_ERROR: 1,
+			SHOW_WARNING: 2,
+			SHOW_INFO: 3,
+			SHOW_ALL: 4
+		},
+		option = {
+			debug: DEBUG.NO_DEBUG
+		},
 		topNamespace = this,
 		out;
 
@@ -31,10 +41,12 @@
 	out = function(msg, type){
 		msg = String(msg);
 		type = type || 3;
-		if(this.Console){
-			this.Console.out(msg, type);
-		}else{
-			alert(msg+"["+type+"]");
+		if(type < option.debug){
+			if(this.Console){
+				this.Console.out(msg, type);
+			}else{
+				alert(msg+"["+type+"]");
+			}
 		}
 		return msg;
 	};
@@ -126,6 +138,12 @@
 				 * @type Number
 				 */
 				version: version,
+				
+				/**
+				 * Jet 配置
+				 * @ignore
+				 */
+				option: option,
 				
 				/**
 				 * Jet 的初始化方法
@@ -3985,7 +4003,11 @@ Jet().$package(function(J){
 			this.print = this.out;
 			
 			this._inited = true;
-			this.setToDebug();
+			if(J.option.debug>0){
+				this.setToDebug();
+			}else{
+				this.setToNoDebug();
+			}
 			this.out("Welcome to JET(Javascript Extension Tools)...", this.TYPE.INFO)
 		},
 		
