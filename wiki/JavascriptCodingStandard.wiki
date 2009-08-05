@@ -65,8 +65,7 @@ XmlDocument strHtml
  # “err” 作为局部变量或参数，表示为error
  # 重复变量建议使用 "i", "j", "k" （依次类推）等名称的变量(全世界公认)
  # 能缩写的单词尽量缩写
- # 避免产生令人误解的布尔值
-isNotNumber isNan
+ # 避免产生令人误解的布尔值 isNotNumber isNan
  # 处理错误的变量，必须在后面跟着 “Error”
  # 初始化用的函数 必须使用 “init” 开头，如果一个页面只有初始化可以单独使用 init()
  # 尽量做有意义的代码折行，不要让一行代码过长。(HTML 字符串除外)
@@ -75,7 +74,9 @@ isNotNumber isNan
  # 逗号（,） 建议 使用空白隔开。
  # 不允许频繁使用 previousSibling 和 nextSibling
 
+
 == 词法结构 ==
+
  # 普通代码段应该看起来如下：
 {{{
 while(!isDone){
@@ -83,6 +84,7 @@ while(!isDone){
       isDone = moreToDo();
 }
 }}}
+
  # IF 语句应该看起来像这样：
 {{{
 if(someCondition){
@@ -93,6 +95,7 @@ if(someCondition){
     statements;
 }
 }}}
+
  # FOR 语句应该看起来像这样：
 {{{
 for(initialization; condition; update){
@@ -105,12 +108,14 @@ while(!isDone){
     isDone = moreToDo();
 }
 }}}
+
  # DO ... WHILE 语句应该看起来像这样：
 {{{
 do{
         statements;
 }while(condition);
 }}}
+
  # SWITCH 语句应该看起来像这样：
 {{{
 switch(condition){
@@ -125,6 +130,7 @@ default:
     break;
 }
 }}}
+
  # TRY ... CATCH 语句应该看起来像这样：
 {{{
 try{
@@ -135,6 +141,7 @@ try{
     statements;
 }
 }}}
+
  # 单行的 IF - ELSE，WHILE 或者 FOR 语句也必须加入括号：
 {{{
 if(condition){ statement;}
@@ -160,16 +167,22 @@ for(intialization; condition; update){ statement;}
 
 
 == 其他 ==
+
+
  # String 优化
 循环体内的字符串累加使用join方式。 例如:
-var r = [];
+{{{
+	var r = [];
 	for (var i=0;i<100;i++){
 		r.push("hello");
 	}
 	var k = r.join("");
+}}}
+
  # Switch 建议采用hash-table
 switch 可以才用 Object代替 例如:
-var a = {
+{{{
+	var a = {
 		"1":doAction1,
 		"2":doAction2,
 	}
@@ -183,7 +196,10 @@ var a = {
 	}
  
 	a[1]();
+}}}
+
  # 不建议使用eval 
 不推荐使用eval来执行脚本。除非用来解释json数据。
+
 
  # 注意 IE 的内存泄露问题
