@@ -17,11 +17,16 @@
  * [JET core]: JET 微内核
  */
 ;(function(){
-	var Jet,
-		version = "1.0",
+	var version = "1.0",
 		mark = "JetMark",
+		topNamespace = this,
+		
+		// 将顶级命名空间中可能存在的 Jet 对象引入
+		Jet = topNamespace.Jet,
+		
 		VERSIONS = {},
 		PACKAGES = {},
+		
 		DEBUG = {
 			NO_DEBUG: 0,
 			SHOW_ERROR: 1,
@@ -29,31 +34,27 @@
 			SHOW_INFO: 3,
 			SHOW_ALL: 4
 		},
+		
 		option = {
 			debug: DEBUG.NO_DEBUG
 		},
-		topNamespace = this,
-		out;
-
-	/**
-	 * @ignore
-	 */
-	out = function(msg, type){
-		msg = String(msg);
-		type = type || 3;
-		if(type < option.debug){
-			if(this.Console){
-				this.Console.out(msg, type);
-			}else{
-				alert(msg+"["+type+"]");
+		
+		/**
+		 * @ignore
+		 */
+		out = function(msg, type){
+			msg = String(msg);
+			type = type || 3;
+			if(type < option.debug){
+				if(this.Console){
+					this.Console.out(msg, type);
+				}else{
+					alert(msg+"["+type+"]");
+				}
 			}
-		}
-		return msg;
-	};
-	
-	// 将顶级命名空间中可能存在的 Jet 对象引入
-	Jet = topNamespace.Jet;
-	
+			return msg;
+		};
+
 	try{
 		// 判断Jet名字空间是否已经存在
 		if(typeof Jet === "undefined" || (Jet.mark && Jet.mark === mark)){
