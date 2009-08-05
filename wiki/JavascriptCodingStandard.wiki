@@ -27,11 +27,11 @@ Any violation to this guide is allowed if it enhances readability.
 || 常量     || 大写式 || DEFAULT_FRAME_LAYOUT ||
 
  # 其他建议风格，非必要
- * || *结构* || *规则* ||
- * || 私有方法 || 混合，例子：_mixedCase ||
- * || 私有变量 || 混合，例子：_mixedCase ||
- * || 方法（method）参数 || 混合，例子：_mixedCase, mixedCase ||
- * || 本地（local）变量 || 混合，例子：_mixedCase, mixedCase ||
+|| *结构* || *规则* ||
+|| 私有方法 || 混合，例子：_mixedCase ||
+|| 私有变量 || 混合，例子：_mixedCase ||
+|| 方法（method）参数 || 混合，例子：_mixedCase, mixedCase ||
+|| 本地（local）变量 || 混合，例子：_mixedCase, mixedCase ||
  # 所有语句结束后，必须使用 ; 号结束
 
 
@@ -143,28 +143,28 @@ for(intialization; condition; update){ statement;}
 }}}
 
 == 注释规范 ==
-1.       一些你不打算给其他人使用的函数，建议添加 @ignore 让文档输出时可以忽略这段注释
-2.       一些相关的功能相关的函数，建议加上@see Function 来对上下文做索引
-3. 对于一些函数不建议或则需要注意的使用方法，必须加上 @deprecated作为提醒
-4. 每个js文件的文件头都必须包含 @fileoverview @author, 建议加上@version
-5. 每个函数都必须使用JsDoc 来注释他的用意
-6.    每个带参数的函数必须包含 @param
-7.    每个有返回值的函数必须包含 @return
-8.    构造函数必须加上 @constructor
-9.    继承函数建议加上 @base 表示其继承于哪个类
-10.常用全局变量建议使用 JsDoc 的注释方式
-11. 一般的变量及局部变量才用 // 方式进行注释，建议在需要做注释的语句的上一行
-12.   其他详情请参考 JsDoc 注释方法
+ # 一些你不打算给其他人使用的函数，建议添加 @ignore 让文档输出时可以忽略这段注释
+ # 一些相关的功能相关的函数，建议加上@see Function 来对上下文做索引
+ # 对于一些函数不建议或则需要注意的使用方法，必须加上 @deprecated作为提醒
+ # 每个js文件的文件头都必须包含 @fileoverview @author, 建议加上@version
+ # 每个函数都必须使用JsDoc 来注释他的用意
+ # 每个带参数的函数必须包含 @param
+ # 每个有返回值的函数必须包含 @return
+ # 构造函数必须加上 @constructor
+ # 继承函数建议加上 @base 表示其继承于哪个类
+ # 常用全局变量建议使用 JsDoc 的注释方式
+ # 一般的变量及局部变量才用 // 方式进行注释，建议在需要做注释的语句的上一行
+ # 其他详情请参考 JsDoc 注释方法
 
 == 其他 ==
-1. String 优化
+ # String 优化
 循环体内的字符串累加使用join方式。 例如:
 var r = [];
 	for (var i=0;i<100;i++){
 		r.push("hello");
 	}
 	var k = r.join("");
-2. Switch 建议采用hash-table
+ # Switch 建议采用hash-table
 switch 可以才用 Object代替 例如:
 var a = {
 		"1":doAction1,
@@ -180,7 +180,7 @@ var a = {
 	}
  
 	a[1]();
-3. 不建议使用eval 
+ # 不建议使用eval 
 不推荐使用eval来执行脚本。除非用来解释json数据。
 
-4. 注意 IE 的内存泄露问题
+ # 注意 IE 的内存泄露问题
