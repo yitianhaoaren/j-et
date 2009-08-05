@@ -20,16 +20,13 @@ Any violation to this guide is allowed if it enhances readability.
 || 公有方法 || 混合式 || getPosition() ||
 || 公有变量 || 混合式 || frameStyle ||
 || 常量     || 大写式 || DEFAULT_FRAME_LAYOUT ||
-
  # 其他建议风格，非必要
 || *结构* || *规则* ||
 || 私有方法 || 混合，例子：_mixedCase ||
 || 私有变量 || 混合，例子：_mixedCase ||
 || 方法（method）参数 || 混合，例子：_mixedCase, mixedCase ||
 || 本地（local）变量 || 混合，例子：_mixedCase, mixedCase ||
-
  # 所有语句结束后，必须使用 ; 号结束
-
  # 所有变量必须是有意义的英文，严厉禁止拼音
  # 变量允许使用公认英文缩写
  # 类命名必须是驼峰式
@@ -37,7 +34,7 @@ Any violation to this guide is allowed if it enhances readability.
  # 枚举类型时，枚举的命名必须有意义，枚举与枚举成员必须以驼峰式
  # 常量和枚举必须在最前端定义，merge 时注意，必须把常量与枚举定义的文件放在文件列表的第一位
  # 变量内的简写单词不能全大写XmlDocument strHtml
- #  "on"只能用作事件的命名
+ # "on"只能用作事件的命名
  # 函数开头必须是有意义的动词或动词短语
  #  私有类的变量属性成员 建议 使用混合式命名，并前面下下划线
  # 临时的全局变量放到一个全局的哈希表里，方便变量回收
@@ -77,7 +74,6 @@ while(!isDone){
       isDone = moreToDo();
 }
 }}}
-
  # if 语句应该看起来像这样：
 {{{
 if(someCondition){
@@ -88,7 +84,6 @@ if(someCondition){
     statements;
 }
 }}}
-
  # for 语句应该看起来像这样：
 {{{
 for(initialization; condition; update){
@@ -102,14 +97,12 @@ while(!isDone){
     isDone = moreToDo();
 }
 }}}
-
  # do ... while 语句应该看起来像这样：
 {{{
 do{
         statements;
 }while(condition);
 }}}
-
  # switch 语句应该看起来像这样：
 {{{
 switch(condition){
@@ -124,7 +117,6 @@ default:
     break;
 }
 }}}
-
  # try ... catch 语句应该看起来像这样：
 {{{
 try{
@@ -135,7 +127,6 @@ try{
     statements;
 }
 }}}
-
  # 单行的 if - else，while 或者 for 语句也必须加入括号：
 {{{
 if(condition){ statement;}
@@ -146,6 +137,7 @@ for(intialization; condition; update){ statement;}
 
 
 == 注释规范 ==
+
  # 一些你不打算给其他人使用的函数，建议添加 @ignore 让文档输出时可以忽略这段注释
  # 一些相关的功能相关的函数，建议加上@see Function 来对上下文做索引
  # 对于一些函数不建议或则需要注意的使用方法，必须加上 @deprecated作为提醒
@@ -171,7 +163,6 @@ for(intialization; condition; update){ statement;}
 	}
 	var k = r.join("");
 }}}
-
  # Switch 建议采用hash-table
 switch 可以才用 Object代替 例如:
 {{{
@@ -190,9 +181,6 @@ switch 可以才用 Object代替 例如:
  
 	a[1]();
 }}}
-
  # 不建议使用eval 
 不推荐使用eval来执行脚本。除非用来解释json数据。
-
-
  # 注意 IE 的内存泄露问题
