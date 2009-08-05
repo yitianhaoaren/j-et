@@ -14,16 +14,18 @@ Any violation to this guide is allowed if it enhances readability.
 == 命名规范 ==
 
 
-|| +3232 || - ||
-|| `*`|| / ||
+   || +3232 || - ||
+   || `*`|| / ||
 
  # 必须使用 Tab 键进行代码缩进，以节约代码大小(建议设置编辑器的tab为4个空格的宽度)
  # 接口风格
+
    || *结构*   || *规则* || *例如* ||
    || 类       || 驼峰式 || ModuleClass() ||
    || 公有方法 || 混合式 || getPosition() ||
    || 公有变量 || 混合式 || frameStyle ||
    || 常量     || 大写式 || DEFAULT_FRAME_LAYOUT ||
+
  # 其他建议风格，非必要
    || *结构* || *规则* ||
    || 私有方法 || 混合，例子：_mixedCase ||
