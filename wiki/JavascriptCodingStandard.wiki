@@ -27,11 +27,11 @@ Any violation to this guide is allowed if it enhances readability.
 || 常量     || 大写式 || DEFAULT_FRAME_LAYOUT ||
 
  # 其他建议风格，非必要
-   || *结构* || *规则* ||
-   || 私有方法 || 混合，例子：_mixedCase ||
-   || 私有变量 || 混合，例子：_mixedCase ||
-   || 方法（method）参数 || 混合，例子：_mixedCase, mixedCase ||
-   || 本地（local）变量 || 混合，例子：_mixedCase, mixedCase ||
+ * || *结构* || *规则* ||
+ * || 私有方法 || 混合，例子：_mixedCase ||
+ * || 私有变量 || 混合，例子：_mixedCase ||
+ * || 方法（method）参数 || 混合，例子：_mixedCase, mixedCase ||
+ * || 本地（local）变量 || 混合，例子：_mixedCase, mixedCase ||
  # 所有语句结束后，必须使用 ; 号结束
 
 
