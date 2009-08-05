@@ -142,6 +142,8 @@ while(condition){ statement;}
 for(intialization; condition; update){ statement;}
 }}}
 
+
+
 == 注释规范 ==
  # 一些你不打算给其他人使用的函数，建议添加 @ignore 让文档输出时可以忽略这段注释
  # 一些相关的功能相关的函数，建议加上@see Function 来对上下文做索引
@@ -155,6 +157,7 @@ for(intialization; condition; update){ statement;}
  # 常用全局变量建议使用 JsDoc 的注释方式
  # 一般的变量及局部变量才用 // 方式进行注释，建议在需要做注释的语句的上一行
  # 其他详情请参考 JsDoc 注释方法
+
 
 == 其他 ==
  # String 优化
