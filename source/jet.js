@@ -54,7 +54,9 @@
 			}
 			return msg;
 		};
-
+		
+	//this.name="pp"
+	//alert("jet:"+this.name)
 	try{
 		// 判断Jet名字空间是否已经存在
 		if(typeof Jet === "undefined" || (Jet.mark && Jet.mark === mark)){
@@ -2751,6 +2753,11 @@ Jet().$package(function(J){
     var scripts = tagName("script");
 	J.src = scripts[scripts.length-1].src;
 	J.filename = "jet.js";
+    for(var i=0; i<scripts.length; i++){
+    	if(scripts[i].src.indexOf(J.filename)>-1){
+    		J.src = scripts[i].src;
+    	}
+    }
 	J.path = J.src.split(J.filename)[0];
 	//J.out(J.path)
 	
@@ -3590,11 +3597,11 @@ Jet().$package(function(J){
 	    linkNode = function(uri, win, charset) {
 	        var c = charset || "utf-8";
 	        return $D.node("link", {
-		                "id":      "jet_load_" + id,
-		                "type":    "text/css",
-		                "charset": c,
-		                "rel":     "stylesheet",
-		                "href":    uri
+		                "id":		"jet_load_" + id,
+		                "type":		"text/css",
+		                "charset":	c,
+		                "rel":		"stylesheet",
+		                "href":		uri
 		            }, win);
 	    };
 	    
@@ -3609,10 +3616,11 @@ Jet().$package(function(J){
 	    scriptNode = function(uri, win, charset) {
 	        var c = charset || "utf-8";
 	        return $D.node("script", {
-		                "id":      "jet_load_" + id,
-		                "type":    "text/javascript",
-		                "charset": c,
-		                "src":     uri
+		                "id":		"jet_load_" + id,
+		                "defer":	"defer",
+		                "type":		"text/javascript",
+		                "charset":	c,
+		                "src":		uri
 		            }, win);
 	    };
 	    

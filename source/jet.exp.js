@@ -11,7 +11,7 @@
  * 
  */
 
-
+var test="in exp.js";
 
 
 
@@ -21,14 +21,14 @@
 Jet().$package(function(J){
 
 
-	var string="sdf${title},dfsdfsd${name},dkfkksdf!";
+	var string="sdf ${title},dfsdfsd ${name},dkfkksdf!";
 	var p = J.String.template(string, {
-		title: "1111",
-		tel: "22",
-		name: "3"
+		title: "我是标题",
+		tel: "18923896900",
+		name: "Kinvix"
 	});
 
-
+	J.out(p);
 });
 
 
