@@ -3,19 +3,12 @@
 = 一、在HTML中嵌入Javasript的方法 =
 
  # 直接在Javascript代码放在标记对`<script>`和`</script>`之间
-
  # 由`<script />`标记的src属性制定外部的js文件
-
  # 放在事件处理程序中，比如：`<p onclick="alert('我是由onclick事件执行的Javascript')">点击我</p>`
-
  # 作为URL的主体，这个URL使用特殊的`Javascript：`协议，比如：`<a href="javascript:alert('我是由javascript:协议执行的javascript')">点击我</a>`
-
  # 利用javascript本身的`document.write()`方法写入新的javascript代码
-
  # 利用Ajax异步获取javascript代码，然后执行
-
   注：第3种和第4种方法写入的Javascript需要触发才能执行，所以除非特别设置，否则页面加载时不会执行。 
-
 
 
 = 二、Javascript在页面的执行顺序 =
@@ -77,8 +70,9 @@ alert(3);
 }}}
 这样IE下和其他浏览器输出值的顺序都是一直的了：1、2、我是1、3。 
 
+
 = 三、如何改变Javascript在页面的执行顺序 =
-利用onload
+== 1.利用onload ==
 {{{
 <script type="text/javascript">//<![CDATA[
 window.onload = f;
@@ -120,5 +114,5 @@ alert(3);
 
 当 HTML解析器遇到一个脚本，它必须按常规终止对文档的解析并等待脚本执行。为了解决这个问题HTML4标准定义了defer。通过defer来提示浏览器可以继续解析HTML文档，并延迟执行脚本。这种延迟在脚本从外部文件载入时非常有用，让浏览器不必等待外部文件全部载入之后才继续执行，能有效的提高性能。IE是目前唯一支持defer属性的浏览器，但IE并没有正确的实现了defer属性，因为延迟的脚本总是被延迟，直到文档结束，而不是只延迟到下一个非延迟的脚本。这意味着，IE中延迟的脚本的执行顺序相当混乱，并且不能定义任何后面非延迟脚本并须的函数和变量。在IE中所有的defer的脚本执行时间应该都是HTML文档树建立以后，window.onload之前。 
 
-利用Ajax。
+== 2.利用Ajax ==
 因为xmlhttpRequest能判断外部文档加载的状态，所以能够改变代码的加载顺序。
