@@ -1,17 +1,17 @@
 #summary JET 简介
-#labels Featured
+#labels Featured,JET
 
 
 == 命名含义 ==
  * JET 是 Javascript Extension Tools 的缩写，即 Javascript 扩展工具箱的意思。
- * jet 本意是喷气式飞机，所以同时可以借喻轻巧快速的寓意。
+ * jet 本意是喷气式飞机，所以同时借喻轻巧快速的寓意。
 
 
 
 == 设计理念 ==
- * 保持优秀的效率
- * 保持 Javascript 原有的风格
- * 更好的组织 WebApp 代码
+ * 保持最优的执行效率
+ * 保持 Javascript 原有的代码风格
+ * 更好的组织工业级 Javascript 应用程序
 
 
 == 其他 ==
