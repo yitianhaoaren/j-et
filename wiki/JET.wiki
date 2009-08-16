@@ -17,3 +17,11 @@
 == 其他 ==
  * 探索在前端使用 MVC 模式来构建大型 WebApp (Build Web App with MVC)
  * 探索工业级 Javascript 的开发技术
+
+== 发展规划 ==
+ # 核心底层（跨浏览器）
+ # 基础扩展
+ # UI 基础控件
+ # widgets 元件
+ # 实时动画系统
+ # 基础扩展
