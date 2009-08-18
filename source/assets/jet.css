@@ -1,6 +1,6 @@
 ﻿
 /* 控制台 */
-.console_log{
+.consoleBox{
 	display:none;
 	position: fixed;
 	_position: absolute;
@@ -24,19 +24,19 @@
 }
 
 /* 控制台标题栏 */
-.console_log_head{
+.consoleBoxHead{
 	height:16px;
 	background: #666;
 	overflow:hidden;
 }
-.console_log_head .title{
+.consoleBoxHead .title{
 	margin:0;
 	padding: 0 0 0 3px;
 	height:16px;
 	line-height:16px;
 	font-family: Verdana;
 }
-.console_log_head .close_button{
+.consoleBoxHead .consoleCloseButton{
 	float:right;
 	margin-top:-5px;
 	_margin-top:-5px;
@@ -53,19 +53,19 @@
 }
 
 /* 控制台信息输出列表 */
-ul.log_list{
+ul.consoleOutput{
 	margin:2px 0 0 0;
 	padding:0;
 	height:260px;
 	overflow-y:auto;
 	list-style:none;
 }
-ul.log_list li{
+ul.consoleOutput li{
 	padding:3px;
 	border-bottom:1px solid #333333;
 	line-height:150%;
 }
-.log_list .log_icon{
+.consoleOutput .log_icon{
 	width:13px;
 	height:13px;
 	background:#fff;
@@ -106,7 +106,7 @@ ul.log_list li{
 .log_profile_type{}
 
 /* 控制台输入框 */
-.console_input_box{
+#JetConsole .consoleInputBox{
 	font-family: Verdana;
 	font-size:12px;
 
@@ -115,7 +115,7 @@ ul.log_list li{
 	color:#CCFF00;
 	padding:2px 0 2px 0;
 }
-.console_input_box input{
+#JetConsole  input.consoleInput{
 	border:0px solid #666;
 	background:#000;
 	color:#CCFF00;

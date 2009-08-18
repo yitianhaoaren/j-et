@@ -36,7 +36,7 @@
 		},
 		
 		option = {
-			debug: DEBUG.NO_DEBUG
+			debug: DEBUG.SHOW_ALL
 		},
 		
 		/**
@@ -871,10 +871,9 @@ Jet().$package(function(J){
 	 * @return {Function} 返回重构后的函数的执行结果
 	 */
 	rebuild = function(func, option){
-		var self = func;
 		option = option || {};
 		
-		self.$$rebuildedFunc = function(){
+		func.$$rebuildedFunc = func.$$rebuildedFunc || function(){
 			var self2 = this,
 				scope,
 				args,
@@ -889,10 +888,10 @@ Jet().$package(function(J){
 				args = args.slice(1);
 			}
 
-			return self.apply(scope, args);
+			return func.apply(scope, args);
 		};
 
-		return self.$$rebuildedFunc;
+		return func.$$rebuildedFunc;
 	};
 	
 	/**
@@ -2899,6 +2898,10 @@ Jet().$package(function(J){
 					clientY: e.clientY,
 	                screenX: e.screenX,
 					screenY: e.screenY,
+					layerX: e.offsetX,
+					layerY: e.offsetY,
+					pageX: e.clientX + document.body.scrollLeft,
+					pageY: e.clientY + document.body.scrollTop,
 	                
 	               // Key state
 	                altKey: e.altKey,
@@ -3254,7 +3257,7 @@ Jet().$package(function(J){
 		eventType = "on" + eventType;
 		
 		// 判断对象是否含有$Events对象
-		if(!targetModel._$Events){
+		if(!!!targetModel._$Events){
 			targetModel._$Events={};
 		}
 		
@@ -3305,12 +3308,13 @@ Jet().$package(function(J){
 		if(targetModel._$Events && targetModel._$Events[eventType]){
 			handlers = targetModel._$Events[eventType];
 			length = handlers.length;
-
-			// 通过循环，执行handlers数组所包含的所有函数function
-			for(i=0; i<length; i++){
-				handlers[i].apply(targetModel, J.toArray(options));
+			if(length > 0){
+				// 通过循环，执行handlers数组所包含的所有函数function
+				for(i=0; i<length; i++){
+					handlers[i].apply(targetModel, J.toArray(options));
+				}
+				return true;
 			}
-			return true;
 		}else{
 			// throw new Error("还没有定义 [" + targetModel + "] 对象的: " + eventType + " 事件！");
 			return false;
@@ -3338,19 +3342,22 @@ Jet().$package(function(J){
 			events = targetModel._$Events;
 		
 		if(handler){
+			
 			if(events){
 				eventType = "on" + eventType;
 				handlers = events[eventType];
+				
 				if(handlers){
 					length = handlers.length;
 					for(i=0; i<length; i++){
-						if(handlers[i] === handler){
+						if(handlers[i] == handler){
 							handlers[i] = null;
 							handlers.splice(i, 1);
 							break;
 						}	
 					}
 				}
+				
 				
 			}
 		}else if(eventType){
@@ -3744,8 +3751,19 @@ Jet().$package(function(J){
 			}, timeout);
         }
         
-		
-		return true;
+		var func = function(node){
+			this._node = node;
+			this._head = head;
+		};
+		func.prototype={
+			abort:function(){
+				this._node.src="";
+				this._head.removeChild(this._node);
+				delete this._node;
+			}
+			
+		};
+		return new func(node);
 	};
 	load.Id=0;
 	
@@ -3918,13 +3936,13 @@ Jet().$package(function(J){
 		 * 
 		 * @type String
 		 */
-		_html :    '<div id="log_head" class="console_log_head">\
-						<button id="log_close" class="close_button">x</button>\
+		_html :    '<div id="ConsoleBoxHead" class="consoleBoxHead">\
+						<button id="ConsoleCloseButton" class="consoleCloseButton">x</button>\
 						<h5 class="title">Console</h5>\
 					</div>\
-					<ul id="log_list" class="log_list"></ul>\
-					<div class="console_input_box">\
-						&gt;<input id="console_input"/>\
+					<ul id="ConsoleOutput" class="consoleOutput"></ul>\
+					<div class="consoleInputBox">\
+						&gt;<input id="ConsoleInput" class="consoleInput" />\
 					</div>',
 	
 		/**
@@ -3936,6 +3954,8 @@ Jet().$package(function(J){
 		
 		//日志记录对象
 		_log_record: [],
+		
+		
 	
 		/**
 		 * 信息类型常量，一共五种类型<br/> <br/> DEBUG : 0 <br/> ERROR : 1 <br/> WARNING : 2
@@ -3991,21 +4011,25 @@ Jet().$package(function(J){
 			$H.loadCss(J.path+"assets/jet.css");
 			this._main = document.createElement("div");
 			window.document.body.appendChild(this._main);
-			this._main.className = "console_log";
+			this._main.id="JetConsole";
+			this._main.className = "consoleBox";
 			this._main.innerHTML = this._html;
-	
-			this._input = $("console_input");
-			this._button = $("log_close");
-			this._list = $("log_list");
+			
+			
+			this._headEl = $("ConsoleBoxHead");
+			this._inputEl = $("ConsoleInput");
+			this._closeButtonEl = $("ConsoleCloseButton");
+			this._outputEl = $("ConsoleOutput");
 
 			// 如果存在拖拽类
 			if (J.dragdrop) {
-				J.dragdrop.registerDragdropHandler($("log_head"), this._main);
+				J.dragdrop.registerDragdropHandler(this._headEl, this._main);
 			}
+			
 	
 			// 绑定方法
-			$E.on(this._input, "keypress", this._execScript);
-			$E.on(this._button, "click", this.hide);
+			$E.on(this._inputEl, "keypress", this._execScript);
+			$E.on(this._closeButtonEl, "click", this.hide);
 			// 输入焦点过来
 			// $E.on(this._main, "dblclick", this.focusCommandLine.bind(this));
 			// 快捷键显示
@@ -4038,7 +4062,7 @@ Jet().$package(function(J){
 		},
 		
 		focusCommandLine: function(){
-			this._input.focus();
+			this._inputEl.focus();
 		},
 		
 		toggleShow:function(){
@@ -4077,13 +4101,13 @@ Jet().$package(function(J){
 			this.log(msg, type);
 			if(type < J.option.debug){
 				var _item = document.createElement("li");
-				this._list.appendChild(_item);
+				this._outputEl.appendChild(_item);
 				
 				var _ti = J.Console._typeInfo[type] || J.Console._typeInfo[0];
 				_item.className = _ti[0];
 				_item.innerHTML = '<span class="log_icon">' + _ti[1] + '</span>' + msg;
 		
-				this._list.scrollTop = this._list.scrollHeight;
+				this._outputEl.scrollTop = this._outputEl.scrollHeight;
 			}
 		},
 		
@@ -4114,7 +4138,7 @@ Jet().$package(function(J){
 		 * 清空log
 		 */
 		clear : function() {
-			J.Console._list.innerHTML = "";
+			J.Console._outputEl.innerHTML = "";
 		},
 	
 		/**
@@ -4126,7 +4150,7 @@ Jet().$package(function(J){
 			}
 	
 			// 控制台命令
-			switch (J.Console._input.value) {
+			switch (J.Console._inputEl.value) {
 				case "help" :
 					var _rv = "Console Help<br/>help  : console help<br/>clear : clear console list.<br/>hide : hide console"
 					J.Console.out(_rv, 3);
@@ -4138,9 +4162,9 @@ Jet().$package(function(J){
 					J.Console.hide();
 					break;
 				default :
-					var _rv = '<span style="color:#CCFF00">' + J.Console._input.value + '</span><br/>';
+					var _rv = '<span style="color:#CCFF00">' + J.Console._inputEl.value + '</span><br/>';
 					try {
-						_rv += (eval(J.Console._input.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
+						_rv += (eval(J.Console._inputEl.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
 						J.Console.out(_rv, 0);
 					} catch (ex) {
 						_rv += ex.description;
@@ -4148,7 +4172,7 @@ Jet().$package(function(J){
 					}
 			}
 	
-			J.Console._input.value = "";
+			J.Console._inputEl.value = "";
 		}
 	});
 	
@@ -4171,6 +4195,11 @@ Jet().$package(function(J){
 	 * @lends Debug
 	 */
 	{
+		NO_DEBUG: 0,
+		SHOW_ERROR: 1,
+		SHOW_WARNING: 2,
+		SHOW_INFO: 3,
+		SHOW_ALL: 4,
 		/**
 		 * 错误对象
 		 */
@@ -4188,7 +4217,7 @@ Jet().$package(function(J){
 			 */
 			window.onerror = function(msg,url,line) {
 				var urls = (url || "").replace(/\\/g,"/").split("/");
-				J.Console.out(msg + "<br/>" + urls[urls.length - 1] + " (line:" + line + ")",1);
+				J.Console.out(msg + "<br/>" + urls[urls.length - 1] + " (line:" + line + ")",J.Debug.SHOW_ERROR);
 				J.Debug.errorLogs.push(msg);
 				return false;
 			}
