@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>鼠标拖拽</title>
+	<link rel="stylesheet" href="../../source/assets/jet.reset2.css" type="text/css" />
+	<link rel="stylesheet" href="../../source/assets/jet.960grid.css" />
+	<style>
+	.draggable1{  
+		position:absolute;  
+		width:300px;   
+		height:200px;  
+		background: blue;  
+	}
+	.draggable2{  
+		position:absolute;  
+		width:300px;   
+		height:200px;  
+		background: red;  
+	}
+	</style>
+</head>
+
+<body>
+
+	<div id="m1" class="draggable1"></div>  
+	<div id="m2" class="draggable2"></div>  
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.exp.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+		Jet().$package(function(J){
+			var $D = J.Dom,
+				$E = J.Event;
+
+			var p = new J.Drag($D.id("m1"));
+			var p = new J.Drag($D.id("m2"));
+
+		});
+		
+	//]]>
+	</script>
+</body>
+</html>
