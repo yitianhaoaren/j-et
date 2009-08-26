@@ -3,7 +3,10 @@
 .consoleBox{
 	display:none;
 	position: fixed;
-	_position: absolute;
+	/* position fixed for IE6 */
+    _position: absolute; 
+    _top:expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight-33);
+    _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth);
 	right: 30px;
 	bottom: 30px;
 	z-index: 65535;
