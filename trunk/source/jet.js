@@ -230,7 +230,7 @@
 							if(typeof name === "string"){
 								ns = this.$namespace(name);
 								if(Jet.PACKAGES[name]){
-									throw new Error("Package name [" + name + "] is exist!");
+									//throw new Error("Package name [" + name + "] is exist!");
 								}else{
 							   		Jet.PACKAGES[name] = {
 										isLoaded: true,
@@ -238,6 +238,7 @@
 									};
 								}
 							}
+							ns.packageName = name;
 							returnValue = func.call(ns, this);
 						}else{
 							throw new Error("Function required");
@@ -2803,9 +2804,9 @@ Jet().$package(function(J){
 		removeEventListener,
 		onDOMReady,
 		isDOMReady,
-		addModelEvent,
-		trigger,
-		removeModelEvent;
+		addObserver,
+		notifyObservers,
+		removeObserver;
 	/**
 	 * Event 名字空间
 	 * 
@@ -3240,14 +3241,14 @@ Jet().$package(function(J){
 	 * 
 	 * 为自定义Model添加事件监听器
 	 * 
-	 * @method addModelEvent
+	 * @method addObserver
 	 * @memberOf Event
 	 * 
 	 * @param targetModel 目标 model，即被观察的目标
 	 * @param eventType 事件类型，不含on
 	 * @param handler 观察者要注册的事件处理器
 	 */
-	addModelEvent = function(targetModel, eventType, handler){
+	addObserver = function(targetModel, eventType, handler){
 		var handlers,
 			length,
 			index,
@@ -3290,7 +3291,7 @@ Jet().$package(function(J){
 	 * 
 	 * 触发自定义Model事件的监听器
 	 * 
-	 * @method trigger
+	 * @method notifyObservers
 	 * @memberOf Event
 	 * 
 	 * @param targetModel 目标 model，即被观察目标
@@ -3298,7 +3299,7 @@ Jet().$package(function(J){
 	 * @param options 触发的参数对象
 	 * @return {Boolean} 是否出发到至少一个的观察者
 	 */
-	trigger = function(targetModel, eventType, options){
+	notifyObservers = function(targetModel, eventType, options){
 		var handlers,
 			length,
 			i;
@@ -3326,7 +3327,7 @@ Jet().$package(function(J){
 	 * 
 	 * 为自定义 Model 移除事件监听器
 	 * 
-	 * @method removeModelEvent
+	 * @method removeObserver
 	 * @memberOf Event
 	 * 
 	 * @param targetModel 目标 model，即被观察的目标
@@ -3334,7 +3335,7 @@ Jet().$package(function(J){
 	 * @param handler 观察者要取消注册的事件处理器
 	 */
 	// 按照对象和事件处理函数来移除事件处理函数
-	removeModelEvent = function(targetModel, eventType, handler){
+	removeObserver = function(targetModel, eventType, handler){
 		var i,
 			j,
 			handlers,
@@ -3394,9 +3395,9 @@ Jet().$package(function(J){
 	$E.onDOMReady = onDOMReady;
 	
 	// Model 事件方法
-	$E.addModelEvent = addModelEvent;
-	$E.trigger = trigger;
-	$E.removeModelEvent = removeModelEvent;
+	$E.addObserver = addObserver;
+	$E.notifyObservers = notifyObservers;
+	$E.removeObserver = removeObserver;
 });
 
 
@@ -4152,7 +4153,10 @@ Jet().$package(function(J){
 			// 控制台命令
 			switch (J.Console._inputEl.value) {
 				case "help" :
-					var _rv = "Console Help<br/>help  : console help<br/>clear : clear console list.<br/>hide : hide console"
+					var _rv = "&lt;&lt; Console Help &gt;&gt;<br/>\
+								help  : 控制台帮助<br/>\
+								clear : 清空控制台输出<br/>\
+								hide  : 隐藏控制台，或者使用 Ctrl + `(~) 快捷键"
 					J.Console.out(_rv, 3);
 					break;
 				case "clear" :
@@ -4162,7 +4166,7 @@ Jet().$package(function(J){
 					J.Console.hide();
 					break;
 				default :
-					var _rv = '<span style="color:#CCFF00">' + J.Console._inputEl.value + '</span><br/>';
+					var _rv = '<span style="color:#ccff00">' + J.Console._inputEl.value + '</span><br/>';
 					try {
 						_rv += (eval(J.Console._inputEl.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
 						J.Console.out(_rv, 0);
