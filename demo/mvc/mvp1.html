@@ -45,21 +45,7 @@ whatDoesAnimalDo.model = {
 };
 
 
-// controller层
-whatDoesAnimalDo.presenter = {
-    // 选择视图
-    start: function() {
-        whatDoesAnimalDo.view.start();
-    },
-    // 将用户的操作映射到模型的更新上
-    sendViewChange: function(animalName) {
-        whatDoesAnimalDo.model.setAnimal(animalName);
-    },
-	// 将模型的更新映射到View视图上
-    sendModelChange: function(data) {
-        whatDoesAnimalDo.view.update(data);
-    }
-};
+
 
 
 // View视图层
@@ -75,6 +61,22 @@ whatDoesAnimalDo.view = {
     // 视图更新显示的方法，其中视图会向model查询当前的状态，并将其显示给用户
     update: function(data) {
         document.getElementById('whatDoesThisAnimalDo').innerHTML = data;
+    }
+};
+
+// presenter 层
+whatDoesAnimalDo.presenter = {
+    // 选择视图
+    start: function() {
+        whatDoesAnimalDo.view.start();
+    },
+    // 将用户的操作映射到模型的更新上
+    sendViewChange: function(animalName) {
+        whatDoesAnimalDo.model.setAnimal(animalName);
+    },
+	// 将模型的更新映射到View视图上
+    sendModelChange: function(data) {
+        whatDoesAnimalDo.view.update(data);
     }
 };
 

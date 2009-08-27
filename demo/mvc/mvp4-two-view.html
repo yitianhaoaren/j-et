@@ -41,7 +41,7 @@
 	<script type="text/javascript" defer="defer" src="../../source/jet.js"></script>
 	<script type="text/javascript">
 	
-		// model 层
+		// model 层：
 		Jet().$package("whatDoesAnimalDo.model", function(J){
 			var $E = J.Event;
 			
@@ -55,7 +55,7 @@
 			// 当前的animal，也就是这个application的状态
 			var currentAnimal= null;
 			
-			// 数据模型负责业务逻辑和数据存储
+			// 数据模型负责【业务逻辑】和【数据存储】
 			this.setAnimal = function(animalName) {
 				currentAnimal = animalDictionary[animalName] ? animalName : null;
 				
@@ -70,7 +70,7 @@
 
 		});
 		
-		// view 层1
+		// view 层：1
 		Jet().$package("whatDoesAnimalDo.view", function(J){
 			var $E = J.Event;
 			
@@ -89,7 +89,7 @@
 
 		});
 		
-		// view 层2
+		// view 层：2
 		Jet().$package("whatDoesAnimalDo.view2", function(J){
 			var $E = J.Event;
 			
@@ -109,7 +109,7 @@
 		});
 		
 		
-		// presenter 层
+		// presenter(主持者，呈献者) 层：1
 		Jet().$package("whatDoesAnimalDo.presenter", function(J){
 			var $E = J.Event;
 
@@ -135,7 +135,7 @@
 		});
 		
 		
-		// presenter2 层
+		// presenter 层：2
 		Jet().$package("whatDoesAnimalDo.presenter2", function(J){
 			var $E = J.Event;
 
@@ -159,6 +159,7 @@
 			//this.init();
 
 		});
+		
 		
 		whatDoesAnimalDo.presenter.init();
 		whatDoesAnimalDo.presenter2.init();
