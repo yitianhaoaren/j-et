@@ -27,18 +27,18 @@
 			var $E = J.Event;
 			
 			// animal的数据
-			this.animalDictionary = {
-				cat: "喵喵~~",
-				fish: "游来游去~~~",
-				bird: "飞翔~"
-			};
+			var animalDictionary = {
+					cat: "喵喵~~",
+					fish: "游来游去~~~",
+					bird: "飞翔~"
+				};
 			
 			// 当前的animal，也就是这个application的状态
-			this.currentAnimal= null;
+			var currentAnimal= null;
 			
 			// 数据模型负责业务逻辑和数据存储
 			this.setAnimal = function(animalName) {
-				this.currentAnimal = this.animalDictionary[animalName] ? animalName : null;
+				currentAnimal = animalDictionary[animalName] ? animalName : null;
 				
 				// 触发自己的事件
 				$E.notifyObservers(this,"ModelChange", this.getAnimalAction());
@@ -46,7 +46,7 @@
 			
 			// 还需要响应视图对当前状态的查询
 			this.getAnimalAction = function() {
-				return this.currentAnimal ? this.currentAnimal + ": " + this.animalDictionary[this.currentAnimal] : "汪汪?";
+				return currentAnimal ? currentAnimal + ": " + animalDictionary[currentAnimal] : "汪汪?";
 			};
 
 		});
@@ -56,7 +56,7 @@
 			var $E = J.Event;
 			
 			// 用户输入触发onchange事件
-			this.start = function() {
+			this.init = function() {
 				document.getElementById('selAnimal').onchange = J.bind(function(){
 					// 触发自己的事件
 					$E.notifyObservers(this, "ViewChange", document.getElementById('selAnimal').value);
@@ -71,37 +71,33 @@
 		});
 		
 		
+		
 		// presenter 层
 		Jet().$package("whatDoesAnimalDo.presenter", function(J){
 			var $E = J.Event;
 
 			// 选择视图
-			this.start = function() {
-				whatDoesAnimalDo.view.start();
+			this.init = function() {
+				$E.addObserver(whatDoesAnimalDo.model, "ModelChange", J.bind(this.onModelChange,this));
+				$E.addObserver(whatDoesAnimalDo.view, "ViewChange", J.bind(this.onViewChange,this));
+				whatDoesAnimalDo.view.init();
 			};
 			
 			// 将用户的操作映射到模型的更新上
-			this.sendViewChange = function(animalName) {
+			this.onViewChange = function(animalName) {
 				whatDoesAnimalDo.model.setAnimal(animalName);
 			};
 			
 			// 将模型的更新映射到View视图上
-			this.sendModelChange = function(data) {
+			this.onModelChange = function(data) {
 				whatDoesAnimalDo.view.update(data);
 			};
 
-			$E.addObserver(whatDoesAnimalDo.model, "ModelChange", J.bind(function(data){
-				this.sendModelChange(data);
-			},this));
-			
-			$E.addObserver(whatDoesAnimalDo.view, "ViewChange", function(data) {
-				whatDoesAnimalDo.presenter.sendViewChange(data);
-			});
-
-			this.start();
+			//this.init();
 
 		});
 		
+		whatDoesAnimalDo.presenter.init();
 
 	</script>
 </body>
