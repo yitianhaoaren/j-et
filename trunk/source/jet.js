@@ -2711,15 +2711,42 @@ Jet().$package(function(J){
 	 * @memberOf Dom
 	 * 
 	 * @param {Element} el 元素
+	 * @param {String} displayStyle 强制指定以何种方式显示，如：block，inline，inline-block等等
 	 */
-    show = function(el){
+    show = function(el, displayStyle){
     	var display;
     	if(el["$oldDisplay"]){
     		display = el["$oldDisplay"];
     	}else{
     		display = getStyle(el, "display");
     	}
-    	
+    	if(displayStyle){
+    		setStyle(el, "display", displayStyle);
+    	}else{
+	    	if(display === "none"){
+	    		setStyle(el, "display", "block");
+	    	}else{
+	    		setStyle(el, "display", display);
+	    	}
+    	}
+    };
+    
+    /**
+	 * 
+	 * 还原元素原来的display属性
+	 * 
+	 * @method recover
+	 * @memberOf Dom
+	 * 
+	 * @param {Element} el 元素
+	 */
+    recover = function(el){
+    	var display;
+    	if(el["$oldDisplay"]){
+    		display = el["$oldDisplay"];
+    	}else{
+    		display = getStyle(el, "display");
+    	}
     	if(display === "none"){
     		setStyle(el, "display", "");
     	}else{
@@ -2760,6 +2787,8 @@ Jet().$package(function(J){
     }
 	J.path = J.src.split(J.filename)[0];
 	//J.out(J.path)
+	
+	$D.getDoc = getDoc;
 	
 	$D.id = id;
 	$D.name = name;
