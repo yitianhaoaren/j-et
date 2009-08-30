@@ -1282,6 +1282,8 @@ Jet().$package(function(J){
 		escapeRegExp,
 		toInt,
 		toFloat,
+		toHtml,
+		toTitle,
 		hexToRgb,
 		rgbToHex,
 		stripScripts,
@@ -1501,6 +1503,43 @@ Jet().$package(function(J){
 	toFloat = function(string){
 		return parseFloat(string);
 	};
+	
+	/**
+	 * 将字符串转换成html源码
+	 * 
+	 * @memberOf String
+	 * @return {Sring} 返回转换后的html代码字符串
+	 */
+	toHtml = function(str){
+		return String(str).replace(/&/gi,"&amp;")
+							.replace(/\\/gi,"&#92;")
+							.replace(/\'/gi,"&#39;")
+							.replace(/\"/gi,"&quot;")
+							.replace (/</gi,"&lt;")
+							.replace(/>/gi,"&gt;")
+							.replace(/ /gi,"&nbsp;")
+							.replace(/\r\n/g,"<br />")
+							.replace(/\n\r/g,"<br />")
+							.replace(/\n/g,"<br />")
+							.replace(/\r/g,"<br />");
+	};
+	
+	/**
+	 * 将字符串转换成用于title的字符串
+	 * 
+	 * @memberOf String
+	 * @return {Number} 返回转换后的in title字符串
+	 */
+	toTitle = function(str){
+		return String(str).replace(/\\/gi,"\\")
+							.replace(/\'/gi,"\'")
+							.replace(/\"/gi,"\'");
+	};
+
+	
+	
+	
+	
 
 	/**
 	 * 将颜色 Hex 写法转换成 RGB 写法
@@ -1597,6 +1636,8 @@ Jet().$package(function(J){
 	$S.escapeRegExp = escapeRegExp;
 	$S.toInt = toInt;
 	$S.toFloat = toFloat;
+	$S.toHtml = toHtml;
+	$S.toTitle = toTitle;
 	$S.hexToRgb = hexToRgb;
 	$S.rgbToHex = rgbToHex;
 	$S.stripScripts = stripScripts;
@@ -3328,7 +3369,7 @@ Jet().$package(function(J){
 	 * @param options 触发的参数对象
 	 * @return {Boolean} 是否出发到至少一个的观察者
 	 */
-	notifyObservers = function(targetModel, eventType, options){
+	notifyObservers = function(targetModel, eventType, argument){
 		var handlers,
 			length,
 			i;
@@ -3341,7 +3382,7 @@ Jet().$package(function(J){
 			if(length > 0){
 				// 通过循环，执行handlers数组所包含的所有函数function
 				for(i=0; i<length; i++){
-					handlers[i].apply(targetModel, J.toArray(options));
+					handlers[i].apply(targetModel, [argument]);
 				}
 				return true;
 			}
