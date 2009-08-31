@@ -2281,6 +2281,7 @@ Jet().$package(function(J){
 		setStyle,
 		getStyle,
 		show,
+		recover,
 		hide,
 		
 		getScrollLeft,
@@ -2289,6 +2290,11 @@ Jet().$package(function(J){
 		getScrollWidth,
 		getClientHeight,
 		getClientWidth,
+		getClientXY,
+		setClientXY,
+		getXY,
+		setXY,
+		
 	
 		getDoc,
 		getWin,
@@ -2447,8 +2453,13 @@ Jet().$package(function(J){
      * @return {Number} The height of the actual document (which includes the body and its margin).
      */
     getScrollHeight = function(el) {
-        var el = el || documentElement;
-        return el.scrollHeight;
+        var scrollHeight;
+    	if(el){
+    		scrollHeight = el.scrollHeight;
+    	}else{
+    		scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    	}
+        return scrollHeight || 0;
     };
     
     /**
@@ -2462,8 +2473,13 @@ Jet().$package(function(J){
      * @return {Int} The width of the actual document (which includes the body and its margin).
      */
     getScrollWidth = function(el) {
-        var el = el || documentElement;
-        return el.scrollWidth;
+        var scrollWidth;
+    	if(el){
+    		scrollWidth = el.scrollWidth;
+    	}else{
+    		scrollWidth = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
+    	}
+        return scrollWidth || 0;
     };
 
     /**
@@ -2514,8 +2530,13 @@ Jet().$package(function(J){
      * @return {Int}  The amount that the document is scrolled to the left
      */
     getScrollLeft = function(el) {
-        el = el || documentElement;
-        return el.scrollLeft;
+    	var scrollLeft;
+    	if(el){
+    		scrollLeft = el.scrollLeft;
+    	}else{
+    		scrollLeft = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+    	}
+        return scrollLeft || 0;
     };
 
     /**
@@ -2527,8 +2548,13 @@ Jet().$package(function(J){
      * @return {Int}  The amount that the document is scrolled to the top
      */
     getScrollTop = function(el) {
-        el = el || documentElement;
-        return el.scrollTop;
+        var scrollTop;
+    	if(el){
+    		scrollTop = el.scrollTop;
+    	}else{
+    		scrollTop = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+    	}
+        return scrollTop || 0;
     };
 
     
@@ -2818,6 +2844,84 @@ Jet().$package(function(J){
 	
     
     
+    /**
+	 * 获取对象坐标
+	 * 
+	 * @param {HTMLElement} el
+	 * @return Array [top,left]
+	 * @type Array
+	 */
+	getClientXY = function(el) {
+		var _t = 0,
+			_l = 0;
+
+		if (el) {
+			//这里只检查document不够严谨, 在el被侵染置换(jQuery做了这么恶心的事情)
+			//的情况下, el.getBoundingClientRect() 调用回挂掉
+			if (document.documentElement.getBoundingClientRect && el.getBoundingClientRect) { // 顶IE的这个属性，获取对象到可视范围的距离。
+				//现在firefox3，chrome2，opera9.63都支持这个属性。
+				var box = el.getBoundingClientRect();
+				var oDoc = el.ownerDocument;
+				
+				var _fix = J.Browser.ie ? 2 : 0; //修正ie和firefox之间的2像素差异
+				
+				_t = box.top - _fix + getScrollTop(oDoc);
+				_l = box.left - _fix + getScrollLeft(oDoc);
+			} else {//这里只有safari执行。
+				while (el.offsetParent) {
+					_t += el.offsetTop;
+					_l += el.offsetLeft;
+					el = el.offsetParent;
+				}
+			}
+		}
+		return [_l, _t];
+	};
+	
+	/**
+	 * 设置dom坐标
+	 * 
+	 * @param {HTMLElement} el
+	 * @param {string|number} x 横坐标
+	 * @param {string|number} y 纵坐标
+	 */
+	setClientXY = function(el, x, y) {
+		x = parseInt(x) + getScrollLeft();
+		y = parseInt(y) + getScrollTop();
+		setXY(el, x, y);
+	};
+
+	/**
+	 * 获取对象坐标
+	 * 
+	 * @param {HTMLElement} el
+	 * @return Array [top,left]
+	 * @type Array
+	 */
+	getXY = function(el) {
+		var xy = getClientXY(el);
+		J.out(xy[0])
+		xy[0] = xy[0] + getScrollLeft();
+		xy[1] = xy[1] + getScrollTop();
+		return xy;
+	}
+
+	/**
+	 * 设置dom坐标
+	 * 
+	 * @param {HTMLElement} el
+	 * @param {string|number} x 横坐标
+	 * @param {string|number} y 纵坐标
+	 */
+	setXY = function(el, x, y) {
+		var _ml = parseInt(getStyle(el, "marginLeft")) || 0;
+		var _mt = parseInt(getStyle(el, "marginTop")) || 0;
+
+		setStyle(el, "left", parseInt(x) - _ml + "px");
+		setStyle(el, "top", parseInt(y) - _mt + "px");
+	};
+    
+    
     var scripts = tagName("script");
 	J.src = scripts[scripts.length-1].src;
 	J.filename = "jet.js";
@@ -2849,6 +2953,7 @@ Jet().$package(function(J){
 	$D.getStyle = getStyle;
 	
 	$D.show = show;
+	$D.recover = recover;
 	$D.hide = hide;
 	
 	
@@ -2859,6 +2964,13 @@ Jet().$package(function(J){
 	
 	$D.getClientHeight = getClientHeight;
 	$D.getClientWidth = getClientWidth;
+	
+	$D.getClientXY = getClientXY;
+	$D.setClientXY = setClientXY;
+	
+	$D.getXY = getXY;
+	$D.setXY = setXY;
+	
 	
 	
 	
