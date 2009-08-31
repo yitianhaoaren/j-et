@@ -28,7 +28,7 @@ Jet().$package(function(J){
 		name: "Kinvix"
 	});
 
-	J.out(p);
+	//J.out(p);
 });
 
 
