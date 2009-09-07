@@ -113,7 +113,7 @@
 								J = Jet.VERSIONS[ver];
 							}else{
 								J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
-								throw new Error("No Jet version " + ver + ", so return Jet version " + Jet.DEFAULT_VERSION + "!");
+								throw new Error("No JET version " + ver + ", so return Jet version " + Jet.DEFAULT_VERSION + "!");
 							}
 						}catch(e){
 							J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
@@ -3331,7 +3331,9 @@ Jet().$package(function(J){
 	    // Returns an array index or -1 if no matching handler is found
 	    $E._find = function(element, eventType, handler) {
 	        var handlers = element._handlers;
-	        if (!handlers) return -1;  // if no handlers registered, nothing found
+	        if (!handlers){
+	        	return -1;  // if no handlers registered, nothing found
+	        }
 	
 	        // Get the window of this element
 	        var d = element.document || element;
@@ -3345,8 +3347,9 @@ Jet().$package(function(J){
 	            var handlerId = handlers[i];        // get handler id
 	            var h = w._allHandlers[handlerId];  // get handler info
 	            // If handler info matches type and handler function, we found it.
-	            if (h.eventType == eventType && h.handler == handler)
+	            if (h.eventType == eventType && h.handler == handler){
 	                return i;
+	            }
 	        }
 	        return -1;  // No match found
 	    };
