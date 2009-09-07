@@ -2960,9 +2960,19 @@ Jet().$package(function(J){
     
     
     var scripts = tagName("script");
-	J.src = scripts[scripts.length-1].src;
-	J.filename = J.src.match(/([\w-]+)\.js$/)[0];
+    for(var i=0; i<scripts.length; i++){
+    	if(scripts[i].getAttribute("hasJet")=="true"){
+    		J.src = scripts[i].src;
+    	}
+    }
+    if(!J.src){
+    	J.src = scripts[scripts.length-1].src;
+    }
+	
+	J.filename = J.src.replace(/(.*\/){0,}([^\\]+).*/ig,"$2");
+	//J.out(J.src+" _ "+J.filename)
 	J.path = J.src.split(J.filename)[0];
+
 	
 	$D.getDoc = getDoc;
 	
