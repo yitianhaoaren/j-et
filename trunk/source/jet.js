@@ -2962,9 +2962,7 @@ Jet().$package(function(J){
     var scripts = tagName("script");
 	J.src = scripts[scripts.length-1].src;
 	J.filename = J.src.match(/([\w-]+)\.js$/)[0];
-
-	J.path = J.src.match(/(\w+):[\/]+([\w.]+)\/(\S*)\//)[0];
-	//J.out(J.path)
+	J.path = J.src.split(J.filename)[0];
 	
 	$D.getDoc = getDoc;
 	
