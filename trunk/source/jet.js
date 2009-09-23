@@ -533,7 +533,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的类型是 arguments 时返回 true
 	 */
 	isArguments = function(o) {
-		return o && o.legnth && o.callee;
+		return o && o.length && o.callee;
 	};
 	
 	/**
@@ -767,8 +767,11 @@ Jet().$package(function(J){
     };
     
     // 通用分时处理函数
-    timedChunk = function(items, process, context, callback) {
+    timedChunk = function(items, process, context, isShift, callback) {
         var todo = items.concat(), delay = 25;
+        if(isShift){
+        	todo = items;
+        }
  
         setTimeout(function() {
             var start = +new Date();
@@ -955,12 +958,12 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	/*
+	
 	pass = function(func){
 		var args = Array.prototype.slice.call(arguments, 1);
 		return rebuild(func, {contextObj: null, arguments: args});
 	};
-	*/
+	/*
 	pass = function(func, var_args) {
 		var slice = Array.prototype.slice;
 		var a = slice.call(arguments, 1);
@@ -969,7 +972,7 @@ Jet().$package(function(J){
 			return func.apply(context, a.concat(slice.call(arguments)));
 		};
 	};
-	
+	*/
 	/**
 	 * 给函数绑定一个上下文对象再执行
 	 * 
@@ -985,13 +988,13 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	/*
+	
 	bind = function(func, contextObj){
 		var args = Array.prototype.slice.call(arguments, 2);
 		//args = [this].extend(args);
 		return rebuild(func, {contextObj: contextObj, arguments: args});
 	};
-	*/
+	
 	
 	/**
 	 * Binds a function to an object. The returned function will always use the
@@ -1009,6 +1012,7 @@ Jet().$package(function(J){
 	 *     arguments when the function is called
 	 * @return {Function} A new function that has bound this
 	 */
+	/*
 	bind = function(func, context, var_args) {
 		var slice = Array.prototype.slice;
 		var a = slice.call(arguments, 2);
@@ -1016,6 +1020,7 @@ Jet().$package(function(J){
 			return func.apply(context, a.concat(slice.call(arguments)));
 		};
 	};
+	*/
 
 
 	
@@ -4233,7 +4238,7 @@ Jet().$package(function(J){
 		
 		handleDocumentKeydown: function(e){
 			switch(e.keyCode){
-				case 74:	// J 键:74
+				//case 74:	// J 键:74
 				case 192:	// `~键:192
 					if(e.ctrlKey){
 						
