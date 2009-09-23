@@ -904,10 +904,9 @@ Jet().$package(function(J){
 			if(arr[i] === oldValue){
 				arr[i] = newValue;
 				return true;
-			}else{
-				return false;
 			}
 		}
+		return false;
 	};
 		
 		
