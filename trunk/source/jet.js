@@ -30,7 +30,7 @@
 		},
 		
 		option = {
-			debug: DEBUG.SHOW_ALL
+			debug: DEBUG.NO_DEBUG
 		},
 		
 		/**
@@ -135,6 +135,8 @@
 				 * @type Number
 				 */
 				version: version,
+				
+				DEBUG: DEBUG,
 				
 				/**
 				 * Jet 配置
@@ -394,11 +396,13 @@ Jet().$package(function(J){
 		
 		random,
 		extend,
+		timedChunk,
 		forEach,
 		getLength,
 		Interface,
 		toArray,
 		clone,
+		indexOf,
 		$return,
 		$try,
 		
@@ -408,6 +412,7 @@ Jet().$package(function(J){
 		pass,
 		bind,
 		bindNoEvent,
+		
 		
 		formatDate;
 
@@ -645,7 +650,34 @@ Jet().$package(function(J){
 	};
 
 	
-	
+
+	/**
+	 * 正向查找数组元素在数组中的索引下标
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
+	 * @memberOf Array.prototype
+	 * @name indexOf
+	 * 
+	 * @param {Array} arr 要查找的数组
+	 * @param {Object} obj 要查找的数组的元素
+	 * @param {Number} fromIndex 开始的索引编号
+	 * 
+	 * @return {Number}返回正向查找的索引编号
+	 */
+	indexOf = function (arr, obj, fromIndex) {
+        if (fromIndex == null) {
+            fromIndex = 0;
+        } else if (fromIndex < 0) {
+            fromIndex = Math.max(0, arr.length + fromIndex);
+        }
+        for (var i = fromIndex; i < arr.length; i++) {
+            if (arr[i] === obj){
+                return i;
+            }
+        }
+        return -1;
+    };
+
 	
 	
 	
@@ -733,6 +765,26 @@ Jet().$package(function(J){
 
 		return beExtendObj;
     };
+    
+    // 通用分时处理函数
+    timedChunk = function(items, process, context, callback) {
+        var todo = items.concat(), delay = 25;
+ 
+        setTimeout(function() {
+            var start = +new Date();
+ 
+            do {
+                process.call(context, todo.shift());
+            } while(todo.length > 0 && (+new Date() - start < 50));
+ 
+            if(todo.length > 0) {
+                setTimeout(arguments.callee, delay);
+            } else if(callback) {
+                callback(items);
+            }
+ 
+        }, delay);
+    }
     
     /**
 	 * 对对象或数组的每一个元素执行指定的函数
@@ -903,9 +955,19 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
+	/*
 	pass = function(func){
 		var args = Array.prototype.slice.call(arguments, 1);
 		return rebuild(func, {contextObj: null, arguments: args});
+	};
+	*/
+	pass = function(func, var_args) {
+		var slice = Array.prototype.slice;
+		var a = slice.call(arguments, 1);
+		return function(){
+			var context = this;
+			return func.apply(context, a.concat(slice.call(arguments)));
+		};
 	};
 	
 	/**
@@ -923,31 +985,40 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
+	/*
 	bind = function(func, contextObj){
 		var args = Array.prototype.slice.call(arguments, 2);
 		//args = [this].extend(args);
 		return rebuild(func, {contextObj: contextObj, arguments: args});
 	};
-
+	*/
+	
 	/**
-	 * 给函数绑定一个上下文对象,并剔除 event 事件对象参数后再执行
-	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Object} contextObj 要绑定的上下文对象
-	 * @param {Mixed} args 参数列表
-	 * @return {Mixed} 返回函数执行结果
-	 * 
-	 * @example
-	 * Jet().$package(function(J){
-	 * 	// 以 contextObjB 对象为上下文对象 this 来执行funcA函数，如果过函数被传入了 event 对象则会被去掉
-	 * 	funcA.bindNoEvent(contextObjB);
-	 * };
+	 * Binds a function to an object. The returned function will always use the
+	 * passed in {@code obj} as {@code this}.
+	 *
+	 * Example:
+	 *
+	 *   g = bind(f, obj, a, b)
+	 *   g(c, d) // will do f.call(obj, a, b, c, d)
+	 *
+	 * @param {Function} f The function to bind the object to
+	 * @param {Object} obj The object that should act as this when the function
+	 *     is called
+	 * @param {*} var_args Rest arguments that will be used as the initial
+	 *     arguments when the function is called
+	 * @return {Function} A new function that has bound this
 	 */
-	bindNoEvent = function(func, contextObj){
-		var args = Array.prototype.slice.call(arguments, 2);
-		//args = [this].extend(args);
-		return rebuild(func, {contextObj: contextObj, arguments: args, event: false});
+	bind = function(func, context, var_args) {
+		var slice = Array.prototype.slice;
+		var a = slice.call(arguments, 2);
+		return function(){
+			return func.apply(context, a.concat(slice.call(arguments)));
+		};
 	};
+
+
+	
 	
 	/**
 	 * 让日期和时间按照指定的格式显示的方法
@@ -1006,6 +1077,10 @@ Jet().$package(function(J){
 	J.getLength = getLength;
 	J.random = random;
 	J.extend = extend;
+	J.timedChunk = timedChunk;
+	J.indexOf = indexOf;
+	
+	
 	J.Interface = Interface;
 	J.$return = $return;
 	J.$try = $try;
@@ -1027,230 +1102,6 @@ Jet().$package(function(J){
 
 
 
-/**
- * [Javascript core]: Native 对象扩展
- */
-Jet().$package(function(J){
-
-	/**
-	 * @class Array
-	 * @name Array
-	 */
-
-	//标准方法跨浏览器统一
-	
-	if (!Array.prototype.indexOf) {
-		/**
-		 * 正向查找数组元素在数组中的索引下标
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
-		 * @memberOf Array.prototype
-		 * @name indexOf
-		 * 
-		 * @param {Object} obj 要查找的数组元素
-		 * @param {Number} fromIndex 开始的索引编号
-		 * 
-		 * @return {Number}返回正向查找的索引编号
-		 */
-	    Array.prototype.indexOf = function (obj, fromIndex) {
-	        if (fromIndex == null) {
-	            fromIndex = 0;
-	        } else if (fromIndex < 0) {
-	            fromIndex = Math.max(0, this.length + fromIndex);
-	        }
-	        for (var i = fromIndex; i < this.length; i++) {
-	            if (this[i] === obj){
-	                return i;
-	            }
-	        }
-	        return -1;
-	    };
-	}
-	
-	
-	if (!Array.prototype.lastIndexOf) {
-		/**
-		 * 反向查找数组元素在数组中的索引下标
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Object} obj 要查找的数组元素
-		 * @param {Number} fromIndex 开始的索引编号
-		 * 
-		 * @return {Number}返回反向查找的索引编号
-		 */
-	    Array.prototype.lastIndexOf = function (obj, fromIndex) {
-	        if (fromIndex == null) {
-	            fromIndex = this.length - 1;
-	        } else if (fromIndex < 0) {
-	            fromIndex = Math.max(0, this.length + fromIndex);
-	        }
-	        for (var i = fromIndex; i >= 0; i--) {
-	            if (this[i] === obj){
-	                return i;
-	            }
-	        }
-	        return -1;
-	    };
-	}
-	
-	
-	
-	if (!Array.prototype.forEach) {
-		/**
-		 * 遍历数组，把每个数组元素作为第一个参数来执行函数
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Function} fun 要执行的函数
-		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-		 * 
-		 */
-	    Array.prototype.forEach = function(fun /*, thisp*/) {
-	        var len = this.length;
-	        if (typeof fun != "function") {
-	            throw new TypeError();
-	        }
-	        var thisp = arguments[1];
-	        for (var i = 0; i < len; i++) {
-	            if (i in this) {
-	                fun.call(thisp, this[i], i, this);
-	            }
-	        }
-	    };
-	}
-	
-	
-	if (!Array.prototype.filter) {
-		/**
-		 * 用一个自定义函数来过滤数组
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Function} fun 过滤函数
-		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-		 * 
-		 * @return {Array}返回筛选出的新数组
-		 */
-	    Array.prototype.filter = function(fun) {
-	        var len = this.length;
-	        if (typeof fun != "function") {
-	          throw new TypeError();
-	        }
-	        var res   = [];
-	        var thisp = arguments[1];
-	        for (var i = 0; i < len; i++) {
-	            if (i in this) {
-	                var val = this[i]; // in case fun mutates this
-	                if (fun.call(thisp, val, i, this)) {
-	                    res.push(val);
-	                }
-	            }
-	        }
-	        return res;
-	    };
-	}
-	
-	
-
-	
-	if (!Array.prototype.map) {
-		/**
-		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，并把函数的返回结果以映射的方式存入到返回的数组中
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Function} fun 过滤函数
-		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-		 * 
-		 * @return {Array}返回映射后的新数组
-		 */
-	    Array.prototype.map = function(fun /*, thisp*/) {
-	        var len = this.length;
-	        if (typeof fun != "function") {
-	            throw new TypeError();
-	        }
-	        var res   = new Array(len);
-	        var thisp = arguments[1];
-	        for (var i = 0; i < len; i++) {
-	            if (i in this) {
-	                res[i] = fun.call(thisp, this[i], i, this);
-	            }
-	        }
-	
-	        return res;
-	    };
-	}
-	
-
-	if (!Array.prototype.some) {
-		/**
-		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果有任意一个或多个数组成员使得函数执行结果返回 true，则最终返回 true，否则返回 false
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Function} fun 要执行的函数
-		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-		 * 
-		 * @return {Boolean}
-		 */
-	    Array.prototype.some = function(fun /*, thisp*/) {
-	        var len = this.length;
-	        if (typeof fun != "function") {
-	            throw new TypeError();
-	        }
-	
-	        var thisp = arguments[1];
-	        for (var i = 0; i < len; i++) {
-	            if (i in this && fun.call(thisp, this[i], i, this)) {
-	                return true;
-	            }
-	        }
-	
-	        return false;
-	    };
-	}
-
-
-	if (!Array.prototype.every) {
-		/**
-		 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
-		 * 
-		 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
-		 * @memberOf Array.prototype
-		 * 
-		 * @param {Function} fun 要执行的函数
-		 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-		 * 
-		 * @return {Boolean}
-		 */
-	    Array.prototype.every = function(fun) {
-	        var len = this.length;
-	        if (typeof fun != "function") {
-	            throw new TypeError();
-	        }
-	        var thisp = arguments[1];
-	        for (var i = 0; i < len; i++) {
-	            if (i in this && !fun.call(thisp, this[i], i, this)) {
-	                return false;
-	            }
-	        }
-	        return true;
-	    };
-	}
-	
-	
-
-});
-
-
-
-
 
 /**
  * [Javascript core]: String 字符串处理
@@ -1266,6 +1117,7 @@ Jet().$package(function(J){
 	J.String = J.String || {};
 	var $S = J.String,
 		template,
+		template2,
 		isURL,
 		mapQuery,
 		test,
@@ -1278,8 +1130,12 @@ Jet().$package(function(J){
 		escapeRegExp,
 		toInt,
 		toFloat,
+		toSingleLine,
 		toHtml,
 		toTitle,
+		toQueryPair,
+		toQueryString,
+		
 		hexToRgb,
 		rgbToHex,
 		stripScripts,
@@ -1319,6 +1175,44 @@ Jet().$package(function(J){
 		}
 		return str;
 	};
+	
+
+	var cache = {};
+	  
+	template2 = function(str, data){
+		// Figure out if we're getting a template, or if we need to
+		// load the template - and be sure to cache the result.
+		var fn = !/\W/.test(str) ?
+		  cache[str] = cache[str] ||
+			tmpl(document.getElementById(str).innerHTML) :
+		  
+		  // Generate a reusable function that will serve as a template
+		  // generator (and which will be cached).
+		  new Function("obj",
+			"var p=[],print=function(){p.push.apply(p,arguments);};" +
+			
+			// Introduce the data as local variables using with(){}
+			"with(obj){p.push('" +
+			
+			// Convert the template into pure JavaScript
+			str
+			  .replace(/[\r\t\n]/g, " ")
+			  .split("<%").join("\t")
+			  .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+			  .replace(/\t=(.*?)%>/g, "',$1,'")
+			  .split("\t").join("');")
+			  .split("%>").join("p.push('")
+			  .split("\r").join("\\'")
+		  + "');}return p.join('');");
+		
+		// Provide some basic currying to the user
+		return data ? fn( data ) : fn;
+	};
+
+	
+	
+	
+	
 
 	/**
 	 * 判断是否是一个可接受的 url 串
@@ -1494,6 +1388,7 @@ Jet().$package(function(J){
 	 * 将字符串转换成浮点数
 	 * 
 	 * @memberOf String
+	 * @param {Sring} string 要转换的字符串
 	 * @return {Number} 返回转换后的浮点数
 	 */
 	toFloat = function(string){
@@ -1501,9 +1396,22 @@ Jet().$package(function(J){
 	};
 	
 	/**
+	 * 将带换行符的字符串转换成无换行符的字符串
+	 * 
+	 * @memberOf String
+	 * @param {Sring} str 要转换的字符串
+	 * @return {Sring} 返回转换后的字符串
+	 */
+	toSingleLine = function(str){
+		return String(str).replace(/\r/gi,"")
+							.replace(/\n/gi,"");
+	};
+	
+	/**
 	 * 将字符串转换成html源码
 	 * 
 	 * @memberOf String
+	 * @param {Sring} str 要转换的字符串
 	 * @return {Sring} 返回转换后的html代码字符串
 	 */
 	toHtml = function(str){
@@ -1524,6 +1432,7 @@ Jet().$package(function(J){
 	 * 将字符串转换成用于title的字符串
 	 * 
 	 * @memberOf String
+	 * @param {Sring} str 要转换的字符串
 	 * @return {Number} 返回转换后的in title字符串
 	 */
 	toTitle = function(str){
@@ -1578,6 +1487,28 @@ Jet().$package(function(J){
 		}
 		return text;
 	};
+	
+	
+	toQueryPair = function(key, value) {
+		return encodeURIComponent(String(key)) + "=" + encodeURIComponent(String(value));
+	};
+	
+	/**
+	 * 。。。。
+	 * 
+	 * @memberOf String
+	 * @param {Object} obj 要转换成查询字符串的对象
+	 * @return {String} 返回转换后的查询字符串
+	 */
+	toQueryString = function(obj){
+		var result=[];
+		for(var key in obj){
+			result.push(toQueryPair(key, obj[key]));
+		}
+		return result.join("&");
+	};
+
+
 
 	/**
 	 * 。。。。
@@ -1616,10 +1547,16 @@ Jet().$package(function(J){
 		var u = string.match(/[^\x00-\xff]/g);
 		return string.length+(u ? u.length : 0);
 	};
+	
+	
+	
+	
+    
 		
 		
 
 	$S.template = template;
+	$S.template2 = template2;
 	$S.isURL = isURL;
 	$S.mapQuery = mapQuery;
 	$S.test = test;
@@ -1632,14 +1569,21 @@ Jet().$package(function(J){
 	$S.escapeRegExp = escapeRegExp;
 	$S.toInt = toInt;
 	$S.toFloat = toFloat;
+	$S.toSingleLine = toSingleLine;
+	
 	$S.toHtml = toHtml;
 	$S.toTitle = toTitle;
+	$S.toQueryPair = toQueryPair;
+	$S.toQueryString = toQueryString;
+	
 	$S.hexToRgb = hexToRgb;
 	$S.rgbToHex = rgbToHex;
 	$S.stripScripts = stripScripts;
 	$S.substitute = substitute;
 	$S.replaceAll = replaceAll;
 	$S.byteLength = byteLength;
+	
+
 
 
 });
@@ -2899,7 +2843,7 @@ Jet().$package(function(J){
 	 */
 	getXY = function(el) {
 		var xy = getClientXY(el);
-		J.out(xy[0])
+
 		xy[0] = xy[0] + getScrollLeft();
 		xy[1] = xy[1] + getScrollTop();
 		return xy;
@@ -2961,7 +2905,9 @@ Jet().$package(function(J){
     
     var scripts = tagName("script");
     for(var i=0; i<scripts.length; i++){
+    	
     	if(scripts[i].getAttribute("hasJet")=="true"){
+    		//J.out("hasJet: "+(scripts[i].getAttribute("hasJet")=="true"));
     		J.src = scripts[i].src;
     	}
     }
@@ -3757,6 +3703,7 @@ Jet().$package(function(J){
 				o.uri=uri;
 				o.arguments=options.arguments;
 				options.onTimeout(o);
+				options.onComplete(o);
 			}
 		}, timeout);	
 		
@@ -4159,7 +4106,7 @@ Jet().$package(function(J){
 		 * 
 		 * @type Boolean
 		 */
-		_inited : false,
+		_isCreated : false,
 	
 		/**
 		 * Console表现模板
@@ -4212,9 +4159,10 @@ Jet().$package(function(J){
 		 * 显示Console
 		 */
 		show : function() {
-			if (!this._inited) {
-				this._init();
+			if (!this._isCreated) {
+				this._create();
 			}
+			//alert(this._inited)
 			this._main.style.display = "block";
 			//输入焦点过来
 			var _self = this;
@@ -4237,13 +4185,21 @@ Jet().$package(function(J){
 		 * @ignore
 		 */
 		_init : function() {
-			//$H.loadCss(J.path+"assets/jet.css");
+			this.print = this.out;
+			// 快捷键开启
+			$E.on(document, "keydown", J.bind(this.handleDocumentKeydown, this));
+		},
+		_create:function(){
+			
+			
 			$H.loadCss(J.path+"assets/jet.css");
 			this._main = document.createElement("div");
-			window.document.body.appendChild(this._main);
+			
 			this._main.id="JetConsole";
+			this._main.style.display="none";
 			this._main.className = "consoleBox";
 			this._main.innerHTML = this._html;
+			window.document.body.appendChild(this._main);
 			
 			
 			this._headEl = $("ConsoleBoxHead");
@@ -4262,27 +4218,25 @@ Jet().$package(function(J){
 			$E.on(this._closeButtonEl, "click", this.hide);
 			// 输入焦点过来
 			// $E.on(this._main, "dblclick", this.focusCommandLine.bind(this));
-			// 快捷键显示
-			$E.on(document, "keydown", J.bind(this.handleDocumentKeydown, this));
+			
 
 			
-			this.print = this.out;
-			
-			this._inited = true;
-			if(J.option.debug>0){
+			if(J.option.debug > J.DEBUG.NO_DEBUG){
 				this.setToDebug();
 			}else{
 				this.setToNoDebug();
 			}
-			this.out("Welcome to JET(Javascript Extension Tools)...", this.TYPE.INFO)
+			this._isCreated = true;
+			this.out("Welcome to JET(Javascript Extension Tools)...", this.TYPE.INFO);
+			
 		},
 		
 		handleDocumentKeydown: function(e){
-			
 			switch(e.keyCode){
 				case 74:	// J 键:74
 				case 192:	// `~键:192
 					if(e.ctrlKey){
+						
 						this.toggleShow();
 						e.preventDefault();
 					}
@@ -4298,8 +4252,10 @@ Jet().$package(function(J){
 		toggleShow:function(){
 			if(this._opened){
 				this.hide();
+				J.option.debug = J.DEBUG.NO_DEBUG;
 			}else{
 				this.show();
+				J.option.debug = J.DEBUG.SHOW_ALL;
 			}
 			
 		},
@@ -4414,126 +4370,7 @@ Jet().$package(function(J){
 	
 	
 	
-	/**
-	 * 错误调试类
-	 * 
-	 * @namespace
-	 * @name Debug
-	 */
 
-	J.Debug = J.Debug || {};
-	J.extend(J.Debug, 
-		
-	/**
-	 * @lends Debug
-	 */
-	{
-		NO_DEBUG: 0,
-		SHOW_ERROR: 1,
-		SHOW_WARNING: 2,
-		SHOW_INFO: 3,
-		SHOW_ALL: 4,
-		/**
-		 * 错误对象
-		 */
-		errorLogs : [],
-	
-		/**
-		 * 启用Jet调试模式，错误会记录到对象中
-		 */
-		startDebug : function() {
-			/**
-			 * 为窗口加入错误处理
-			 * 
-			 * @ignore
-			 * @param {Object} e
-			 */
-			window.onerror = function(msg,url,line) {
-				var urls = (url || "").replace(/\\/g,"/").split("/");
-				J.Console.out(msg + "<br/>" + urls[urls.length - 1] + " (line:" + line + ")",J.Debug.SHOW_ERROR);
-				J.Debug.errorLogs.push(msg);
-				return false;
-			}
-		},
-	
-		/**
-		 * 停止Jet调试模式
-		 */
-		stopDebug : function() {
-			/**
-			 * 为窗口加入错误处理
-			 * 
-			 * @ignore
-			 */
-			window.onerror = null;
-		},
-	
-		/**
-		 * 清除所有错误信息
-		 */
-		clearErrorLog : function() {
-			this.errorLogs = [];
-		},
-	
-		showLog : function() {
-			//需改进
-			var o = ENV.get("debug_out");
-			if (!!o) {
-				o.innerHTML = nl2br(escHTML(this.errorLogs.join("\n")));
-			}
-		},
-	
-		getLogString : function() {
-			return (this.errorLogs.join("\n"));
-		},
-		
-		/**
-		 * breakpoint currently works only in DOM/browser environment.
-		 * 
-		 * @function
-		 * @memberOf Debug
-		 * @name breakpoint
-		 * 
-		 * @param {Number} num 一个数字
-		 * @return {boolean} true 一个布尔值
-		 */
-		breakPoint: function(evalFunc, msg, initialExprStr){
-			if (msg == null){
-				msg = "";
-			}
-			var result = initialExprStr || "1+2";
-			while(true){
-				var expr = window.prompt("[BREAKPOINT]: " + msg + "\nEnter an expression to evaluate, or Cancel to continue.", result); 
-				if(expr == null || expr == ""){
-					return;
-				}
-				try{
-					result = evalFunc(expr);
-				}catch(e){
-					result = e;
-				}
-			}
-		}
-	});
-	/*
-	//DOM错误提示
-	var handleError=function(errorMessage, url, line){
-		var text;
-		text="以下页面中的脚本发生错误：\n\n";
-		text+="　- [错误]:　" + errorMessage + "\n";
-		text+="　- [页面]:　" + url + "\n";
-		text+="　- [行号]:　" + line + "\n\n";
-		J.out(text);
-		return true;
-	};
-	//J.Debug.handleError = handleError;
-	//window.onerror=handleError;
-	
-	
-	*/
-	
-	
-	
 	
 	
 	
