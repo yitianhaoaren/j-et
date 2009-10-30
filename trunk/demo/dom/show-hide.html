@@ -6,11 +6,15 @@
 	<link rel="stylesheet" href="../../source/assets/jet.reset2.css" type="text/css" />
 	<link rel="stylesheet" href="../../source/assets/jet.960grid.css" />
 	<style>
+		.container{
+			height:300px;
+			overflow:auto;
+		}
 		#ObjectA{
 			display:none;
 		}
 		#ObjectB{
-			display:none;
+
 		}
 	</style>
 </head>
@@ -26,11 +30,11 @@
 			<button id="Button_B2" onclick="Display.hideB()">隐藏 ObjectB</button>
 
 		</div>
-		<div>
-			
-			<div id="ObjectA">ObjectA</div>
-			<a id="ObjectB" href="#">ObjectB</a>
-			
+		
+		<div id="ObjectA">ObjectA</div>
+		
+		<div class="container">
+			我是自由数字<a id="ObjectB" href="#">ObjectB</a><span>我是span</span>
 		</div>
 	</div> 
 
