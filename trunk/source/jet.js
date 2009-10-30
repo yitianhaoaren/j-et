@@ -1313,7 +1313,7 @@ Jet().$package(function(J){
 	 * @return {String} 返回清除后的字符串
 	 */
 	trim = function(string){
-		return string.replace(/^\s+|\s+$/g, '');
+		return String(string).replace(/^\s+|\s+$/g, '');
 	};
 
 	/**
@@ -2238,6 +2238,7 @@ Jet().$package(function(J){
 		setClientXY,
 		getXY,
 		setXY,
+		getRelativeXY,
 		
 		getSelection,
 		getTextFieldSelection,
@@ -2868,6 +2869,15 @@ Jet().$package(function(J){
 		setStyle(el, "top", parseInt(y) - _mt + "px");
 	};
 	
+	getRelativeXY = function(el, relativeEl) {
+		var xyEl = getXY(el);
+		var xyRelativeEl = getXY(relativeEl);
+		var xy=[];
+		
+		xy[0] = xyEl[0] - xyRelativeEl[0];
+		xy[1] = xyEl[1] - xyRelativeEl[1];
+		return xy;
+	}
 	
 
 	getSelection = function(win) {
@@ -2961,6 +2971,7 @@ Jet().$package(function(J){
 	
 	$D.getXY = getXY;
 	$D.setXY = setXY;
+	$D.getRelativeXY = getRelativeXY;
 	$D.getSelection = getSelection;
 	
 	$D.getTextFieldSelection = getTextFieldSelection;
