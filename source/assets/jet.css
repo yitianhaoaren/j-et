@@ -2,10 +2,9 @@
 /* 控制台 */
 .consoleBox{
 	display:none;
-	position: fixed;
-	/* position fixed for IE6 */
-    _position: absolute; 
-    _top:expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight-33);
+	position:fixed;
+    _position: absolute;
+    _top:expression(documentElement.scrollTop+documentElement.clientHeight-this.offsetHeight);
     _left:expression(documentElement.scrollLeft+documentElement.clientWidth-this.offsetWidth);
 	right: 30px;
 	bottom: 30px;

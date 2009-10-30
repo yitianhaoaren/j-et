@@ -2705,7 +2705,8 @@ Jet().$package(function(J){
     	if(el.style[styleName]){
     		return el.style[styleName];
     	}else if(el.currentStyle){
-    		return el.style[styleName];
+    		//alert(el.currentStyle[styleName]);
+    		return el.currentStyle[styleName];
     	}else if(win.getComputedStyle){
     		//J.out(win.getComputedStyle(el, null));
     		return win.getComputedStyle(el, null)[styleName];
@@ -2730,11 +2731,14 @@ Jet().$package(function(J){
 	 */
     show = function(el, displayStyle){
     	var display;
-    	if(el["$oldDisplay"]){
-    		display = el["$oldDisplay"];
+    	var oldDisplay = el.getAttribute("_oldDisplay");
+    	
+    	if(oldDisplay){
+    		display = oldDisplay;
     	}else{
     		display = getStyle(el, "display");
     	}
+
     	if(displayStyle){
     		setStyle(el, "display", displayStyle);
     	}else{
@@ -2757,8 +2761,8 @@ Jet().$package(function(J){
 	 */
     recover = function(el){
     	var display;
-    	if(el["$oldDisplay"]){
-    		display = el["$oldDisplay"];
+    	if(el["_oldDisplay"]){
+    		display = el["_oldDisplay"];
     	}else{
     		display = getStyle(el, "display");
     	}
@@ -2780,11 +2784,13 @@ Jet().$package(function(J){
 	 */
     hide = function(el){
     	var display = getStyle(el, "display");
-    	if(!el["$oldDisplay"]){
+    	var oldDisplay = el.getAttribute("_oldDisplay");
+    	
+    	if(!oldDisplay){
     		if(display === "none"){
-    			el["$oldDisplay"] = "";
+    			el.setAttribute("_oldDisplay", "");
     		}else{
-    			el["$oldDisplay"] = display;
+    			el.setAttribute("_oldDisplay", display);
     		}
     	}
     	setStyle(el, "display", "none");
@@ -4177,13 +4183,12 @@ Jet().$package(function(J){
 			if (!this._isCreated) {
 				this._create();
 			}
-			//alert(this._inited)
-			this._main.style.display = "block";
-			//输入焦点过来
-			var _self = this;
-			window.setTimeout(J.bind(this.focusCommandLine, this), 0);
-			
 			this._opened = true;
+			
+			this._main.style.display = "block";
+				
+			//输入焦点过来
+			window.setTimeout(J.bind(this.focusCommandLine, this), 0);
 		},
 	
 		/**
@@ -4271,6 +4276,7 @@ Jet().$package(function(J){
 			}else{
 				this.show();
 				J.option.debug = J.DEBUG.SHOW_ALL;
+				
 			}
 			
 		},
