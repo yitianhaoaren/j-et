@@ -1,4 +1,8 @@
 ﻿
+html{
+    _background:url(./jet.fix);  /* 阻止闪动 in IE6 */
+}
+
 /* 控制台 */
 .consoleBox{
 	display:none;
@@ -13,8 +17,7 @@
 	border: 2px solid #fff;
 	padding: 2px;
 	width: 300px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
+	border-radius: 3px;
 	
 	background: #000;
 	opacity: 0.75;

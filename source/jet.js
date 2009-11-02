@@ -2731,10 +2731,10 @@ Jet().$package(function(J){
 	 */
     show = function(el, displayStyle){
     	var display;
-    	var oldDisplay = el.getAttribute("_oldDisplay");
+    	var _oldDisplay = el.getAttribute("_oldDisplay");
     	
-    	if(oldDisplay){
-    		display = oldDisplay;
+    	if(_oldDisplay){
+    		display = _oldDisplay;
     	}else{
     		display = getStyle(el, "display");
     	}
@@ -2761,8 +2761,10 @@ Jet().$package(function(J){
 	 */
     recover = function(el){
     	var display;
-    	if(el["_oldDisplay"]){
-    		display = el["_oldDisplay"];
+    	var _oldDisplay = el.getAttribute("_oldDisplay");
+    	
+    	if(_oldDisplay){
+    		display = _oldDisplay;
     	}else{
     		display = getStyle(el, "display");
     	}
@@ -2784,9 +2786,9 @@ Jet().$package(function(J){
 	 */
     hide = function(el){
     	var display = getStyle(el, "display");
-    	var oldDisplay = el.getAttribute("_oldDisplay");
+    	var _oldDisplay = el.getAttribute("_oldDisplay");
     	
-    	if(!oldDisplay){
+    	if(!_oldDisplay){
     		if(display === "none"){
     			el.setAttribute("_oldDisplay", "");
     		}else{
@@ -3041,6 +3043,14 @@ Jet().$package(function(J){
 		 * @return {Element} 返回元素
 		 */
 		addEventListener = function(element, eventType, handler) {
+			//var id = $E._uid( );  // Generate a unique property name
+			if(!element._eventTypes){
+				element._eventTypes = {};
+				if (!element._eventTypes.handlers){
+					element._eventTypes.handlers = [];
+				}
+			}
+	        element._eventTypes.handlers.push(handler);
 			element.addEventListener(eventType, handler, false);
 		};
 		
@@ -3057,7 +3067,43 @@ Jet().$package(function(J){
 		 * @return {Element} 返回元素
 		 */
 		removeEventListener = function(element, eventType, handler) {
-			element.removeEventListener(eventType, handler, false);
+			if(eventType){
+				if(handler){
+					element.removeEventListener(eventType, handler, false);
+					if(element._eventTypes && element._eventTypes[eventType]){
+						var handlers = element._eventTypes.handlers;
+						for(var i=0; i<handlers.length; i++){
+							if(handlers[i] === handler){
+								handlers.splice(i, 1);
+							}
+						}
+					}
+				}else{
+					if(element._eventTypes && element._eventTypes.handlers){
+						var handlers = element._eventTypes.handlers;
+						for(var i=0; i<handlers.length; i++){
+							element.removeEventListener(eventType, handlers[i], false);
+						}
+						handlers = [];
+					}
+					
+				}
+			}else{
+				if(element._eventTypes && element._eventTypes.handlers){
+					var eventTypes = element._eventTypes;
+					for(var i=0; i<eventTypes.length; i++){
+						var handlers = element._eventTypes.handlers;
+						for(var j=0; j<handlers.length; j++){
+							element.removeEventListener(eventType, handlers[j], false);
+						}
+						handlers = [];
+					}
+					eventTypes = {};
+					
+				}
+			}
+	        
+			
 		};
 	}
 	// In IE 5 and later, we use attachEvent( ) and detachEvent( ), with a number of
@@ -3349,7 +3395,9 @@ Jet().$package(function(J){
 	
 	    // Private utility to generate unique handler ids
 	    $E._counter = 0;
-	    $E._uid = function( ) { return "h" + $E._counter++; };
+	    $E._uid = function(){
+	    	return "h" + $E._counter++;
+	    };
 	}
 	
 	
