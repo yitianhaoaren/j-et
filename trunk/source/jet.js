@@ -3880,9 +3880,9 @@ Jet().$package(function(J){
         
 	    
 	    if(type === "script"){
-            node = scriptNode(uri, win, charset);
+            node = options.node || scriptNode(uri, win, charset);
         }else if(type === "css"){
-            node = linkNode(uri, win, charset);
+            node = options.node || linkNode(uri, win, charset);
         }
         
         
@@ -3979,8 +3979,17 @@ Jet().$package(function(J){
                 }
             };
         }
-        
-        head.appendChild(node);
+        if(options.node){
+        	
+        	if(type === "script"){
+	            node.src = uri;
+	        }else if(type === "css"){
+	            node.href = uri;
+	        }
+        }else{
+        	head.appendChild(node);
+        }
+       
         
         if(type === "script"){
             timer = window.setTimeout(function(){
