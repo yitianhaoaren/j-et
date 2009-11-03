@@ -3071,7 +3071,7 @@ Jet().$package(function(J){
 				if(handler){
 					element.removeEventListener(eventType, handler, false);
 					if(element._eventTypes && element._eventTypes[eventType]){
-						var handlers = element._eventTypes.handlers;
+						var handlers = element._eventTypes[eventType];
 						for(var i=0; i<handlers.length; i++){
 							if(handlers[i] === handler){
 								handlers.splice(i, 1);
@@ -3079,8 +3079,8 @@ Jet().$package(function(J){
 						}
 					}
 				}else{
-					if(element._eventTypes && element._eventTypes.handlers){
-						var handlers = element._eventTypes.handlers;
+					if(element._eventTypes && element._eventTypes[eventType]){
+						var handlers = element._eventTypes[eventType];
 						for(var i=0; i<handlers.length; i++){
 							element.removeEventListener(eventType, handlers[i], false);
 						}
@@ -3089,14 +3089,14 @@ Jet().$package(function(J){
 					
 				}
 			}else{
-				if(element._eventTypes && element._eventTypes.handlers){
+				if(element._eventTypes){
 					var eventTypes = element._eventTypes;
-					for(var i=0; i<eventTypes.length; i++){
-						var handlers = element._eventTypes.handlers;
-						for(var j=0; j<handlers.length; j++){
-							element.removeEventListener(eventType, handlers[j], false);
+					for(var p in eventTypes){
+						var handlers = element._eventTypes[p];
+						for(var i=0; i<handlers.length; i++){
+							element.removeEventListener(p, handlers[i], false);
 						}
-						handlers = [];
+						//delete element._eventTypes[p];
 					}
 					eventTypes = {};
 					
