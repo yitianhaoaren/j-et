@@ -3044,14 +3044,25 @@ Jet().$package(function(J){
 		 */
 		addEventListener = function(element, eventType, handler) {
 			//var id = $E._uid( );  // Generate a unique property name
+			var isExist = false;
 			if(!element._eventTypes){
 				element._eventTypes = {};
-				if (!element._eventTypes.handlers){
-					element._eventTypes.handlers = [];
-				}
 			}
-	        element._eventTypes.handlers.push(handler);
-			element.addEventListener(eventType, handler, false);
+			if (!element._eventTypes[eventType]){
+				element._eventTypes[eventType] = [];
+			}
+	        element.addEventListener(eventType, handler, false);
+	        
+	        var handlers= element._eventTypes[eventType];
+	        for(var i=0; i<handlers.length; i++){
+	        	if(handlers[i] == handler){
+	        		isExist = true;
+	        	}
+	        }
+	        if(!isExist){
+	        	handlers.push(handler);
+	        	J.out(handlers.length)
+	        }
 		};
 		
 		/**
@@ -3079,12 +3090,14 @@ Jet().$package(function(J){
 						}
 					}
 				}else{
+					
 					if(element._eventTypes && element._eventTypes[eventType]){
 						var handlers = element._eventTypes[eventType];
+						
 						for(var i=0; i<handlers.length; i++){
 							element.removeEventListener(eventType, handlers[i], false);
 						}
-						handlers = [];
+						element._eventTypes[eventType] = [];
 					}
 					
 				}
@@ -3096,10 +3109,8 @@ Jet().$package(function(J){
 						for(var i=0; i<handlers.length; i++){
 							element.removeEventListener(p, handlers[i], false);
 						}
-						//delete element._eventTypes[p];
 					}
 					eventTypes = {};
-					
 				}
 			}
 	        
@@ -3279,9 +3290,9 @@ Jet().$package(function(J){
 	            }
 	
 
-	            if (Function.prototype.call)
+	            if (Function.prototype.call){
 	                handler.call(element, event);
-	            else {
+	            }else {
 	                // If we don't have Function.call, fake it like this.
 	                element._currentHandler = handler;
 	                element._currentHandler(event);
@@ -3329,23 +3340,25 @@ Jet().$package(function(J){
 		 */
 	    removeEventListener = function(element, eventType, handler) {
 	        // Find this handler in the element._handlers[] array.
-	        var i = $E._find(element, eventType, handler);
-	        if (i == -1) return;  // If the handler was not registered, do nothing
-	
+	        var handlersIndex = $E._find(element, eventType, handler);
+	        if (handlersIndex == -1) return;  // If the handler was not registered, do nothing
+			J.out(handlersIndex)
 	        // Get the window of this element.
 	        var d = element.document || element;
 	        var w = d.parentWindow;
-	
-	        // Look up the unique id of this handler.
-	        var handlerId = element._handlers[i];
-	        // And use that to look up the handler info.
-	        var h = w._allHandlers[handlerId];
-	        // Using that info, we can detach the handler from the element.
-	        element.detachEvent("on" + eventType, h.wrappedEvent);
-	        // Remove one element from the element._handlers array.
-	        element._handlers.splice(i, 1);
-	        // And delete the handler info from the per-window _allHandlers object.
-	        delete w._allHandlers[handlerId];
+			for(var j=0; j<handlersIndex.length; j++){
+				var i = handlersIndex[j];
+		        // Look up the unique id of this handler.
+		        var handlerId = element._handlers[i];
+		        // And use that to look up the handler info.
+		        var h = w._allHandlers[handlerId];
+		        // Using that info, we can detach the handler from the element.
+		        element.detachEvent("on" + h.eventType, h.wrappedEvent);
+		        // Remove one element from the element._handlers array.
+		        element._handlers.splice(i, 1);
+		        // And delete the handler info from the per-window _allHandlers object.
+		        delete w._allHandlers[handlerId];
+			}
 	    };
 	
 	    // A utility function to find a handler in the element._handlers array
@@ -3360,18 +3373,53 @@ Jet().$package(function(J){
 	        var d = element.document || element;
 	        var w = d.parentWindow;
 	
-	        // Loop through the handlers associated with this element, looking
-	        // for one with the right type and function.
-	        // We loop backward because the most recently registered handler
-	        // is most likely to be the first removed one.
-	        for(var i = handlers.length-1; i >= 0; i--) {
-	            var handlerId = handlers[i];        // get handler id
-	            var h = w._allHandlers[handlerId];  // get handler info
-	            // If handler info matches type and handler function, we found it.
-	            if (h.eventType == eventType && h.handler == handler){
-	                return i;
-	            }
-	        }
+	        var handlersIndex = [];
+	        
+	        
+	        if(eventType){
+				if(handler){
+					// Loop through the handlers associated with this element, looking
+			        // for one with the right type and function.
+			        // We loop backward because the most recently registered handler
+			        // is most likely to be the first removed one.
+			        for(var i = handlers.length-1; i >= 0; i--) {
+			            var handlerId = handlers[i];        // get handler id
+			            var h = w._allHandlers[handlerId];  // get handler info
+			            // If handler info matches type and handler function, we found it.
+			            if (h.eventType == eventType && h.handler == handler){
+			                return i;
+			            }
+			        }
+				}else{
+					
+					for(var i = handlers.length-1; i >= 0; i--) {
+			            var handlerId = handlers[i];        // get handler id
+			            var h = w._allHandlers[handlerId];  // get handler info
+			            // If handler info matches type and handler function, we found it.
+			            if (h.eventType == eventType){
+			                handlersIndex.push(i);
+			            }
+			        }
+			        if(handlersIndex.length>0){
+			        	return handlersIndex;
+			        }
+					
+				}
+			}else{
+
+				for(var i = handlers.length-1; i >= 0; i--) {
+		            handlersIndex.push(i);
+		        }
+		        if(handlersIndex.length>0){
+		        	return handlersIndex;
+		        }
+			}
+	        
+	        
+	        
+	        
+	        
+	        
 	        return -1;  // No match found
 	    };
 	
