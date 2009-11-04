@@ -957,12 +957,12 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	
+	/*
 	pass = function(func){
 		var args = Array.prototype.slice.call(arguments, 1);
 		return rebuild(func, {contextObj: null, arguments: args});
 	};
-	/*
+	*/
 	pass = function(func, var_args) {
 		var slice = Array.prototype.slice;
 		var a = slice.call(arguments, 1);
@@ -971,7 +971,7 @@ Jet().$package(function(J){
 			return func.apply(context, a.concat(slice.call(arguments)));
 		};
 	};
-	*/
+	
 	/**
 	 * 给函数绑定一个上下文对象再执行
 	 * 
@@ -987,13 +987,13 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	
+	/*
 	bind = function(func, contextObj){
 		var args = Array.prototype.slice.call(arguments, 2);
 		//args = [this].extend(args);
 		return rebuild(func, {contextObj: contextObj, arguments: args});
 	};
-	
+	*/
 	
 	/**
 	 * Binds a function to an object. The returned function will always use the
@@ -1011,7 +1011,7 @@ Jet().$package(function(J){
 	 *     arguments when the function is called
 	 * @return {Function} A new function that has bound this
 	 */
-	/*
+	
 	bind = function(func, context, var_args) {
 		var slice = Array.prototype.slice;
 		var a = slice.call(arguments, 2);
@@ -1019,7 +1019,7 @@ Jet().$package(function(J){
 			return func.apply(context, a.concat(slice.call(arguments)));
 		};
 	};
-	*/
+	
 
 
 	
@@ -3061,7 +3061,7 @@ Jet().$package(function(J){
 	        }
 	        if(!isExist){
 	        	handlers.push(handler);
-	        	J.out(handlers.length)
+	        	
 	        }
 		};
 		
@@ -3342,7 +3342,6 @@ Jet().$package(function(J){
 	        // Find this handler in the element._handlers[] array.
 	        var handlersIndex = $E._find(element, eventType, handler);
 	        if (handlersIndex == -1) return;  // If the handler was not registered, do nothing
-			J.out(handlersIndex)
 	        // Get the window of this element.
 	        var d = element.document || element;
 	        var w = d.parentWindow;
