@@ -21,6 +21,7 @@
 <body>
 	<h1 id="Div1" class="styleA">Browser 检测</h1>
 	<ul class="styleB">
+		<li>userAgent：<span id="UserAgent">...</span></li>
 		<li>操作系统平台：<span id="Platform">...</span></li>
 		<li>浏览器：<span id="BrowserName">...</span></li>
 		<li>版本：<span id="BrowserVer">...</span></li>
@@ -41,7 +42,7 @@
 
 		var $=J.Dom.id;
 		var $D=J.Dom;
-
+		$("UserAgent").innerHTML = J.Browser.ua;
 		$("Platform").innerHTML = J.Platform.name;
 		$("BrowserName").innerHTML = J.Browser.name;
 		$("BrowserVer").innerHTML = J.Browser.version;
