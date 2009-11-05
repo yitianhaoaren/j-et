@@ -209,10 +209,14 @@ if (!this.JSON) {
                  f(this.getUTCMinutes())   + ':' +
                  f(this.getUTCSeconds())   + 'Z' : null;
         };
-
+		/*
         String.prototype.toJSON =
         Number.prototype.toJSON =
         Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+        };
+        */
+        J.toJSON = function (key) {
             return this.valueOf();
         };
     }
