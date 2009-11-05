@@ -2,17 +2,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>Demo - JET</title>
 <link href="../../source/jet.css" rel="stylesheet" type="text/css" />
+
+<style>
+	#Content{
+		padding:5px;
+		background:#ffffcc;
+	}
+</style>
 </head>
 
 <body>
-	<div id="A">绑定3个事件处理函数</div>
-	<div id="B">解绑onclick类型所有事件处理函数</div>
-	<div id="C">解绑所有类型事件处理函数</div>
 	
-	<div id="Content">响应区域</div>
-
+	
+	<div id="Content">
+		<p>事件感应区：</p>
+		<p>点击“绑定”，即可给此感应区绑定 2 个click事件，1 个mouseover事件</p>
+	
+	</div>
+	
+	<button id="A">绑定</button>
+	<button id="B">解绑fn1事件</button>
+	<button id="C">解绑所有onclick类型事件</button>
+	<button id="D">解绑所有类型事件</button>
 
 
 	<script type="text/javascript" src="../../source/jet.js"></script>
@@ -24,13 +37,13 @@
 			
 			
 			var fn1=function(){
-				J.out("click A: 1 ");
+				J.out("fn1");
 			};
 			var fn2=function(){
-				J.out("click A: 2 ");
+				J.out("fn2");
 			};
 			var fn3=function(a,b,e){
-				J.out("click A: 3 ");
+				J.out("fn3");
 			};
 			
 			var k_fn = function(e){
@@ -54,10 +67,14 @@
 			});
 			
 			$E.on($("B"),"click",function(e){
-				$E.off($("Content"),"click");
+				$E.off($("Content"),"click",fn1);
 			});
 			
 			$E.on($("C"),"click",function(e){
+				$E.off($("Content"),"click");
+			});
+			
+			$E.on($("D"),"click",function(e){
 				$E.off($("Content"));
 			});
 			

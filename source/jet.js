@@ -30,7 +30,8 @@
 		},
 		
 		option = {
-			debug: DEBUG.NO_DEBUG
+			console: true,
+			debug: DEBUG.SHOW_ALL
 		},
 		
 		/**
@@ -77,7 +78,7 @@
 			 * 
 			 * @example
 			 * //代码组织方式一(传统)：
-			 * new Jet();
+			 * var J = new Jet();
 			 * J.out(J.version);	//输出当前Jet的版本
 			 * 
 			 * @example
@@ -116,7 +117,8 @@
 								throw new Error("No JET version " + ver + ", so return Jet version " + Jet.DEFAULT_VERSION + "!");
 							}
 						}catch(e){
-							J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
+							//J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
+							J.out(e.fileName+", 行号:"+e.lineNumber+"; "+e.name+": "+e.message+", stack:"+typeof e.stack, 2);
 						}
 					}else{
 						J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
@@ -240,7 +242,9 @@
 							throw new Error("Function required");
 						}
 					}catch(e){
-						this.out(e, 1);
+						// 全局异常捕获
+						this.out(e.fileName+", 行号:"+e.lineNumber+"; "+e.name+": "+e.message+", stack:"+typeof e.stack, 1);
+						//this.out(e, 1);
 					}
 				},
 				
@@ -3061,7 +3065,6 @@ Jet().$package(function(J){
 	        }
 	        if(!isExist){
 	        	handlers.push(handler);
-	        	
 	        }
 		};
 		
@@ -4312,6 +4315,9 @@ Jet().$package(function(J){
 			this.print = this.out;
 			// 快捷键开启
 			$E.on(document, "keydown", J.bind(this.handleDocumentKeydown, this));
+			if (J.option.console) {
+				this.show();
+			}
 		},
 		_create:function(){
 			
@@ -4353,6 +4359,7 @@ Jet().$package(function(J){
 			this._isCreated = true;
 			this.out("Welcome to JET(Javascript Extension Tools)...", this.TYPE.INFO);
 			
+			
 		},
 		
 		handleDocumentKeydown: function(e){
@@ -4376,10 +4383,10 @@ Jet().$package(function(J){
 		toggleShow:function(){
 			if(this._opened){
 				this.hide();
-				J.option.debug = J.DEBUG.NO_DEBUG;
+				//J.option.debug = J.DEBUG.NO_DEBUG;
 			}else{
 				this.show();
-				J.option.debug = J.DEBUG.SHOW_ALL;
+				//J.option.debug = J.DEBUG.SHOW_ALL;
 				
 			}
 			
@@ -4392,10 +4399,10 @@ Jet().$package(function(J){
 		 * @param {Number} type 要输出的信息的类型，可选项
 		 * @return {String} 返回要输出的信息
 		 */
-		outShow:function(msg, type){
+		outConsoleShow:function(msg, type){
 			this.outConsole(msg, type);
 			
-			if ((!this._opened)) {
+			if ((!this._opened) && J.option.console) {
 				this.show();
 			}
 		},
@@ -4410,6 +4417,7 @@ Jet().$package(function(J){
 		outConsole: function(msg, type) {
 			type = type || 3;
 			this.log(msg, type);
+			
 			if(type < J.option.debug){
 				var _item = document.createElement("li");
 				this._outputEl.appendChild(_item);
@@ -4434,7 +4442,7 @@ Jet().$package(function(J){
 		
 		
 		setToDebug:function(){
-			this.out = this.outShow;
+			this.out = this.outConsoleShow;
 		},
 		
 		setToNoDebug:function(){

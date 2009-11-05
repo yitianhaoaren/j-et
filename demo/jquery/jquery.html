@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>JET 与 jQuery 并存示例</title>
+	<title>在 JET 中嵌入 jQuery 的示例 - JET</title>
 	<style>
 	.code{
 		border:1px solid #cccccc;
@@ -31,10 +31,10 @@
 <body>
 	<div id="Content">
 		<div id="Title">
-			<h3>JET 与 jQuery 并存示例</h3>
+			<h3>在 JET 中嵌入 jQuery 的示例</h3>
 		</div>
 		<p class="code">
-			jq("p.neat").addClass("ohmy").show("slow");
+			$("p.neat").addClass("ohmy").show("slow");
 		</p>
 		<button id="Button_3" onclick="Playground.runCode()">运行代码</button>
 		<p class="neat">12353424342342342343243 34343243, dfjsfkls, 我是中文</p>
@@ -46,10 +46,10 @@
 	<script type="text/javascript" src="../../source/jet.mod.jquery.js"></script>
 	<script type="text/javascript">
 		Jet().$package("Playground",function(J){
-			var jq = J.jQuery;
+			var $ = J.jQuery;
 			
 			this.runCode = function(){
-				jq("p.neat").addClass("ohmy").show("slow");
+				$("p.neat").addClass("ohmy").show("slow");
 			};
 
 		});
