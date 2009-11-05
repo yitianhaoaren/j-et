@@ -1943,13 +1943,18 @@ Jet().$package(function(J){
 			this[name] = ver;
 		}
 	};
-
+	var toFixedVersion = function(ver){
+		ver = ver.split(".");
+		ver = ver[0] + "." + (ver[1] || "0");
+		ver = Number(ver).toFixed(1);
+		return ver;
+	};
 	// 探测浏览器并存入 Browser 对象
-    (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",(s[1])):
-    (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",(s[1])) :
-    (s = ua.match(/chrome\/([\d.]+)/)) ? Browser.set("chrome",(s[1])) :
-    (s = ua.match(/opera.([\d.]+)/)) ? Browser.set("opera",(s[1])) :
-    (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser.set("safari",(s[1])) : 0;
+    (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",toFixedVersion(s[1])):
+    (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",toFixedVersion(s[1])) :
+    (s = ua.match(/chrome\/([\d.]+)/)) ? Browser.set("chrome",toFixedVersion(s[1])) :
+    (s = ua.match(/opera.([\d.]+)/)) ? Browser.set("opera",toFixedVersion(s[1])) :
+    (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser.set("safari",toFixedVersion(s[1])) : 0;
     
     //J.out(Browser.name);
     //J.out(Browser.ua);
@@ -2025,13 +2030,19 @@ Jet().$package(function(J){
 		
 	};
 	
+	/*
 	// 探测浏览器的内核并存入 Browser.Engine 对象
     (s = (!window.ActiveXObject) ? 0 : ((window.XMLHttpRequest) ? 5 : 4)) ? Engine.set("trident", s):
     (s = (document.getBoxObjectFor == undefined) ? 0 : ((document.getElementsByClassName) ? 19 : 18)) ? Engine.set("gecko",s) :
     (s = (navigator.taintEnabled) ? false : ((Browser.Features.xpath) ? ((Browser.Features.query) ? 525 : 420) : 419)) ? Engine.set("webkit", s) :
     (s = (!window.opera) ? false : ((arguments.callee.caller) ? 960 : ((document.getElementsByClassName) ? 950 : 925))) ? Engine.set("presto", s) : 0;
-    
-    
+    */
+	
+    // 探测浏览器的内核并存入 Browser.Engine 对象
+    (s = ua.match(/trident\/([\d.]+)/)) ? Engine.set("trident",toFixedVersion(s[1])):
+    (s = ua.match(/gecko\/([\d.]+)/)) ? Engine.set("gecko",toFixedVersion(s[1])) :
+    (s = ua.match(/applewebkit\/([\d.]+)/)) ? Engine.set("webkit",toFixedVersion(s[1])) :
+    (s = ua.match(/presto\/([\d.]+)/)) ? Engine.set("presto",toFixedVersion(s[1])) : 0;
 	
     
     
@@ -2042,7 +2053,7 @@ Jet().$package(function(J){
 	 */
 	var adjustBehaviors = function() {
 		// ie6 背景图片不能被缓存的问题
-		if (Engine.trident && Engine.version < 5) {
+		if (Browser.ie && Browser.ie < 7) {
 			try {
 				document.execCommand('BackgroundImageCache', false, true);
 			}catch(e){}
