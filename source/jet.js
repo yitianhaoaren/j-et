@@ -403,7 +403,7 @@ Jet().$package(function(J){
 		timedChunk,
 		forEach,
 		getLength,
-		Interface,
+		emptyFn,
 		toArray,
 		clone,
 		indexOf,
@@ -863,14 +863,11 @@ Jet().$package(function(J){
 	};
 	
 	/**
-	 * 一个默认初始化的接口函数
+	 * 一个空函数函数
 	 * 
-	 * @class Interface
 	 * @memberOf Jet.prototype
 	 */
-    Interface = function(){
-    	return function(){};
-    };
+    emptyFn = function(){};
     
 
     
@@ -1089,7 +1086,7 @@ Jet().$package(function(J){
 	J.indexOf = indexOf;
 	
 	
-	J.Interface = Interface;
+	J.emptyFn = emptyFn;
 	J.$return = $return;
 	J.$try = $try;
 	
@@ -4201,7 +4198,7 @@ Jet().$package(function(J){
 		 * @param {number} time 响应时间
 		 * @ignore
 		 */
-		receive : new J.Interface(),
+		receive : J.emptyFn,
 	
 		/**
 		 * 添加监控规则,
@@ -4217,7 +4214,7 @@ Jet().$package(function(J){
 		 * J.Report.addRule("http://imgcache.qq.com/data2.js","http://imgcache.qq.com/ok?flag1=3234&flag2=%status%&1=%percent%&flag4=123456");
 		 * @ignore
 		 */
-		addRule : new J.Interface()
+		addRule : J.emptyFn
 	};
 	
 	
