@@ -21,8 +21,10 @@
 <body>
 	<h1 id="Div1" class="styleA">Browser 检测</h1>
 	<ul class="styleB">
-		<li>userAgent：<span id="UserAgent">...</span></li>
-		<li>操作系统平台：<span id="Platform">...</span></li>
+		<li>Platform：<span id="Platform1">...</span></li>
+		<li>UserAgent：<span id="UserAgent">...</span></li>
+		<li>操作系统平台：<span id="Platform2">...</span></li>
+		<li>系统版本：<span id="PlatformVer">...</span></li>
 		<li>浏览器：<span id="BrowserName">...</span></li>
 		<li>版本：<span id="BrowserVer">...</span></li>
 		<li>引擎：<span id="EngineName">...</span></li>
@@ -42,8 +44,10 @@
 
 		var $=J.Dom.id;
 		var $D=J.Dom;
+		$("Platform1").innerHTML = J.Platform.platform;
 		$("UserAgent").innerHTML = J.Browser.ua;
-		$("Platform").innerHTML = J.Platform.name;
+		$("Platform2").innerHTML = J.Platform.name;
+		$("PlatformVer").innerHTML = J.Platform.version;
 		$("BrowserName").innerHTML = J.Browser.name;
 		$("BrowserVer").innerHTML = J.Browser.version;
 		$("EngineName").innerHTML = J.Browser.Engine.name;

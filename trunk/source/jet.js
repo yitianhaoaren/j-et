@@ -1809,12 +1809,21 @@ Jet().$package(function(J){
  */
 Jet().$package(function(J){
 	var ua = navigator.userAgent.toLowerCase(),
+		platform = navigator.platform.toLowerCase(),
 		Platform,
 		Browser,
 		Engine,
 		Support = {},
 		loadBootOptions,
 		s;
+		
+	var toFixedVersion = function(ver){
+		ver = ver.split(".");
+		ver = ver[0] + "." + (ver[1] || "0");
+		ver = Number(ver).toFixed(1);
+		return ver;
+	};
+	
 	/**
 	 * Platform 名字空间
 	 * 
@@ -1823,13 +1832,41 @@ Jet().$package(function(J){
 	 * @type Object
 	 */
 	Platform = {
+		platform: platform,
 		/**
     	 * @property name
 		 * @lends Platform
 		 */
-		name: (window.orientation != undefined) ? 'ipod' : (navigator.platform.match(/mac|win|linux/i) || ['other'])[0].toLowerCase()
+		name: (window.orientation != undefined) ? 'ipod' : (platform.match(/mac|win|linux/i) || ['other'])[0],
+		
+		version: 0,
+		ipod: 0,
+		win: 0,
+		linux: 0,
+		mac: 0,
+		/**
+		 * 设置浏览器类型和版本
+		 * 
+		 * @ignore
+		 * @private
+		 * @memberOf Browser
+		 * 
+		 */
+		set: function(name, ver){
+			this.name = name;
+			this.version = ver;
+			this[name] = ver;
+		}
 	};
+	
 	Platform[Platform.name] = true;
+	
+	// 探测操作系统版本
+    (s = ua.match(/windows ([\d.]+)/)) ? Platform.set("win",toFixedVersion(s[1])):
+    (s = ua.match(/windows nt ([\d.]+)/)) ? Platform.set("win",toFixedVersion(s[1])):
+    (s = ua.match(/mac ([\d.]+)/)) ? Platform.set("mac",toFixedVersion(s[1])):
+    (s = ua.match(/ipod ([\d.]+)/)) ? Platform.set("ipod",toFixedVersion(s[1])):
+    (s = ua.match(/linux ([\d.]+)/)) ? Platform.set("linux",toFixedVersion(s[1])) : 0;
 	
 	/**
 	 * Browser 名字空间
@@ -1943,12 +1980,7 @@ Jet().$package(function(J){
 			this[name] = ver;
 		}
 	};
-	var toFixedVersion = function(ver){
-		ver = ver.split(".");
-		ver = ver[0] + "." + (ver[1] || "0");
-		ver = Number(ver).toFixed(1);
-		return ver;
-	};
+	
 	// 探测浏览器并存入 Browser 对象
     (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",toFixedVersion(s[1])):
     (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",toFixedVersion(s[1])) :
