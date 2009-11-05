@@ -1,6 +1,7 @@
 /**	
  * JET (Javascript Extension Tools) 
  * Copyright (c) 2009, WebQQ Group, All rights reserved.
+ * http://code.google.com/p/j-et/
  *
  * @version	1.0
  * @author	Kinvix(<a href="mailto:Kinvix@gmail.com">Kinvix@gmail.com</a>)
