@@ -2,16 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>前端i18n国际化 - JET</title>
 <link href="../../source/jet.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-	<div id="a">aaaaaa</div>
-	<div id="b">bbbbbb</div>
-	<div id="c">ccccccc</div>
-
-
 
 	<script type="text/javascript" src="../../source/jet.js"></script>
 	<script type="text/javascript" src="../../source/jet.i18n.zh-cn.js"></script>
@@ -21,10 +16,10 @@
 		Jet().$package(function(J){
 
 	        J.Event.onDOMReady(function() {
-	            J.out(J.I18n.text.helloWorld);
+	            J.out("默认是英文："+J.I18n.text.helloWorld);
 	            
 	            J.I18n.set("zh-cn");
-	            J.out(J.I18n.text.helloWorld);
+	            J.out("切换到中文："+J.I18n.text.helloWorld);
 
 	        });
 	    });
