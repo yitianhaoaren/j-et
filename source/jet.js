@@ -3846,7 +3846,7 @@ Jet().$package(function(J){
 			linkNode,
 			scriptNode,
 			id,
-			head = document.getElementsByTagName("head")[0],
+			head = document.getElementsByTagName("head") ? document.getElementsByTagName("head")[0] : document.documentElement,
 			timer,
 			isTimeout = false,
 			isComplete = false,
