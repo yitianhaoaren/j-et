@@ -66,6 +66,7 @@ ul.consoleOutput{
 	list-style:none;
 }
 ul.consoleOutput li{
+	margin:0;
 	padding:3px;
 	border-bottom:1px solid #333333;
 	line-height:150%;
