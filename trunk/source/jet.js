@@ -1868,7 +1868,7 @@ Jet().$package(function(J){
     	 * @name Plugins
 		 * @memberOf Browser
 		 */
-		Plugins: {},
+		Plugins: navigator.plugins,
 		
 		/**
     	 * @property ua
@@ -1945,11 +1945,11 @@ Jet().$package(function(J){
 	};
 
 	// 探测浏览器并存入 Browser 对象
-    (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",Number(s[1])):
-    (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",Number(s[1])) :
-    (s = ua.match(/chrome\/([\d.]+)/)) ? Browser.set("chrome",Number(s[1])) :
-    (s = ua.match(/opera.([\d.]+)/)) ? Browser.set("opera",Number(s[1])) :
-    (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser.set("version",Number(s[1])) : 0;
+    (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",(s[1])):
+    (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",(s[1])) :
+    (s = ua.match(/chrome\/([\d.]+)/)) ? Browser.set("chrome",(s[1])) :
+    (s = ua.match(/opera.([\d.]+)/)) ? Browser.set("opera",(s[1])) :
+    (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser.set("safari",(s[1])) : 0;
     
     //J.out(Browser.name);
     //J.out(Browser.ua);
@@ -2182,7 +2182,7 @@ Jet().$package(function(J){
 		
 	};
 	
-	J.Platform=Platform;
+	J.Platform = Platform;
 	J.Browser = Browser;
 	J.Browser.Engine = Engine;
 	J.Browser.Support = Support;
@@ -4303,6 +4303,7 @@ Jet().$package(function(J){
 		hide : function() {
 			J.Console._main.style.display = "none";
 			J.Console._opened = false;
+			
 		},
 	
 		/**
@@ -4382,6 +4383,7 @@ Jet().$package(function(J){
 		toggleShow:function(){
 			if(this._opened){
 				this.hide();
+				
 				//J.option.debug = J.DEBUG.NO_DEBUG;
 			}else{
 				this.show();
@@ -4480,6 +4482,7 @@ Jet().$package(function(J){
 					J.Console.clear();
 					break;
 				case "hide" :
+				
 					J.Console.hide();
 					break;
 				default :
