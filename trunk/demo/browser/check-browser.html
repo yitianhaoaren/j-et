@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Browser 检测 - Demo - JET</title>
+
+	<link rel="stylesheet" href="../../source/assets/jet.reset2.css" type="text/css" />
+	<link rel="stylesheet" href="../../source/assets/jet.960grid.css" />
+	<style type="text/css">
+
+	.styleA{
+		padding:5px 0;
+		overflow:hidden;
+	}
+	.styleB{
+		padding:5px 0;
+	}
+	</style>
+</head>
+
+<body>
+	<h1 id="Div1" class="styleA">Browser 检测</h1>
+	<ul class="styleB">
+		<li>操作系统平台：<span id="Platform">...</span></li>
+		<li>浏览器：<span id="BrowserName">...</span></li>
+		<li>版本：<span id="BrowserVer">...</span></li>
+		<li>引擎：<span id="EngineName">...</span></li>
+		<li>引擎版本：<span id="EngineVer">...</span></li>
+		<li>支持特性：<span id="Features">...</span></li>
+		<li>插件：<span id="Plugin">...</span></li>
+		
+	</ul>
+
+	
+
+	<script type="text/javascript" src="../../source/jet.js"></script>
+
+	<script>
+	
+		J = new Jet();
+
+		var $=J.Dom.id;
+		var $D=J.Dom;
+
+		$("Platform").innerHTML = J.Platform.name;
+		$("BrowserName").innerHTML = J.Browser.name;
+		$("BrowserVer").innerHTML = J.Browser.version;
+		$("EngineName").innerHTML = J.Browser.Engine.name;
+		$("EngineVer").innerHTML = J.Browser.Engine.version;
+		$("Features").innerHTML = "xpath:"+J.Browser.Features.xpath+", air:"+J.Browser.Features.air+", query:"+J.Browser.Features.query;
+		
+		$("Plugin").innerHTML = (function(){
+			var a=[];
+			window.plug = J.Browser.Plugins;
+			for(var i=0; i<J.Browser.Plugins.length; i++){
+				a.push(J.Browser.Plugins[i].name);
+			}
+			
+			return a.join(",<br />");
+		})();
+		
+		
+
+
+
+	</script>
+</body>
+</html>
