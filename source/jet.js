@@ -2189,6 +2189,7 @@ Jet().$package(function(J){
 	
 	J.loadBootOptions = loadBootOptions;
 	J.query = J.String.mapQuery(window.location.search);
+	J.host = window.location.host;
 	J.bootOptions = J.loadBootOptions();
 	
 });
