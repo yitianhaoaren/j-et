@@ -1808,19 +1808,29 @@ Jet().$package(function(J){
  * [Browser part]: Browser 资料分析包
  */
 Jet().$package(function(J){
+	J.browserOptions = {
+		htmlClass: true
+	};
+	J.query = J.String.mapQuery(window.location.search);
+	J.host = window.location.host;
+	
 	var ua = navigator.userAgent.toLowerCase(),
 		platform = navigator.platform.toLowerCase(),
 		Platform,
 		Browser,
 		Engine,
 		Support = {},
-		loadBootOptions,
+		toFixedVersion,
 		s;
-		
-	var toFixedVersion = function(ver){
+	
+	/**
+	 * @ignore
+	 */
+	toFixedVersion = function(ver, floatLength){
+		floatLength = floatLength || 1;
 		ver = ver.split(".");
 		ver = ver[0] + "." + (ver[1] || "0");
-		ver = Number(ver).toFixed(1);
+		ver = Number(ver).toFixed(floatLength);
 		return ver;
 	};
 	
@@ -1837,7 +1847,7 @@ Jet().$package(function(J){
     	 * @property name
 		 * @lends Platform
 		 */
-		name: (window.orientation != undefined) ? 'ipod' : (platform.match(/mac|win|linux/i) || ['other'])[0],
+		name: (window.orientation != undefined) ? 'ipod' : (platform.match(/mac|win|linux/i) || ['unknown'])[0],
 		
 		version: 0,
 		ipod: 0,
@@ -2071,6 +2081,9 @@ Jet().$package(function(J){
     */
 	
     // 探测浏览器的内核并存入 Browser.Engine 对象
+	if(Browser.ie && Browser.ie < 7){
+		Engine.set("trident", 4.0);
+	}
     (s = ua.match(/trident\/([\d.]+)/)) ? Engine.set("trident",toFixedVersion(s[1])):
     (s = ua.match(/gecko\/([\d.]+)/)) ? Engine.set("gecko",toFixedVersion(s[1])) :
     (s = ua.match(/applewebkit\/([\d.]+)/)) ? Engine.set("webkit",toFixedVersion(s[1])) :
@@ -2213,27 +2226,14 @@ Jet().$package(function(J){
 	Support.compatMode = document.compatMode;
 	
 	
-	/**
-	 * loadBootOptions
-	 * 
-	 * @memberOf Jet.prototype
-	 * @method loadBootOptions
-	 */
-	loadBootOptions = function(){
-		var o = {};
-		return o;
-		
-	};
+
 	
 	J.Platform = Platform;
 	J.Browser = Browser;
 	J.Browser.Engine = Engine;
 	J.Browser.Support = Support;
 	
-	J.loadBootOptions = loadBootOptions;
-	J.query = J.String.mapQuery(window.location.search);
-	J.host = window.location.host;
-	J.bootOptions = J.loadBootOptions();
+
 	
 });
 
