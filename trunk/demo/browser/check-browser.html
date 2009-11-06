@@ -30,6 +30,7 @@
 		<li>引擎：<span id="EngineName">...</span></li>
 		<li>引擎版本：<span id="EngineVer">...</span></li>
 		<li>支持特性：<span id="Features">...</span></li>
+		<li>Flash版本：<span id="Flash">...</span></li>
 		<li>插件：<span id="Plugin">...</span></li>
 		
 	</ul>
@@ -53,12 +54,13 @@
 		$("EngineName").innerHTML = J.Browser.Engine.name;
 		$("EngineVer").innerHTML = J.Browser.Engine.version;
 		$("Features").innerHTML = "xpath:"+J.Browser.Features.xpath+", air:"+J.Browser.Features.air+", query:"+J.Browser.Features.query;
+		$("Flash").innerHTML = J.Browser.Plugins.flash;
 		
 		$("Plugin").innerHTML = (function(){
 			var a=[];
-			window.plug = J.Browser.Plugins;
-			for(var i=0; i<J.Browser.Plugins.length; i++){
-				a.push(J.Browser.Plugins[i].name);
+			window.plug = J.Browser.getPlugins();
+			for(var i=0; i<J.Browser.getPlugins().length; i++){
+				a.push(J.Browser.getPlugins()[i].name);
 			}
 			
 			return a.join(",<br />");

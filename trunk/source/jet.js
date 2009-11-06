@@ -186,7 +186,7 @@
 						nis = name.split("."),
 						ns = topNamespace;
 
-					for(i = (nis[0] == "window") ? 1 : 0; i < nis.length; i=i+1){
+					for(i = 0; i < nis.length; i=i+1){
 						ni = nis[i];
 						ns[ni] = ns[ni] || {};
 						ns = ns[nis[i]];
@@ -1123,7 +1123,6 @@ Jet().$package(function(J){
 	J.String = J.String || {};
 	var $S = J.String,
 		template,
-		template2,
 		isURL,
 		mapQuery,
 		test,
@@ -1168,6 +1167,7 @@ Jet().$package(function(J){
 	 * 	});
 	 * };
 	 */
+	/*
 	template = function(str, obj){
 		var p,
 			RE;
@@ -1181,11 +1181,11 @@ Jet().$package(function(J){
 		}
 		return str;
 	};
-	
+	*/
 
 	var cache = {};
 	  
-	template2 = function(str, data){
+	template = function(str, data){
 		// Figure out if we're getting a template, or if we need to
 		// load the template - and be sure to cache the result.
 		var fn = !/\W/.test(str) ?
@@ -1562,7 +1562,6 @@ Jet().$package(function(J){
 		
 
 	$S.template = template;
-	$S.template2 = template2;
 	$S.isURL = isURL;
 	$S.mapQuery = mapQuery;
 	$S.test = test;
@@ -1809,13 +1808,16 @@ Jet().$package(function(J){
  */
 Jet().$package(function(J){
 	J.browserOptions = {
+		adjustBehaviors: true,
 		htmlClass: true
 	};
 	J.query = J.String.mapQuery(window.location.search);
 	J.host = window.location.host;
 	
-	var ua = navigator.userAgent.toLowerCase(),
-		platform = navigator.platform.toLowerCase(),
+	var platform = navigator.platform.toLowerCase(),
+		ua = navigator.userAgent.toLowerCase(),
+		plugins = navigator.plugins,
+		
 		Platform,
 		Browser,
 		Engine,
@@ -1845,7 +1847,10 @@ Jet().$package(function(J){
 	 * @type Object
 	 */
 	Platform = {
-		platform: platform,
+		getPlatform:function(){
+			return platform;
+		},
+		
 		/**
     	 * @property name
 		 * @lends Platform
@@ -1913,18 +1918,37 @@ Jet().$package(function(J){
 			 */
 			query: !!(document.querySelector)
 		},
+		
+		getPlugins: function(){
+			return plugins;
+		},
+		
 		/**
     	 * @namespace
     	 * @name Plugins
 		 * @memberOf Browser
 		 */
-		Plugins: navigator.plugins,
+		Plugins: {
+			flash: (function(){
+				var ver = "none";
+				if (plugins && plugins.length) {
+				    flash = plugins['Shockwave Flash'];
+				    if (flash && flash.description) {
+				    	ver = toFixedVersion(flash.description.match(/\b(\d+)\.\d+\b/)[1], 1) || ver;
+				    }
+				}
+				return ver;
+			})()
+		},
+		
+		
 		
 		/**
-    	 * @property ua
-		 * @lends Browser
+		 * @memberOf Browser
 		 */
-		ua: ua,
+		getUserAgent: function(){
+			return ua;
+		},
 		
 		/**
     	 * @property name
@@ -2107,8 +2131,33 @@ Jet().$package(function(J){
 			}catch(e){}
 		}
 	}
-    adjustBehaviors();
-    
+	
+	if(J.browserOptions.adjustBehaviors){
+		 adjustBehaviors();
+	}
+	
+	// 给html标签添加不同浏览器的参数className
+	var addHtmlClassName = function() {
+		var htmlTag = document.documentElement;
+    	htmlClassName = [htmlTag.className];
+    	htmlClassName.push('javascriptEnabled');
+    	htmlClassName.push(Platform.name);
+    	htmlClassName.push(Platform.name + Platform.version);
+    	htmlClassName.push(Browser.name);
+    	htmlClassName.push(Browser.name + Browser.version);
+    	htmlClassName.push(Engine.name);
+    	htmlClassName.push(Engine.name + Engine.version);
+    	if(Browser.Plugins.flash){
+    		htmlClassName.push("flash");
+    		htmlClassName.push("flash" + Browser.Plugins.flash);
+    	}
+    	htmlTag.className = htmlClassName.join(' ');
+	}
+
+	
+    if(J.browserOptions.htmlClass){
+    	addHtmlClassName();
+    }
     
     
 	// From: Jhon Resig
@@ -4155,6 +4204,77 @@ Jet().$package(function(J){
 
 
 /**
+ * cookie类
+ * 
+ * @namespace J.Cookie
+ */
+Jet().$package(function(J){
+	var domainPrefix = window.location.host;
+	
+	/**
+	 * @namespace Cookie 名字空间
+	 * @name Cookie
+	 */
+	J.Cookie = 
+	/**
+	 * @lends Cookie
+	 */	
+	{
+		
+		/**
+		 * 设置一个cookie
+		 * 
+		 * @param {String} name cookie名称
+		 * @param {String} value cookie值
+		 * @param {String} domain 所在域名
+		 * @param {String} path 所在路径
+		 * @param {Number} hour 存活时间，单位:小时
+		 * @return {Boolean} 是否成功
+		 */
+		set : function(name, value, domain, path, hour) {
+			if (hour) {
+				var today = new Date();
+				var expire = new Date();
+				expire.setTime(today.getTime() + 3600000 * hour);
+			}
+			window.document.cookie = name + "=" + value + "; " + (hour ? ("expires=" + expire.toGMTString() + "; ") : "") + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + domainPrefix + ";"));
+			return true;
+		},
+	
+		/**
+		 * 获取指定名称的cookie值
+		 * 
+		 * @param {String} name cookie名称
+		 * @return {String} 获取到的cookie值
+		 */
+		get : function(name) {
+			var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*)");
+			// var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*?)(?:;|$)");
+			var m = window.document.cookie.match(r);
+			return (!m ? "" : m[1]);
+			// document.cookie.match(new
+			// RegExp("(?:^|;+|\\s+)speedMode=([^;]*?)(?:;|$)"))
+		},
+	
+		/**
+		 * 删除指定cookie,复写为过期
+		 * 
+		 * @param {String} name cookie名称
+		 * @param {String} domain 所在域
+		 * @param {String} path 所在路径
+		 */
+		remove : function(name, domain, path) {
+			window.document.cookie = name + "=; expires=Mon, 26 Jul 1997 05:00:00 GMT; " + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + domainPrefix + ";"));
+		}
+	};
+
+});
+
+
+
+
+
+/**
  * [Browser part]: Console 控制台
  */
 Jet().$package(function(J){
@@ -4696,73 +4816,6 @@ Jet().$package(function(J){
 });
 
 
-/**
- * cookie类
- * 
- * @namespace J.Cookie
- */
-Jet().$package(function(J){
-	var domainPrefix = window.location.host;
-	
-	/**
-	 * @namespace Cookie 名字空间
-	 * @name Cookie
-	 */
-	J.Cookie = 
-	/**
-	 * @lends Cookie
-	 */	
-	{
-		
-		/**
-		 * 设置一个cookie
-		 * 
-		 * @param {String} name cookie名称
-		 * @param {String} value cookie值
-		 * @param {String} domain 所在域名
-		 * @param {String} path 所在路径
-		 * @param {Number} hour 存活时间，单位:小时
-		 * @return {Boolean} 是否成功
-		 */
-		set : function(name, value, domain, path, hour) {
-			if (hour) {
-				var today = new Date();
-				var expire = new Date();
-				expire.setTime(today.getTime() + 3600000 * hour);
-			}
-			window.document.cookie = name + "=" + value + "; " + (hour ? ("expires=" + expire.toGMTString() + "; ") : "") + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + domainPrefix + ";"));
-			return true;
-		},
-	
-		/**
-		 * 获取指定名称的cookie值
-		 * 
-		 * @param {String} name cookie名称
-		 * @return {String} 获取到的cookie值
-		 */
-		get : function(name) {
-			var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*)");
-			// var r = new RegExp("(?:^|;+|\\s+)" + name + "=([^;]*?)(?:;|$)");
-			var m = window.document.cookie.match(r);
-			return (!m ? "" : m[1]);
-			// document.cookie.match(new
-			// RegExp("(?:^|;+|\\s+)speedMode=([^;]*?)(?:;|$)"))
-		},
-	
-		/**
-		 * 删除指定cookie,复写为过期
-		 * 
-		 * @param {String} name cookie名称
-		 * @param {String} domain 所在域
-		 * @param {String} path 所在路径
-		 */
-		remove : function(name, domain, path) {
-			window.document.cookie = name + "=; expires=Mon, 26 Jul 1997 05:00:00 GMT; " + (path ? ("path=" + path + "; ") : "path=/; ") + (domain ? ("domain=" + domain + ";") : ("domain=" + domainPrefix + ";"));
-		}
-	};
-
-});
-
 
 
 /**
@@ -5287,6 +5340,7 @@ Jet().$package(function(J){
 		$E = J.Event;
 		
 	$E.onDOMReady(function(){
+		// dom就绪后探测boxModel盒式模型
 		var div = document.createElement("div");
 		div.style.width = "1px";
 		div.style.paddingLeft = "1px";
