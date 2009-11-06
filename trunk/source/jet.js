@@ -45,7 +45,7 @@
 				if(this.Console){
 					this.Console.out(msg, type);
 				}else{
-					alert(msg+"["+type+"]");
+					alert(msg+" - 消息类型["+type+"]");
 				}
 			}
 			return msg;
@@ -115,11 +115,11 @@
 								J = Jet.VERSIONS[ver];
 							}else{
 								J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
-								throw new Error("No JET version " + ver + ", so return Jet version " + Jet.DEFAULT_VERSION + "!");
+								throw new Error("没有找到 JET version " + ver + ", 所以返回默认版本 JET version " + Jet.DEFAULT_VERSION + "!");
 							}
 						}catch(e){
 							//J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
-							J.out(e.fileName+", 行号:"+e.lineNumber+"; "+e.name+": "+e.message+", stack:"+typeof e.stack, 2);
+							J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 						}
 					}else{
 						J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
@@ -244,7 +244,7 @@
 						}
 					}catch(e){
 						// 全局异常捕获
-						this.out(e.fileName+", 行号:"+e.lineNumber+"; "+e.name+": "+e.message+", stack:"+typeof e.stack, 1);
+						this.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
 						//this.out(e, 1);
 					}
 				},
@@ -372,7 +372,7 @@
 		}
 	}catch(e){
 		// 微内核初始化失败，输出出错信息
-		out("JET 微内核初始化失败，错误：" + e, 1);
+		out("JET 微内核初始化失败! " + "错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
 	}
 })();
 
@@ -728,7 +728,9 @@ Jet().$package(function(J){
 				result = arguments[i]();
 				// 如果上边语句执行成功则执行break跳出循环
 				break;
-			}catch(e){}
+			}catch(e){
+				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+			}
 		}
 		return result;
 	};
@@ -1276,7 +1278,7 @@ Jet().$package(function(J){
 				}
 			}
 			catch(e){
-				J.out(e);
+				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 			}
 		}
 		return params;
@@ -1949,7 +1951,9 @@ Jet().$package(function(J){
 				            new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + startVer);
 				            ver = toFixedVersion(startVer);
 				            break;
-				        } catch(e) {}
+				        } catch(e) {
+				        	J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				        }
 				    }
 				}
 				return ver;
@@ -2143,7 +2147,9 @@ Jet().$package(function(J){
 		if (Browser.ie && Browser.ie < 7) {
 			try {
 				document.execCommand('BackgroundImageCache', false, true);
-			}catch(e){}
+			}catch(e){
+				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+			}
 		}
 	}
 	
@@ -3918,13 +3924,15 @@ Jet().$package(function(J){
 		/**
 		 * @ignore
 		 */
-		httpSuccess=function(r){
+		httpSuccess = function(r){
 			try{
 				return (!r.status && location.protocol == "file:")
 					|| (r.status>=200 && r.status<300)
 					|| (r.status==304)
 					|| (navigator.userAgent.indexOf("Safari")>-1 && typeof r.status=="undefined");
-			}catch(e){}
+			}catch(e){
+				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+			}
 			return false;
 		}
 		
@@ -4705,8 +4713,8 @@ Jet().$package(function(J){
 					try {
 						_rv += (eval(J.Console._inputEl.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
 						J.Console.out(_rv, 0);
-					} catch (ex) {
-						_rv += ex.description;
+					} catch (e) {
+						_rv += e.description;
 						J.Console.out(_rv, 1);
 					}
 			}
