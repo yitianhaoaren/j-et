@@ -1936,6 +1936,15 @@ Jet().$package(function(J){
 				    if (flash && flash.description) {
 				    	ver = toFixedVersion(flash.description.match(/\b(\d+)\.\d+\b/)[1], 1) || ver;
 				    }
+				} else {
+					var startVer = 13;
+				    while (startVer--) {
+				        try {
+				            new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + startVer);
+				            ver = startVer;
+				            break;
+				        } catch(e) {}
+				    }
 				}
 				return ver;
 			})()
