@@ -2082,7 +2082,7 @@ Jet().$package(function(J){
 	
     // 探测浏览器的内核并存入 Browser.Engine 对象
 	if(Browser.ie && Browser.ie < 7){
-		Engine.set("trident", 4.0);
+		Engine.set("trident", toFixedVersion(4));
 	}
     (s = ua.match(/trident\/([\d.]+)/)) ? Engine.set("trident",toFixedVersion(s[1])):
     (s = ua.match(/gecko\/([\d.]+)/)) ? Engine.set("gecko",toFixedVersion(s[1])) :
