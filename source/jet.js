@@ -1,6 +1,6 @@
 /**	
  * JET (Javascript Extension Tools) 
- * Copyright (c) 2009, WebQQ Group, All rights reserved.
+ * Copyright (c) 2009, KDV.cn, All rights reserved.
  * http://code.google.com/p/j-et/
  *
  * @version	1.0
@@ -1816,6 +1816,10 @@ Jet().$package(function(J){
 	J.query = J.String.mapQuery(window.location.search);
 	J.host = window.location.host;
 	
+	// 设置 domain
+	// document.domain = 'kdv.cn';
+	
+	
 	var platform = navigator.platform.toLowerCase(),
 		ua = navigator.userAgent.toLowerCase(),
 		plugins = navigator.plugins,
@@ -2287,6 +2291,40 @@ Jet().$package(function(J){
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
 	Support.compatMode = document.compatMode;
+	
+	
+	
+	
+	// set reference
+	var topNamespace = this, 
+	    console,
+	    firebug;
+	
+	// init debug console
+	if (!topNamespace.console) {
+	    console = topNamespace.console = {
+	        log: function() {},
+	        debug: function() {},
+	        info: function() {},
+	        warn: function() {},
+	        error: function() {},
+	        assert: function() {},
+	        dir: function() {},
+	        dirxml: function() {},
+	        trace: function() {},
+	        group: function() {},
+	        groupCollapsed: function() {},
+	        groupEnd: function() {},
+	        time: function() {},
+	        timeEnd: function() {},
+	        profile: function() {},
+	        profileEnd: function() {},
+	        count: function() {}
+	    };
+	} else {
+	    console = topNamespace.console;
+	}
+	
 	
 	
 
