@@ -1941,7 +1941,7 @@ Jet().$package(function(J){
 				    while (startVer--) {
 				        try {
 				            new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + startVer);
-				            ver = startVer;
+				            ver = toFixedVersion(startVer);
 				            break;
 				        } catch(e) {}
 				    }
