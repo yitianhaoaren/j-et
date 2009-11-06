@@ -303,6 +303,8 @@
 				 */
 				out: out,
 				
+				startTime: new Date(),
+				
 				/**
 				 * 关于 Jet
 				 * 
