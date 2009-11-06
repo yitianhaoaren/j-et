@@ -8,7 +8,7 @@
 			background: #e1e1e1;
 		}
 		.view2{
-			background:#e1e1e1;
+			background:#e1e161;
 		}
 	</style>
 </head>
@@ -45,11 +45,11 @@
 		Jet().$package("whatDoesAnimalDo.model", function(J){
 			var $E = J.Event;
 			
-			// animal的数据
+			// animal的字典数据
 			var animalDictionary = {
-					cat: "喵喵~~",
-					fish: "游来游去~~~",
-					bird: "飞翔~"
+					cat: "[字典释义]小猫，喵喵~~",
+					fish: "[字典释义]鱼，游来游去~~~",
+					bird: "[字典释义]鸟，飞翔~"
 				};
 			
 			// 当前的animal，也就是这个application的状态
@@ -59,7 +59,7 @@
 			this.setAnimal = function(animalName) {
 				currentAnimal = animalDictionary[animalName] ? animalName : null;
 				
-				// 触发自己的事件
+				// 触发事件
 				$E.notifyObservers(this,"ModelChange", this.getAnimalAction());
 			};
 			
@@ -67,7 +67,6 @@
 			this.getAnimalAction = function() {
 				return currentAnimal ? currentAnimal + ": " + animalDictionary[currentAnimal] : "汪汪?";
 			};
-
 		});
 		
 		// view 层：1
@@ -86,7 +85,6 @@
 			this.update = function(data) {
 				document.getElementById('whatDoesThisAnimalDo').innerHTML = data;
 			};
-
 		});
 		
 		// view 层：2
@@ -105,7 +103,6 @@
 			this.update = function(data) {
 				document.getElementById('whatDoesThisAnimalDo2').innerHTML = data;
 			};
-
 		});
 		
 		
@@ -115,9 +112,10 @@
 
 			// 选择视图
 			this.init = function() {
+				this.view = whatDoesAnimalDo.view;
 				$E.addObserver(whatDoesAnimalDo.model, "ModelChange", J.bind(this.onModelChange,this));
 				$E.addObserver(whatDoesAnimalDo.view, "ViewChange", J.bind(this.onViewChange,this));
-				whatDoesAnimalDo.view.init();
+				this.view.init();
 			};
 			
 			// 将用户的操作映射到模型的更新上
@@ -131,7 +129,6 @@
 			};
 
 			//this.init();
-
 		});
 		
 		
@@ -141,9 +138,10 @@
 
 			// 选择视图
 			this.init = function() {
+				this.view = whatDoesAnimalDo.view2;
 				$E.addObserver(whatDoesAnimalDo.model, "ModelChange", J.bind(this.onModelChange,this));
 				$E.addObserver(whatDoesAnimalDo.view2, "ViewChange", J.bind(this.onViewChange,this));
-				whatDoesAnimalDo.view2.init();
+				this.view.init();
 			};
 			
 			// 将用户的操作映射到模型的更新上
@@ -157,7 +155,6 @@
 			};
 
 			//this.init();
-
 		});
 		
 		
