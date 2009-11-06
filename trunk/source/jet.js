@@ -119,7 +119,7 @@
 							}
 						}catch(e){
 							//J.out(e.fileName+";"+e.lineNumber+","+typeof e.stack+";"+e.name+","+e.message, 2);
-							J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+							J.out("A.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 						}
 					}else{
 						J = Jet.VERSIONS[Jet.DEFAULT_VERSION];
@@ -244,7 +244,7 @@
 						}
 					}catch(e){
 						// 全局异常捕获
-						this.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
+						this.out("B.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
 						//this.out(e, 1);
 					}
 				},
@@ -729,7 +729,7 @@ Jet().$package(function(J){
 				// 如果上边语句执行成功则执行break跳出循环
 				break;
 			}catch(e){
-				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				J.out("C.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 			}
 		}
 		return result;
@@ -1278,7 +1278,7 @@ Jet().$package(function(J){
 				}
 			}
 			catch(e){
-				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				//J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 			}
 		}
 		return params;
@@ -1952,7 +1952,7 @@ Jet().$package(function(J){
 				            ver = toFixedVersion(startVer);
 				            break;
 				        } catch(e) {
-				        	J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				        	//J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 				        }
 				    }
 				}
@@ -2148,7 +2148,7 @@ Jet().$package(function(J){
 			try {
 				document.execCommand('BackgroundImageCache', false, true);
 			}catch(e){
-				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				//J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 			}
 		}
 	}
@@ -3931,7 +3931,7 @@ Jet().$package(function(J){
 					|| (r.status==304)
 					|| (navigator.userAgent.indexOf("Safari")>-1 && typeof r.status=="undefined");
 			}catch(e){
-				J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
+				//J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
 			}
 			return false;
 		}
