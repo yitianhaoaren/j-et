@@ -7,7 +7,7 @@
 Author: Justin Rogers ,Micrsoft Corporation June 2005
 Translator by: http://birdshome.cnblogs.com
 
-Web开发的发展
+===Web开发的发展===
 
     在过去一些的时候，Web开发人员并没有太多的去关注内存泄露问题。那时的页面间联系大都比较简单，并主要使用不同的连接地址在同一个站点中导航，这样的设计方式是非常有利于浏览器释放资源的。即使Web页面运行中真的出现了资源泄漏，那它的影响也是非常有限而且常常是不会被人在意的。
 
@@ -15,21 +15,18 @@ Web开发的发展
 
     还算好的事情是，当你明确了希望寻找什么时，内存泄露方式是比较容易被确定的。大多数你能遇到的泄露问题我们都已经知道，你只需要少量额外的工作就会给你带来好处。虽然在一些页面中少量的小泄漏问题仍会发生，但是主要的问题还是很容易解决的。
 
-泄露方式
+===泄露方式===
 
     在接下来的内容中，我们会讨论内存泄露方式，并为每种方式给出示例。其中一个重要的示例是JScript中的Closure技术，另一个示例是在事件执行中使用Closures。当你熟悉本示例后，你就能找出并修改你已有的大多数内存泄漏问题，但是其它Closure相关的问题可能又会被忽视。
 
 现在让我们来看看这些个方式都有什么：
 
- 1、循环引用(Circular References) — IE浏览器的COM组件产生的对象实例和网页脚本引擎产生的对象实例相互引用，就会造成内存泄漏。这也是Web页面中我们遇到的最常见和主要的泄漏方式；
+ # 循环引用(Circular References) — IE浏览器的COM组件产生的对象实例和网页脚本引擎产生的对象实例相互引用，就会造成内存泄漏。这也是Web页面中我们遇到的最常见和主要的泄漏方式；
+ # 内部函数引用(Closures) — Closures可以看成是目前引起大量问题的循环应用的一种特殊形式。由于依赖指定的关键字和语法结构，Closures调用是比较容易被我们发现的；
+ # 页面交叉泄漏(Cross-Page Leaks) — 页面交叉泄漏其实是一种较小的泄漏，它通常在你浏览过程中，由于内部对象薄计引起。下面我们会讨论DOM插入顺序的问题，在那个示例中你会发现只需要改动少量的代码，我们就可以避免对象薄计对对象构建带来的影响；
+ # 貌似泄漏(Pseudo-Leaks) — 这个不是真正的意义上的泄漏，不过如果你不了解它，你可能会在你的可用内存资源变得越来越少的时候极度郁闷。为了演示这个问题，我们将通过重写Script元素中的内容来引发大量内存的"泄漏"。
 
- 2、内部函数引用(Closures) — Closures可以看成是目前引起大量问题的循环应用的一种特殊形式。由于依赖指定的关键字和语法结构，Closures调用是比较容易被我们发现的；
-
- 3、页面交叉泄漏(Cross-Page Leaks) — 页面交叉泄漏其实是一种较小的泄漏，它通常在你浏览过程中，由于内部对象薄计引起。下面我们会讨论DOM插入顺序的问题，在那个示例中你会发现只需要改动少量的代码，我们就可以避免对象薄计对对象构建带来的影响；
-
- 4、貌似泄漏(Pseudo-Leaks) — 这个不是真正的意义上的泄漏，不过如果你不了解它，你可能会在你的可用内存资源变得越来越少的时候极度郁闷。为了演示这个问题，我们将通过重写Script元素中的内容来引发大量内存的"泄漏"。
-
-循环引用
+===循环引用===
 
     循环引用基本上是所有泄漏的始作俑者。通常情况下，脚本引擎通过垃圾收集器(GC)来处理循环引用，但是某些未知因数可能会妨碍从其环境中释放资源。对于IE来说，某些DOM对象实例的状态是脚本无法得知的。下面是它们的基本原则：
 
@@ -102,3 +99,98 @@ Web开发的发展
     to be continued ...
 
     // Closure我没有翻，他的表现是内部函数，并且可以访问父函数的变量，有人翻成闭包被骂啦一头包。
+
+=======================
+
+===有很多人提到IE下使用AJAX内存会增长很快===
+
+我稍微研究了一下   发现其实IE的并不会主动的对未引用的变量进行回收 
+CollectGarbage()只是对值为null的变量进行回收,其实就算不用CollectGarbage()在下次分配内存的时候IE也会对null的内存进行重新分配. 
+
+例如一个有类   class1 
+function   class1() 
+{ 
+this.a   =   "xxxx "; 
+this.b   =   "xxxx "; 
+this.c   =   "xxxx "; 
+this.d   =   "xxxx "; 
+} 
+
+var   aa   =   new   class1(); 
+aa   =   null; 
+这样被释放的内存也只有aa这个变量.   
+class1的实例的所有成员的内存完全没有被释放,这些内存将在IE最小化的时候才会被废弃. 
+
+也就是说我们需要手动的对这些内存进行释放. 
+var   aa   =   new   class1(); 
+for(o   in   aa)aa[o]=null; 
+aa   =   null; 
+这样就可以完全把class1的内存释放掉 
+
+但如果class1里面还有一个类的实例 
+function   class1() 
+{ 
+this.a   =   "xxxx "; 
+this.b   =   "xxxx "; 
+this.c   =   "xxxx "; 
+this.d   =   new   class2(); 
+} 
+function   class2() 
+{ 
+this.a   =   "xxxx "; 
+this.b   =   "xxxx "; 
+this.c   =   "xxxx "; 
+this.d   =   "xxxx "; 
+} 
+
+var   aa   =   new   class1(); 
+for(o   in   aa)aa[o]=null; 
+aa   =   null; 
+
+同理这样释放内存的话   class1里面的class2的内存就没有被释放 
+至于怎么释放我就不多说了 
+
+对于document.createElement()方法 
+其实就相当于是一个新的DHTMLElement实例   稍微估算了一下一般是8K一个 
+
+以下是重点 
+IE在移除一个HTML元素时   只是对所有属性进行了回收   而所有的事件完全没有被回收 
+而这些事件方法往往是内存占用的大鳄.通常导致DHTML元素8K的内存完全没有被回收 
+
+例如: 
+function   class1() 
+{ 
+this.a   =   "xxxx "; 
+this.b   =   "xxxx "; 
+this.c   =   "xxxx "; 
+this.d   =   "xxxx "; 
+this.e   =   document.createElement( "div "); 
+this.e.onclick   =   function(){.....;} 
+this.e.ondblclick   =   function(){.....;} 
+} 
+
+var   aa   =   new   class1(); 
+for(o   in   aa)aa[o]=null; 
+aa   =   null; 
+
+这样的话就平白无故的多了8K无法回收的内存 
+
+对于上面的情况我们需要这样   才能回收 
+
+var   aa   =   new   class1(); 
+aa.e.onclick   =   null; 
+aa.e.ondblclick   =   null; 
+for(o   in   aa)aa[o]=null; 
+aa   =   null; 
+
+当然也有个通用的回收方法   效率很低而已 
+var   aa   =   new   class1(); 
+for(o   in   aa.e) 
+        if(o.indexOf( "on ")==0) 
+                aa.e[o]=null; 
+for(o   in   aa) 
+        aa[o]=null; 
+aa   =   null; 
+
+总结以上   IE的内存不会被自动回收   但不是不能被回收 
+怎么回收   那就要靠你自己动手来写了
