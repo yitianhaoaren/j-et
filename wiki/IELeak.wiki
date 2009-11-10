@@ -105,7 +105,7 @@ Translator by: http://birdshome.cnblogs.com
 
 ===有很多人提到IE下使用AJAX内存会增长很快===
 
-我稍微研究了一下   发现其实IE的并不会主动的对未引用的变量进行回收 
+    我稍微研究了一下   发现其实IE的并不会主动的对未引用的变量进行回收 
 CollectGarbage()只是对值为null的变量进行回收,其实就算不用CollectGarbage()在下次分配内存的时候IE也会对null的内存进行重新分配. 
 
 例如一个有类   class1 
@@ -151,10 +151,11 @@ var   aa   =   new   class1();
 for(o   in   aa)aa[o]=null; 
 aa   =   null; 
 }}}
-同理这样释放内存的话   class1里面的class2的内存就没有被释放 
+   同理这样释放内存的话   class1里面的class2的内存就没有被释放 
 至于怎么释放我就不多说了 
 
-对于document.createElement()方法 
+===DOM===
+  对于document.createElement()方法 
 其实就相当于是一个新的DHTMLElement实例   稍微估算了一下一般是8K一个 
 
 以下是重点 
@@ -198,5 +199,4 @@ for(o   in   aa)
         aa[o]=null; 
 aa   =   null; 
 }}}
-总结以上   IE的内存不会被自动回收   但不是不能被回收 
-怎么回收   那就要靠你自己动手来写了
+  总结以上，IE的内存不会被自动回收，但不是不能被回收，怎么回收？那就要靠你自己动手来写了！
