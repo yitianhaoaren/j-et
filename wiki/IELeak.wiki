@@ -36,7 +36,7 @@ Translator by: http://birdshome.cnblogs.com
     本模型中引起的泄漏问题基于COM的引用计数。脚本引擎对象会维持对DOM对象的引用，并在清理和释放DOM对象指针前等待所有引用的移除。在我们的示例中，我们的脚本引擎对象上有两个引用：脚本引擎作用域和DOM对象的expando属性。当终止脚本引擎时第一个引用会释放，DOM对象引用由于在等待脚本擎的释放而并不会被释放。你可能会认为检测并修复假设的这类问题会非常的容易，但事实上这样基本的的示例只是冰山一角。你可能会在30个对象链的末尾发生循环引用，这样的问题排查起来将会是一场噩梦。
 
     如果你仍不清楚这种泄漏方式在HTML代码里到底怎样，你可以通过一个全局脚本变量和一个DOM对象来引发并展现它。
-
+{{{
 <html>
     <head>
         <script language="JScript">
@@ -60,11 +60,11 @@ Translator by: http://birdshome.cnblogs.com
         <div id="LeakedDiv"></div>
     </body>
 </html>
-
+}}}
     你可以使用直接赋null值得方式来破坏该泄漏情形。在页面文档卸载前赋null值，将会让脚本引擎知道对象间的引用链没有了。现在它将能正常的清理引用并释放DOM对象。在这个示例中，作为Web开发员的你因该更多的了解了对象间的关系。
 
     作为一个基本的情形，循环引用可能还有更多不同的复杂表现。对基于对象的JScript，一个通常用法是通过封装JScript对象来扩充DOM对象。在构建过程中，你常常会把DOM对象的引用放入JScript对象中，同时在DOM对象中也存放上对新近创建的JScript对象的引用。你的这种应用模式将非常便于两个对象之间的相互访问。这是一个非常直接的循环引用问题，但是由于使用不用的语法形式可能并不会让你在意。要破环这种使用情景可能变得更加复杂，当然你同样可以使用简单的示例以便于清楚的讨论。
-
+{{{
 <html>
     <head>
         <script language="JScript">
@@ -94,6 +94,7 @@ Translator by: http://birdshome.cnblogs.com
         <div id="LeakedDiv"></div>
     </body>
 </html>
+}}}
     更复杂的办法还有记录所有需要解除引用的对象和属性，然后在Web文档卸载的时候统一清理，但大多数时候你可能会再造成额外的泄漏情形，而并没有解决你的问题。
 
     to be continued ...
@@ -108,6 +109,7 @@ Translator by: http://birdshome.cnblogs.com
 CollectGarbage()只是对值为null的变量进行回收,其实就算不用CollectGarbage()在下次分配内存的时候IE也会对null的内存进行重新分配. 
 
 例如一个有类   class1 
+{{{
 function   class1() 
 { 
 this.a   =   "xxxx "; 
@@ -118,6 +120,7 @@ this.d   =   "xxxx ";
 
 var   aa   =   new   class1(); 
 aa   =   null; 
+}}}
 这样被释放的内存也只有aa这个变量.   
 class1的实例的所有成员的内存完全没有被释放,这些内存将在IE最小化的时候才会被废弃. 
 
@@ -128,6 +131,7 @@ aa   =   null;
 这样就可以完全把class1的内存释放掉 
 
 但如果class1里面还有一个类的实例 
+{{{
 function   class1() 
 { 
 this.a   =   "xxxx "; 
@@ -146,7 +150,7 @@ this.d   =   "xxxx ";
 var   aa   =   new   class1(); 
 for(o   in   aa)aa[o]=null; 
 aa   =   null; 
-
+}}}
 同理这样释放内存的话   class1里面的class2的内存就没有被释放 
 至于怎么释放我就不多说了 
 
@@ -158,6 +162,7 @@ IE在移除一个HTML元素时   只是对所有属性进行了回收   而所�
 而这些事件方法往往是内存占用的大鳄.通常导致DHTML元素8K的内存完全没有被回收 
 
 例如: 
+{{{
 function   class1() 
 { 
 this.a   =   "xxxx "; 
@@ -172,18 +177,19 @@ this.e.ondblclick   =   function(){.....;}
 var   aa   =   new   class1(); 
 for(o   in   aa)aa[o]=null; 
 aa   =   null; 
-
+}}}
 这样的话就平白无故的多了8K无法回收的内存 
 
 对于上面的情况我们需要这样   才能回收 
-
+{{{
 var   aa   =   new   class1(); 
 aa.e.onclick   =   null; 
 aa.e.ondblclick   =   null; 
 for(o   in   aa)aa[o]=null; 
 aa   =   null; 
-
+}}}
 当然也有个通用的回收方法   效率很低而已 
+{{{
 var   aa   =   new   class1(); 
 for(o   in   aa.e) 
         if(o.indexOf( "on ")==0) 
@@ -191,6 +197,6 @@ for(o   in   aa.e)
 for(o   in   aa) 
         aa[o]=null; 
 aa   =   null; 
-
+}}}
 总结以上   IE的内存不会被自动回收   但不是不能被回收 
 怎么回收   那就要靠你自己动手来写了
