@@ -1,6 +1,6 @@
 #summary Javascript 问题汇总
 
-=== 造成IE浏览器发生Stack Overflow错误的可能原因 ===
+=== # 造成IE浏览器发生Stack Overflow错误的可能原因 ===
 
  # IE缓存满了，无法写入。解决办法：清空缓存目录
  # 重复引用相同的Javascript文件。解决办法：去掉重复的文件
