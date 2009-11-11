@@ -3,19 +3,19 @@
 
 
 == 命名含义 ==
- * JET 是 Javascript Extension Tools 的缩写，即 Javascript 扩展工具箱的意思。
- * jet 本意是喷气式飞机，所以同时借喻轻巧快速的寓意。
+ * JET 是 Javascript Extension Tools 的缩写，即 Javascript 扩展工具套件的意思。
+ * jet 本意是喷气式飞机，所以同时借喻轻巧、快速的寓意。
 
 
 
 == 设计理念 ==
  * 保持最优的执行效率
- * 保持 Javascript 原有的代码风格
+ * 保持 Javascript 原有的代码风格，降低学习难度
  * 更好的组织工业级 Javascript 应用程序
 
 
 == 其他 ==
- * 探索在前端使用 MVP、MVC 模式来构建大型 WebApp (Build Web App with MVC)
+ * 探索在前端使用 MVP、MVC 模式来构建大型 WebApp (Build Web App with MVP)
  * 探索工业级 Javascript 的开发技术
 
 == 发展规划 ==
@@ -27,6 +27,6 @@
 
 == 结构图 ==
 
- || 第一层 || Core Javascript 扩展 || 代码组织 || 无缝接入其它js库 ||
- || 第二层 || Browser Javasccript 扩展 || 跨浏览器封装 || 设计模式相关 ||
- || 第三层 || UI 组件 || 实时动画系统 || 游戏引擎 ||
+ || 第一层 || *Core Javascript 扩展模块* || *代码组织模块*(轻松组织大型应用,无缝接入其它js库) ||
+ || 第二层 || *Browser Javasccript 扩展模块*(跨浏览器,基础封装) || *可选模块*(设计模式相关模块,选择器模块...) ||
+ || 第三层 || *UI 组件* || *实时动画模块* || *游戏引擎模块* ||
