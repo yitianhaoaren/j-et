@@ -117,3 +117,282 @@ alert(window.test);
 
 　　通过这个例子，我们可以发现，后续的通过动态创建script脚本进行动态加载js文件或者请求json数据，一旦确定加载完毕，我们可以在对于的回调函数里面移除对应的script节点，防止dom的结构越来越庞大，同时加载成功的js函数我们仍然可以后续继续调用，因为里面的函数和变量均已经attach到window对象了。
 
+
+=== 4.探索javascript中函数的执行顺序 ===
+
+  先来第一段测试代码，如下所示：
+测试代码一：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+function myFn(){  
+    alert('Fn1');  
+};  
+  
+myFn();  
+  
+function myFn(){  
+    alert('Fn2');  
+};  
+  
+myFn();  
+// -->  
+</script>  
+
+      代码很简单，定义两个同名的函数myFn，然后在不同的地方调用该函数，但执行的结果却出人意料,
+两次输出的结果都是Fn2，而不是我们认为的第一次输出Fn1，第二次输出Fn2。具体原因这里先不说，接
+
+下来我们继续测试，看第二段测试代码：
+测试代码二：
+
+view plaincopy to clipboardprint?
+<script type="text/javascript">  
+<!--  
+function myFn(){  
+    alert('Fn1');  
+};  
+  
+myFn();  
+// --></mce:script>  
+<mce:script type="text/javascript"><!--  
+function myFn(){  
+    alert('Fn2');  
+};  
+  
+myFn();  
+// -->  
+</script>  
+
+     这里可能大家认为输出结果跟上次的一样，错了，这次第一次输出Fn1，第二次输出Fn2.继续测试，
+测试代码三：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+var myFn = function(){alert('Fn1');};  
+myFn();  
+myFn = function(){alert('Fn2');};  
+myFn();  
+// -->  
+</script>  
+
+     这次输出的结果是Fn1,Fn2.
+
+测试代码四：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+function myFn(){alert('Fn1');};  
+myFn();  
+  
+myFn = function (){alert('Fn2');};  
+myFn();  
+// -->  
+</script>  
+
+    输出Fn1,Fn2.
+
+测试代码五：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+var myFn = function(){alert('Fn1');};  
+myFn();  
+function myFn(){alert('Fn2');};  
+myFn();  
+// -->  
+</script>  
+
+输出Fn1, Fn1
+
+测试代码六：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+myFn();  
+var myFn = function(){alert('Fn1');};  
+myFn();  
+  
+function myFn(){alert('Fn2');};  
+myFn();  
+// -->  
+</script>  
+
+输出结果是Fn2,Fn1,Fn1
+
+测试代码七：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+myFn();  
+function myFn(){alert('Fn1');};  
+// -->  
+</script>  
+
+输出Fn1,而不是未定义的函数
+
+测试代码八：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+myFn();  
+var myFn = function(){alert('Fn1');};  
+// -->  
+</script>  
+
+则提示缺少对象，也就是函数没定义。
+
+测试代码九：
+
+view plaincopy to clipboardprint?
+<script language="JavaScript">  
+<!--  
+myFn();  
+// -->  
+</script>  
+<script type="text/javascript">  
+<!--  
+function myFn(){alert('Fn1');};  
+// -->  
+</script>  
+
+则提示缺少对象，也就是函数没定义。
+
+   从上面的测试例子中，我们可以发现javascript具有类似“预编译”（或者有人称为“预解释”）的
+
+特点，从这点看，javascript确实有点像传统的编译型语言，比如c,c++等。但javascript跟这种语言又
+
+有根本上的区别，在javascript中，这种预编译的特性并不是对所有的js代码进行的，从上面的测试例
+
+子中，我们可以发现，把myFn的定义分别放到不同的script块中进行调用的时候，就会提示对象未定义
+
+，从这点看，javascript的“预编译”特性只是对属于同一块(即包含在同一个<script></script>块)中
+
+的代码有效。
+  其实，在javascript的执行过程中，js引擎扫描每一script块的代码，把里面的各种函数定义都抽出
+
+来进行“预编译”，注意，这里说的是函数定义而不是函数赋值，或者说是定义式的函数，那什么是定
+
+义式的函数呢，如下的形式就是：
+function myFn(){
+ //Code goes here
+};
+编译完成后，就根据script块中的语句从上到下，从左到右进行执行。根据这样的解释，上面输出的各
+
+种结果也就很清楚了。
+测试代码一：
+首先js引擎扫描该script块中的函数定义（注意这个时候还没开始执行代码），发现有定义式函数
+
+function myFn(){}有两处，由于名字是一样的，编译后就合成了一个myFn函数，后面的定义覆盖了前面
+
+的定义，所以在函数执行之前就只有一个编译的函数myFn,并且其定义是后面的那个，因此真正到执行代
+
+码的时候，也就是第一次调用myFn(),输出的当然是Fn2,第二次执行myFn同样输出Fn2.
+
+测试代码二：
+由于javascript的块编译特性，因此分成在不同的块中的代码是分开编译的，所以第一个script块编译
+
+后的myFn函数并没有被第二块的myFn覆盖，因此第一个执行myFn输出的是Fn1,同样第二块输出的是Fn2.
+需要重点指出的是var myFn = function(){};不是定义式函数声明，而是赋值语句，把一个函数对象赋
+
+值给一个变量，赋值语句的执行时机晚于编译时刻，定义式函数是在执行语句之前就完成了的，而赋值
+
+语句要到执行的时候才进行。通过这样的说明，就可以很清楚的解释
+测试代码七为什么不是提示函数未定义，而是输出Fn1,而测试代码八则提示对象未定义的原因了，因为
+
+测试代码在执行myFn之前，已经优先执行了定义式函数的编译，也就是说，myFn已经是一个定义了的函
+
+数，因此到执行时候当然能够正常执行，而测试代码并没有定义式函数，在执行代码之前是没有任何已
+
+经编译好的函数定义的，而到执行myFn()的时候当然提示函数没定义，接下来才执行函数赋值，把一个
+
+函数赋值给一个myFn变量，这时候如果调用myFn就可以了。
+
+
+=== 5.IE下，恒比较(===)的一些问题 ===
+在IE下，请执行如下测试代码：
+
+view plaincopy to clipboardprint?
+<mce:script language="JavaScript"><!--  
+alert(window == window.self);  //1  
+alert(window === window.self); //2  
+alert(window==window.top);     //3  
+alert(window===window.top);    //4  
+  
+  
+var obj1 = {};  
+var obj2 = new Object();  
+alert(obj1==obj2);   //5  
+alert(obj1===obj2);  //6  
+// --></mce:script>  
+
+执行结果：
+
+IE下上面的执行结果是：第1行和第3行为true，其他的都是fasle。
+
+Chrome，FF，Opera和Safaric执行的结果是：第1，2，3，4行均是true，第5，6行是false.
+
+原因分析：
+
+    我们知道在js中,恒等比较（===）除了不进行类型转换外还要求必须比较的两个对象类型相同，这种情况下，第5和6行的结果是false是正常的，因为比较的两个对象虽然类型一样，但其实是两个独立的内存对象，内部的地址是不一样的，他们相同的只是语义上的相等。
+
+    第1到第4行的比较在IE下比较怪异，也许是实现的不同导致的，难道是window和window.top，window,self的内部对象地址不一样？IE为了防止对象地址引用自己导致的“死循环”而特意对window和window.self进行区分（比如特意增加一个地址offset等），===的比较却是基于这样的一个地址比较而不是语义上的比较来实现的？这些都是笔者的一个猜测，具体原因除了看IE源代码估计没人能够搞清楚。
+
+
+=== 6.eval和函数执行的效率比较 ===
+测试代码如下：
+
+view plaincopy to clipboardprint?
+function testSpeed(){  
+    for(var i=0; i<100000; i++){  
+        $('oHref');  
+    }  
+};  
+  
+var begTime1 = new Date();  
+testSpeed();  
+var endTime1 = new Date();  
+  
+  
+var begTime = new Date();  
+eval('testSpeed();');  
+var endTime = new Date();  
+$('divShow').innerHTML = ("time1:"+(endTime1-begTime1)+",time2:"+(endTime-begTime));  
+
+      很简单的逻辑，testSpeed是循环执行100w次从dom中获取id=oHref的a对象，分别用之间函数调用和eval的方式执行，测试的结果如下：
+
+IE6下：
+
+     两者的执行效率没有明显的差别，基本上都属于比较慢，下面是测试7次的各花的时间（单位是ms）
+
+time1:8703,time2:8782
+time1:10094,time2:10078
+time1:9984,time2:10219
+time1:9891,time2:10109
+time1:9671,time2:9829
+time1:10031,time2:10281
+time1:10093,time2:10563
+
+Firefox3.0.13的环境下：
+
+time1:1550，time2:8105
+
+time1:1687，time2:9215
+
+time1:1764，time2:8499
+
+time1:1667，time2:8216
+
+time1:1518，time2:8586
+
+time1:1756，time2:9003
+
+time1:1575，time2:9040
+
+     可以看出，在firefox下，之间函数调用的效率基本上比eval方式快5倍，另外从这里也可以看出firefox在dom element query的性能明显比IE好得多。
