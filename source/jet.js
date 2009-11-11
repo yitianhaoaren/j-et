@@ -9,7 +9,7 @@
  */
 
 /**
- * [JET core]: JET 微内核
+ * 1.[JET core]: JET 微内核
  */
 ;(function(){
 	var version = "1.0",
@@ -42,8 +42,8 @@
 			msg = String(msg);
 			type = type || 3;
 			if(type < option.debug){
-				if(this.Console){
-					this.Console.out(msg, type);
+				if(this.console){
+					this.console.out(msg, type);
 				}else{
 					alert(msg+" - 消息类型["+type+"]");
 				}
@@ -92,10 +92,10 @@
 			 * @example
 			 * //范例：
 			 * Jet().$package("Tencent.WebQQ", function(J){
-			 * 	var $ = J.Dom.id,
-			 * 	$D = J.Dom,
-			 * 	$E = J.Event,
-			 * 	$H = J.Http;
+			 * 	var $ = J.dom.id,
+			 * 	$D = J.dom,
+			 * 	$E = J.event,
+			 * 	$H = J.http;
 			 * 	this.name = "腾讯WebQQ";
 			 * 	J.out(this.name);
 			 * };
@@ -303,7 +303,7 @@
 				 */
 				out: out,
 				
-				startTime: new Date(),
+				startTime: +new Date(),
 				
 				/**
 				 * 关于 Jet
@@ -387,7 +387,7 @@
 
 
 /**
- * [Javascript core]: 常用工具函数扩展
+ * 2.[Javascript core]: 常用工具函数扩展
  */
 Jet().$package(function(J){
 	var isUndefined,
@@ -409,7 +409,6 @@ Jet().$package(function(J){
 		emptyFn,
 		toArray,
 		clone,
-		indexOf,
 		$return,
 		$try,
 		
@@ -658,32 +657,7 @@ Jet().$package(function(J){
 
 	
 
-	/**
-	 * 正向查找数组元素在数组中的索引下标
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
-	 * @memberOf Array.prototype
-	 * @name indexOf
-	 * 
-	 * @param {Array} arr 要查找的数组
-	 * @param {Object} obj 要查找的数组的元素
-	 * @param {Number} fromIndex 开始的索引编号
-	 * 
-	 * @return {Number}返回正向查找的索引编号
-	 */
-	indexOf = function (arr, obj, fromIndex) {
-        if (fromIndex == null) {
-            fromIndex = 0;
-        } else if (fromIndex < 0) {
-            fromIndex = Math.max(0, arr.length + fromIndex);
-        }
-        for (var i = fromIndex; i < arr.length; i++) {
-            if (arr[i] === obj){
-                return i;
-            }
-        }
-        return -1;
-    };
+	
 
 	
 	
@@ -782,7 +756,7 @@ Jet().$package(function(J){
         	todo = items;
         }
  
-        setTimeout(function() {
+        window.setTimeout(function() {
             var start = +new Date();
  
             do {
@@ -790,7 +764,7 @@ Jet().$package(function(J){
             } while(todo.length > 0 && (+new Date() - start < 50));
  
             if(todo.length > 0) {
-                setTimeout(arguments.callee, delay);
+                window.setTimeout(arguments.callee, delay);
             } else if(callback) {
                 callback(items);
             }
@@ -1088,7 +1062,6 @@ Jet().$package(function(J){
 	J.random = random;
 	J.extend = extend;
 	J.timedChunk = timedChunk;
-	J.indexOf = indexOf;
 	
 	
 	J.emptyFn = emptyFn;
@@ -1114,18 +1087,18 @@ Jet().$package(function(J){
 
 
 /**
- * [Javascript core]: String 字符串处理
+ * 3.[Javascript core]: String 字符串处理
  */
 Jet().$package(function(J){
 	
 	/**
-	 * String 名字空间
+	 * string 名字空间
 	 * 
 	 * @namespace
-	 * @name String
+	 * @name string
 	 */
-	J.String = J.String || {};
-	var $S = J.String,
+	J.string = J.string || {};
+	var $S = J.string,
 		template,
 		isURL,
 		mapQuery,
@@ -1157,7 +1130,7 @@ Jet().$package(function(J){
 	 * 多行或单行字符串模板处理
 	 * 
 	 * @method template
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @param {String} str 模板字符串
 	 * @param {Object} obj 要套入的数据对象
@@ -1228,7 +1201,7 @@ Jet().$package(function(J){
 	 * 判断是否是一个可接受的 url 串
 	 * 
 	 * @method isURL
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @param {String} str 要检测的字符串
 	 * @return {Boolean} 如果是可接受的 url 则返回 true
@@ -1246,7 +1219,7 @@ Jet().$package(function(J){
 	 * 将 uri 的查询字符串参数映射成对象
 	 * 
 	 * @method mapQuery
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @param {String} uri 要映射的 uri
 	 * @return {Object} 按照 uri 映射成的对象
@@ -1288,7 +1261,7 @@ Jet().$package(function(J){
 	 * 
 	 * test的方法
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @param {String, RegExp} regex 正则表达式，或者正则表达式的字符串
 	 * @param {String} params 正则的参数
@@ -1301,7 +1274,7 @@ Jet().$package(function(J){
 	/**
 	 * 判断是否含有指定的字符串
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @param {String} string 是否含有的字符串
 	 * @param {String} separator 分隔符，可选
@@ -1314,7 +1287,7 @@ Jet().$package(function(J){
 	/**
 	 * 清除字符串开头和结尾的空格
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回清除后的字符串
 	 */
@@ -1325,7 +1298,7 @@ Jet().$package(function(J){
 	/**
 	 * 清除字符串开头和结尾的空格，并把字符串之间的多个空格转换为一个空格
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回清除后的字符串
 	 */
@@ -1336,7 +1309,7 @@ Jet().$package(function(J){
 	/**
 	 * 将“-”连接的字符串转换成驼峰式写法
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1349,7 +1322,7 @@ Jet().$package(function(J){
 	/**
 	 * 将驼峰式写法字符串转换成“-”连接的
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1362,7 +1335,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成全大写字母
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1375,7 +1348,7 @@ Jet().$package(function(J){
 	/**
 	 * 转换 RegExp 正则表达式
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {String} 返回转换后的字符串
 	 */
@@ -1386,7 +1359,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成整数
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * 
 	 * @return {Number} 返回转换后的整数
 	 */
@@ -1397,7 +1370,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成浮点数
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @param {Sring} string 要转换的字符串
 	 * @return {Number} 返回转换后的浮点数
 	 */
@@ -1408,7 +1381,7 @@ Jet().$package(function(J){
 	/**
 	 * 将带换行符的字符串转换成无换行符的字符串
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @param {Sring} str 要转换的字符串
 	 * @return {Sring} 返回转换后的字符串
 	 */
@@ -1420,7 +1393,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成html源码
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @param {Sring} str 要转换的字符串
 	 * @return {Sring} 返回转换后的html代码字符串
 	 */
@@ -1441,7 +1414,7 @@ Jet().$package(function(J){
 	/**
 	 * 将字符串转换成用于title的字符串
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @param {Sring} str 要转换的字符串
 	 * @return {Number} 返回转换后的in title字符串
 	 */
@@ -1459,7 +1432,7 @@ Jet().$package(function(J){
 	/**
 	 * 将颜色 Hex 写法转换成 RGB 写法
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回转换后的字符串
 	 */
 	hexToRgb = function(string, array){
@@ -1470,7 +1443,7 @@ Jet().$package(function(J){
 	/**
 	 * 将颜色 RGB 写法转换成 Hex 写法
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回转换后的字符串
 	 */
 	rgbToHex = function(string, array){
@@ -1481,7 +1454,7 @@ Jet().$package(function(J){
 	/**
 	 * 脱去script标签
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回转换后的字符串
 	 */
 	stripScripts = function(string, option){
@@ -1506,7 +1479,7 @@ Jet().$package(function(J){
 	/**
 	 * 。。。。
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @param {Object} obj 要转换成查询字符串的对象
 	 * @return {String} 返回转换后的查询字符串
 	 */
@@ -1523,7 +1496,7 @@ Jet().$package(function(J){
 	/**
 	 * 。。。。
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回转换后的字符串
 	 */
 	substitute = function(string, object, regexp){
@@ -1536,7 +1509,7 @@ Jet().$package(function(J){
 	/**
 	 * 全局替换指定的字符串
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回替换后的字符串
 	 */
 	replaceAll = function(string, reallyDo, replaceWith, ignoreCase) {
@@ -1550,7 +1523,7 @@ Jet().$package(function(J){
 	/**
 	 * 计算字符串的字节长度
 	 * 
-	 * @memberOf String
+	 * @memberOf string
 	 * @return {String} 返回自己长度
 	 */
 	byteLength = function(string){
@@ -1597,27 +1570,76 @@ Jet().$package(function(J){
 
 });
 
+/**
+ * 4.[Javascript core]: array 数组处理
+ */
+Jet().$package(function(J){
+	
+	/**
+	 * array 名字空间
+	 * 
+	 * @namespace
+	 * @name array
+	 */
+	J.array = J.array || {};
+	var $A = J.array,
+		indexOf;
+	
+	
+	
+	/**
+	 * 正向查找数组元素在数组中的索引下标
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
+	 * @memberOf array
+	 * @name indexOf
+	 * 
+	 * @param {Array} arr 要查找的数组
+	 * @param {Object} obj 要查找的数组的元素
+	 * @param {Number} fromIndex 开始的索引编号
+	 * 
+	 * @return {Number}返回正向查找的索引编号
+	 */
+	indexOf = function (arr, obj, fromIndex) {
+        if (fromIndex == null) {
+            fromIndex = 0;
+        } else if (fromIndex < 0) {
+            fromIndex = Math.max(0, arr.length + fromIndex);
+        }
+        for (var i = fromIndex; i < arr.length; i++) {
+            if (arr[i] === obj){
+                return i;
+            }
+        }
+        return -1;
+    };
+    
+    $A.indexOf = indexOf;
+    
+});
+
+
 
 
 
 
 /**
- * [Javascript core]: I18n 国际化扩展
+ * 5.[Javascript core]: i18n 国际化扩展
  */
 Jet().$package(function(J){
 	
 	/**
-	 * I18n 名字空间
+	 * i18n 名字空间
 	 * 
 	 * @namespace
-	 * @name I18n
+	 * @name i18n
 	 */
-	J.I18n = J.I18n || {};
+	J.i18n = J.i18n || {};
 	
-	J.extend(J.I18n, 
+	J.extend(J.i18n, 
 		
 	/**
-	 * @lends I18n
+	 * @lends i18n
 	 * 
 	 */		
 	{
@@ -1625,7 +1647,7 @@ Jet().$package(function(J){
 		/**
 		 * 引用所有语言包的对象
 		 * 
-		 * @memberOf I18n
+		 * @memberOf i18n
 		 * @name langs
 		 * @type {Object}
 		 * 
@@ -1649,7 +1671,7 @@ Jet().$package(function(J){
 		/**
 		 * 当前语言
 		 * 
-    	 * @memberOf I18n
+    	 * @memberOf i18n
 		 * @name currentLang
 		 * @type {Object}
 		 */
@@ -1663,7 +1685,7 @@ Jet().$package(function(J){
 		 * @example
 		 * Jet().$package(function(J){
 		 * 	// 添加一个名字为"zh-cn"中文语言包
-		 * 	J.I18n.add({
+		 * 	J.i18n.add({
 		 * 		"zh-cn":{
 		 * 			// 数字
 		 * 			number:"ddd,ddd.dd",
@@ -1687,7 +1709,7 @@ Jet().$package(function(J){
 		 * };
 		 */
 		add: function(langObj){
-			return J.extend(J.I18n.langs, langObj);
+			return J.extend(J.i18n.langs, langObj);
 		},
 		
 		/**
@@ -1698,11 +1720,11 @@ Jet().$package(function(J){
 		 * @example
 		 * Jet().$package(function(J){
 		 * 	// 将名字为"zh-cn"语言包设置为默认
-		 * 	J.I18n.setDefault("zh-cn");
+		 * 	J.i18n.setDefault("zh-cn");
 		 * };
 		 */
 		setDefault: function(lang){
-			this.defaultLang = J.I18n.langs[lang];
+			this.defaultLang = J.i18n.langs[lang];
 			return this.defaultLang;
 		},
 		
@@ -1715,11 +1737,11 @@ Jet().$package(function(J){
 		 * @example
 		 * Jet().$package(function(J){
 		 * 	// 将名字为"zh-cn"语言包设置为当前语言
-		 * 	J.I18n.set("zh-cn");
+		 * 	J.i18n.set("zh-cn");
 		 * };
 		 */
 		set: function(lang, isSetDefault){
-			this.currentLang = J.I18n.langs[lang];
+			this.currentLang = J.i18n.langs[lang];
 			if(!this.defaultLang){
 				this.defaultLang = this.currentLang;
 			}
@@ -1759,12 +1781,12 @@ Jet().$package(function(J){
 		 * Jet().$package(function(J){
 		 * var d = new Date();
 		 * 	// 安当前语言的格式输出时间字符串
-		 * 	J.out(J.I18n.date(d));
+		 * 	J.out(J.i18n.date(d));
 		 * };
 		 * 
 		 */
 		date: function(date){
-			return J.formatDate(date, J.I18n.currentLang.date);
+			return J.formatDate(date, J.i18n.currentLang.date);
 		},
 		
 		/**
@@ -1774,7 +1796,7 @@ Jet().$package(function(J){
 		 * @returns {String} 返回按当前语言输出的长日期字符串
 		 */
 		longDate: function(date){
-			return J.formatDate(date, J.I18n.currentLang.longDate);
+			return J.formatDate(date, J.i18n.currentLang.longDate);
 		},
 		
 		/**
@@ -1784,12 +1806,12 @@ Jet().$package(function(J){
 		 * @returns {String} 返回按当前语言输出的时间字符串
 		 */
 		time: function(time){
-			return J.formatDate(date, J.I18n.currentLang.time);
+			return J.formatDate(date, J.i18n.currentLang.time);
 		},
 		
 		/**
     	 * @ignore
-		 * @lends I18n
+		 * @lends i18n
 		 */
 		toString: function(){
 			return "";
@@ -1799,8 +1821,8 @@ Jet().$package(function(J){
 	});
 	
 	//将第一个设为默认
-	for(var p in J.I18n.langs){
-		J.I18n.set(p);
+	for(var p in J.i18n.langs){
+		J.i18n.set(p);
 		break;
 	}
 
@@ -1808,28 +1830,28 @@ Jet().$package(function(J){
 
 
 /**
- * [Browser part]: Browser 资料分析包
+ * 6.[Browser part]: Browser 资料分析包
  */
 Jet().$package(function(J){
 	J.browserOptions = {
 		adjustBehaviors: true,
 		htmlClass: true
 	};
-	J.query = J.String.mapQuery(window.location.search);
+	J.query = J.string.mapQuery(window.location.search);
 	J.host = window.location.host;
 	
 	// 设置 domain
 	// document.domain = 'kdv.cn';
 	
 	
-	var platform = navigator.platform.toLowerCase(),
+	var pf = navigator.platform.toLowerCase(),
 		ua = navigator.userAgent.toLowerCase(),
-		plugins = navigator.plugins,
+		plug = navigator.plugins,
 		
-		Platform,
-		Browser,
-		Engine,
-		Support = {},
+		platform,
+		browser,
+		engine,
+		support = {},
 		toFixedVersion,
 		s;
 	
@@ -1841,29 +1863,29 @@ Jet().$package(function(J){
 	 */
 	toFixedVersion = function(ver, floatLength){
 		floatLength = floatLength || 1;
-		ver = ver.split(".");
+		ver = String(ver).split(".");
 		ver = ver[0] + "." + (ver[1] || "0");
 		ver = Number(ver).toFixed(floatLength);
 		return ver;
 	};
 	
 	/**
-	 * Platform 名字空间
+	 * platform 名字空间
 	 * 
 	 * @namespace
-	 * @name Platform
+	 * @name platform
 	 * @type Object
 	 */
-	Platform = {
+	platform = {
 		getPlatform:function(){
-			return platform;
+			return pf;
 		},
 		
 		/**
     	 * @property name
-		 * @lends Platform
+		 * @lends platform
 		 */
-		name: (window.orientation != undefined) ? 'ipod' : (platform.match(/mac|win|linux/i) || ['unknown'])[0],
+		name: (window.orientation != undefined) ? 'ipod' : (pf.match(/mac|win|linux/i) || ['unknown'])[0],
 		
 		version: 0,
 		ipod: 0,
@@ -1875,7 +1897,7 @@ Jet().$package(function(J){
 		 * 
 		 * @ignore
 		 * @private
-		 * @memberOf Browser
+		 * @memberOf browser
 		 * 
 		 */
 		set: function(name, ver){
@@ -1885,30 +1907,30 @@ Jet().$package(function(J){
 		}
 	};
 	
-	Platform[Platform.name] = true;
+	platform[platform.name] = true;
 	
 	// 探测操作系统版本
-    (s = ua.match(/windows ([\d.]+)/)) ? Platform.set("win",toFixedVersion(s[1])):
-    (s = ua.match(/windows nt ([\d.]+)/)) ? Platform.set("win",toFixedVersion(s[1])):
-    (s = ua.match(/mac ([\d.]+)/)) ? Platform.set("mac",toFixedVersion(s[1])):
-    (s = ua.match(/ipod ([\d.]+)/)) ? Platform.set("ipod",toFixedVersion(s[1])):
-    (s = ua.match(/linux ([\d.]+)/)) ? Platform.set("linux",toFixedVersion(s[1])) : 0;
+    (s = ua.match(/windows ([\d.]+)/)) ? platform.set("win",toFixedVersion(s[1])):
+    (s = ua.match(/windows nt ([\d.]+)/)) ? platform.set("win",toFixedVersion(s[1])):
+    (s = ua.match(/mac ([\d.]+)/)) ? platform.set("mac",toFixedVersion(s[1])):
+    (s = ua.match(/ipod ([\d.]+)/)) ? platform.set("ipod",toFixedVersion(s[1])):
+    (s = ua.match(/linux ([\d.]+)/)) ? platform.set("linux",toFixedVersion(s[1])) : 0;
 	
 	/**
-	 * Browser 名字空间
+	 * browser 名字空间
 	 * 
 	 * @namespace
-	 * @name Browser
+	 * @name browser
 	 */
-	Browser = {
+	browser = {
 		/**
     	 * @namespace
-    	 * @name Features
-		 * @memberOf Browser
+    	 * @name features
+		 * @memberOf browser
 		 */
-		Features: 
+		features: 
 		/**
-		 * @lends Browser.Features
+		 * @lends browser.features
 		 */	
 		{
 			/**
@@ -1928,19 +1950,19 @@ Jet().$package(function(J){
 		},
 		
 		getPlugins: function(){
-			return plugins;
+			return plug;
 		},
 		
 		/**
     	 * @namespace
-    	 * @name Plugins
-		 * @memberOf Browser
+    	 * @name plugins
+		 * @memberOf browser
 		 */
-		Plugins: {
+		plugins: {
 			flash: (function(){
 				var ver = "none";
-				if (plugins && plugins.length) {
-				    flash = plugins['Shockwave Flash'];
+				if (plug && plug.length) {
+				    flash = plug['Shockwave Flash'];
 				    if (flash && flash.description) {
 				    	ver = toFixedVersion(flash.description.match(/\b(\d+)\.\d+\b/)[1], 1) || ver;
 				    }
@@ -1951,11 +1973,10 @@ Jet().$package(function(J){
 				            new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + startVer);
 				            ver = toFixedVersion(startVer);
 				            break;
-				        } catch(e) {
-				        	//J.out("错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 2);
-				        }
+				        } catch(e) {}
 				    }
 				}
+				
 				return ver;
 			})()
 		},
@@ -1963,7 +1984,7 @@ Jet().$package(function(J){
 		
 		
 		/**
-		 * @memberOf Browser
+		 * @memberOf browser
 		 */
 		getUserAgent: function(){
 			return ua;
@@ -1971,13 +1992,13 @@ Jet().$package(function(J){
 		
 		/**
     	 * @property name
-		 * @lends Browser
+		 * @lends browser
 		 */
 		name: "unknown",
 		
 		/**
     	 * @property version
-		 * @lends Browser
+		 * @lends browser
 		 */
 		version: 0,
 		
@@ -1985,7 +2006,7 @@ Jet().$package(function(J){
 		 * IE 浏览器
 		 * 
 		 * @property ie
-		 * @lends Browser
+		 * @lends browser
 		 */
 		ie: 0,
 		
@@ -1993,7 +2014,7 @@ Jet().$package(function(J){
 		 * Firefox 浏览器
 		 * 
 		 * @property firefox
-		 * @lends Browser
+		 * @lends browser
 		 */
 		firefox: 0,
 		
@@ -2001,7 +2022,7 @@ Jet().$package(function(J){
 		 * Chrome 浏览器
 		 * 
 		 * @property chrome
-		 * @lends Browser
+		 * @lends browser
 		 */
 		chrome: 0,
 		
@@ -2010,7 +2031,7 @@ Jet().$package(function(J){
 		 * Opera浏览器
 		 * 
 		 * @property opera
-		 * @lends Browser
+		 * @lends browser
 		 */
 		opera: 0,
 		
@@ -2018,7 +2039,7 @@ Jet().$package(function(J){
 		 * Safari 浏览器
 		 * 
 		 * @property safari
-		 * @lends Browser
+		 * @lends browser
 		 */
 		safari: 0,
 		
@@ -2027,7 +2048,7 @@ Jet().$package(function(J){
 		 * 
 		 * @ignore
 		 * @private
-		 * @memberOf Browser
+		 * @memberOf browser
 		 * 
 		 */
 		set: function(name, ver){
@@ -2037,42 +2058,42 @@ Jet().$package(function(J){
 		}
 	};
 	
-	// 探测浏览器并存入 Browser 对象
-    (s = ua.match(/msie ([\d.]+)/)) ? Browser.set("ie",toFixedVersion(s[1])):
-    (s = ua.match(/firefox\/([\d.]+)/)) ? Browser.set("firefox",toFixedVersion(s[1])) :
-    (s = ua.match(/chrome\/([\d.]+)/)) ? Browser.set("chrome",toFixedVersion(s[1])) :
-    (s = ua.match(/opera.([\d.]+)/)) ? Browser.set("opera",toFixedVersion(s[1])) :
-    (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser.set("safari",toFixedVersion(s[1])) : 0;
+	// 探测浏览器并存入 browser 对象
+    (s = ua.match(/msie ([\d.]+)/)) ? browser.set("ie",toFixedVersion(s[1])):
+    (s = ua.match(/firefox\/([\d.]+)/)) ? browser.set("firefox",toFixedVersion(s[1])) :
+    (s = ua.match(/chrome\/([\d.]+)/)) ? browser.set("chrome",toFixedVersion(s[1])) :
+    (s = ua.match(/opera.([\d.]+)/)) ? browser.set("opera",toFixedVersion(s[1])) :
+    (s = ua.match(/version\/([\d.]+).*safari/)) ? browser.set("safari",toFixedVersion(s[1])) : 0;
     
-    //J.out(Browser.name);
-    //J.out(Browser.ua);
+    //J.out(browser.name);
+    //J.out(browser.ua);
     
     //!!navigator.userAgent.match(/Apple.*Mobile.*Safari/);
 	
 	/**
-	 * Engine 名字空间
+	 * engine 名字空间
 	 * 
 	 * @namespace
-	 * @name Engine
-	 * @memberOf Browser
+	 * @name engine
+	 * @memberOf browser
 	 */
-	Engine = {
+	engine = {
 		/**
     	 * @property name
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 */
 		name: 'unknown',
 		
 		/**
     	 * @property version
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 */
 		version: 0,
 		
 		/**
 		 * trident 引擎的浏览器
 		 * 
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 * @property trident
 		 */
 		trident: 0,
@@ -2080,7 +2101,7 @@ Jet().$package(function(J){
 		/**
 		 * gecko 引擎的浏览器
 		 * 
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 * @property gecko
 		 * 
 		 */
@@ -2089,7 +2110,7 @@ Jet().$package(function(J){
 		/**
 		 * webkit 引擎的浏览器
 		 * 
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 * @property webkit
 		 */
 		webkit: 0,
@@ -2097,7 +2118,7 @@ Jet().$package(function(J){
 		/**
 		 * presto 引擎的浏览器
 		 * 
-		 * @lends Browser.Engine
+		 * @lends browser.engine
 		 * @property presto
 		 */
 		presto: 0,
@@ -2107,7 +2128,7 @@ Jet().$package(function(J){
 		 * 
 		 * @ignore
 		 * @private
-		 * @memberOf Browser.Engine
+		 * @memberOf browser.engine
 		 * 
 		 */
 		set: function(name, ver){
@@ -2119,21 +2140,21 @@ Jet().$package(function(J){
 	};
 	
 	/*
-	// 探测浏览器的内核并存入 Browser.Engine 对象
-    (s = (!window.ActiveXObject) ? 0 : ((window.XMLHttpRequest) ? 5 : 4)) ? Engine.set("trident", s):
-    (s = (document.getBoxObjectFor == undefined) ? 0 : ((document.getElementsByClassName) ? 19 : 18)) ? Engine.set("gecko",s) :
-    (s = (navigator.taintEnabled) ? false : ((Browser.Features.xpath) ? ((Browser.Features.query) ? 525 : 420) : 419)) ? Engine.set("webkit", s) :
-    (s = (!window.opera) ? false : ((arguments.callee.caller) ? 960 : ((document.getElementsByClassName) ? 950 : 925))) ? Engine.set("presto", s) : 0;
+	// 探测浏览器的内核并存入 browser.engine 对象
+    (s = (!window.ActiveXObject) ? 0 : ((window.XMLHttpRequest) ? 5 : 4)) ? engine.set("trident", s):
+    (s = (document.getBoxObjectFor == undefined) ? 0 : ((document.getElementsByClassName) ? 19 : 18)) ? engine.set("gecko",s) :
+    (s = (navigator.taintEnabled) ? false : ((browser.features.xpath) ? ((browser.features.query) ? 525 : 420) : 419)) ? engine.set("webkit", s) :
+    (s = (!window.opera) ? false : ((arguments.callee.caller) ? 960 : ((document.getElementsByClassName) ? 950 : 925))) ? engine.set("presto", s) : 0;
     */
 	
-    // 探测浏览器的内核并存入 Browser.Engine 对象
-	if(Browser.ie && Browser.ie < 7){
-		Engine.set("trident", toFixedVersion("4"));
+    // 探测浏览器的内核并存入 browser.engine 对象
+	if(browser.ie && browser.ie < 7){
+		engine.set("trident", toFixedVersion("4"));
 	}
-    (s = ua.match(/trident\/([\d.]+)/)) ? Engine.set("trident",toFixedVersion(s[1])):
-    (s = ua.match(/gecko\/([\d.]+)/)) ? Engine.set("gecko",toFixedVersion(s[1])) :
-    (s = ua.match(/applewebkit\/([\d.]+)/)) ? Engine.set("webkit",toFixedVersion(s[1])) :
-    (s = ua.match(/presto\/([\d.]+)/)) ? Engine.set("presto",toFixedVersion(s[1])) : 0;
+    (s = ua.match(/trident\/([\d.]+)/)) ? engine.set("trident",toFixedVersion(s[1])):
+    (s = ua.match(/gecko\/([\d.]+)/)) ? engine.set("gecko",toFixedVersion(s[1])) :
+    (s = ua.match(/applewebkit\/([\d.]+)/)) ? engine.set("webkit",toFixedVersion(s[1])) :
+    (s = ua.match(/presto\/([\d.]+)/)) ? engine.set("presto",toFixedVersion(s[1])) : 0;
 	
     
     
@@ -2144,7 +2165,7 @@ Jet().$package(function(J){
 	 */
 	var adjustBehaviors = function() {
 		// ie6 背景图片不能被缓存的问题
-		if (Browser.ie && Browser.ie < 7) {
+		if (browser.ie && browser.ie < 7) {
 			try {
 				document.execCommand('BackgroundImageCache', false, true);
 			}catch(e){
@@ -2162,15 +2183,15 @@ Jet().$package(function(J){
 		var htmlTag = document.documentElement;
     	htmlClassName = [htmlTag.className];
     	htmlClassName.push('javascriptEnabled');
-    	htmlClassName.push(Platform.name);
-    	htmlClassName.push(Platform.name + Platform.version);
-    	htmlClassName.push(Browser.name);
-    	htmlClassName.push(Browser.name + Browser.version);
-    	htmlClassName.push(Engine.name);
-    	htmlClassName.push(Engine.name + Engine.version);
-    	if(Browser.Plugins.flash){
+    	htmlClassName.push(platform.name);
+    	htmlClassName.push(platform.name + platform.version);
+    	htmlClassName.push(browser.name);
+    	htmlClassName.push(browser.name + browser.version);
+    	htmlClassName.push(engine.name);
+    	htmlClassName.push(engine.name + engine.version);
+    	if(browser.plugins.flash){
     		htmlClassName.push("flash");
-    		htmlClassName.push("flash" + Browser.Plugins.flash);
+    		htmlClassName.push("flash" + browser.plugins.flash);
     	}
     	htmlTag.className = htmlClassName.join(' ');
 	}
@@ -2182,7 +2203,7 @@ Jet().$package(function(J){
     
     
 	// From: Jhon Resig
-	// Support
+	// support
 	var root = document.documentElement,
 		script = document.createElement("script"),
 		div = document.createElement("div"),
@@ -2200,18 +2221,18 @@ Jet().$package(function(J){
 	}
 
 	/**
-	 * Support 名字空间
+	 * support 名字空间
 	 * 
 	 * @namespace
-	 * @name Support
-	 * @memberOf Browser
+	 * @name support
+	 * @memberOf browser
 	 */
-	Support = {
+	support = {
 		
 		/**
 		 * leadingWhitespace
 		 * 
-		 * @lends Browser.Support
+		 * @lends browser.support
 		 * @property leadingWhitespace
 		 * @type {Number} 
 		 */
@@ -2221,7 +2242,7 @@ Jet().$package(function(J){
 		/**
 		 * tbody
 		 * 
-		 * @lends Browser.Support
+		 * @lends browser.support
 		 * @property tbody
 		 * @type {Number} 
 		 */
@@ -2271,7 +2292,7 @@ Jet().$package(function(J){
 	// tag with appendChild/createTextNode
 	// (IE doesn't support this, fails, and uses .text instead)
 	if ( window[ id ] ) {
-		Support.scriptEval = true;
+		support.scriptEval = true;
 		delete window[ id ];
 	}
 
@@ -2281,7 +2302,7 @@ Jet().$package(function(J){
 		div.attachEvent("onclick", function(){
 			// Cloning a node shouldn't copy over any
 			// bound event handlers (IE does this)
-			Support.noCloneEvent = false;
+			support.noCloneEvent = false;
 			div.detachEvent("onclick", arguments.callee);
 		});
 		div.cloneNode(true).fireEvent("onclick");
@@ -2290,13 +2311,13 @@ Jet().$package(function(J){
 	/**
 	 * compatMode
 	 * 
-	 * @lends Browser.Support
+	 * @lends browser.support
 	 * @property compatMode
 	 * @type {Number} 
 	 */
 	// Figure out if the W3C box model works as expected
 	// document.body must exist before we can do this
-	Support.compatMode = document.compatMode;
+	support.compatMode = document.compatMode;
 	
 	
 	
@@ -2335,10 +2356,10 @@ Jet().$package(function(J){
 	
 
 	
-	J.Platform = Platform;
-	J.Browser = Browser;
-	J.Browser.Engine = Engine;
-	J.Browser.Support = Support;
+	J.platform = platform;
+	J.browser = browser;
+	J.browser.engine = engine;
+	J.browser.support = support;
 	
 
 	
@@ -2358,7 +2379,7 @@ Jet().$package(function(J){
 
 
 /**
- * [Browser part]: Dom 扩展包
+ * 7.[Browser part]: dom 扩展包
  */
 Jet().$package(function(J){
 	var $D,
@@ -2402,15 +2423,15 @@ Jet().$package(function(J){
 		w,
 		documentElement;
 	/**
-	 * Dom 名字空间
+	 * dom 名字空间
 	 * 
 	 * @namespace
-	 * @name Dom
+	 * @name dom
 	 * @type Object
 	 */
-	J.Dom = J.Dom || {};
-	$D = J.Dom;
-	$B = J.Browser;
+	J.dom = J.dom || {};
+	$D = J.dom;
+	$B = J.browser;
 	
 		
 
@@ -2419,7 +2440,7 @@ Jet().$package(function(J){
 	$D.win = w;
 	$D.doc = w.document;
 	
-	if($B.Support.compatMode === 'CSS1Compat'){
+	if($B.support.compatMode === 'CSS1Compat'){
 		documentElement = document.documentElement;
 	}else{
 		documentElement = document.body;
@@ -2428,7 +2449,7 @@ Jet().$package(function(J){
 	/**
 	 * 获取元素所属的根文档
 	 * 
-	 * @memberOf Dom
+	 * @memberOf dom
 	 */
 	getDoc = function(element) {
 		element = element || window.document;
@@ -2440,7 +2461,7 @@ Jet().$package(function(J){
 	 * 获取元素所属的 window 对象
 	 * returns the appropriate window.
 	 * 
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * @private
 	 * @param {HTMLElement} element optional Target element.
 	 * @return {Object} The window for the given element or the default window. 
@@ -2456,7 +2477,7 @@ Jet().$package(function(J){
 	 * 根据 id 获取元素
 	 * 
 	 * @method id
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {String} id 元素的 id 名称
 	 * @param {Element} doc 元素所属的文档对象，默认为当前文档
@@ -2474,7 +2495,7 @@ Jet().$package(function(J){
 	 * 
 	 * 根据 name 属性获取元素
 	 * 
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {String} name 元素的 name 属性
 	 * @param {Element} doc 元素所属的文档对象，默认为当前文档
@@ -2489,7 +2510,7 @@ Jet().$package(function(J){
 	 * 
 	 * 根据 tagName 获取元素
 	 * 
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {String} tagName 元素的 tagName 标签名
 	 * @param {Element} doc 元素所属的文档对象，默认为当前文档
@@ -2504,7 +2525,7 @@ Jet().$package(function(J){
 	 * 获取元素中的文本内容
 	 * Returns the text content of the HTMLElement. 
 	 * 
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * @param {HTMLElement} element The html element. 
 	 * @return {String} The text content of the element (includes text of any descending elements).
 	 */
@@ -2520,7 +2541,7 @@ Jet().$package(function(J){
 	 * 生成一个 DOM 节点
      * Generates an HTML element, this is not appended to a document
      * 
-     * @memberOf Dom
+     * @memberOf dom
      * 
      * @param type {string} the type of element
      * @param attr {string} the attributes
@@ -2548,7 +2569,7 @@ Jet().$package(function(J){
      * Returns the height of the document.
      * 
      * @method getDocumentHeight
-     * @memberOf Dom
+     * @memberOf dom
      * 
      * @param {HTMLElement} element The html element. 
      * @return {Number} The height of the actual document (which includes the body and its margin).
@@ -2568,7 +2589,7 @@ Jet().$package(function(J){
      * Returns the width of the document.
      * 
      * @method getDocumentWidth
-     * @memberOf Dom
+     * @memberOf dom
      * 
      * @param {HTMLElement} element The html element. 
      * @return {Int} The width of the actual document (which includes the body and its margin).
@@ -2588,11 +2609,11 @@ Jet().$package(function(J){
      * Returns the current height of the viewport.
      * 
      * @method getViewportHeight
-     * @memberOf Dom
+     * @memberOf dom
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
     getClientHeight = function(el) {
-    	var name = J.Browser.Engine.name;
+    	var name = J.browser.engine.name;
     	if(name=="webkit" || name=="presto"){
     		el = el || w;
     		return el.innerHeight; // Safari, Opera
@@ -2606,13 +2627,13 @@ Jet().$package(function(J){
      * 获取元素的client宽度
      * Returns the current width of the viewport.
      * @method getViewportWidth
-     * @memberOf Dom
+     * @memberOf dom
      * @param {Element} el 要获取client宽度的元素
      * @return {Number} 宽度值.
      */
     
     getClientWidth = function(el) {
-    	var name = J.Browser.Engine.name;
+    	var name = J.browser.engine.name;
     	if(name==="webkit" || name==="presto"){
     		el = el || w;
     		return el.innerWidth; // Safari, Opera
@@ -2626,7 +2647,7 @@ Jet().$package(function(J){
      * 获取当前文档的左边已卷动的宽度
      * Returns the left scroll value of the document 
      * @method getDocumentScrollLeft
-     * @memberOf Dom
+     * @memberOf dom
      * @param {HTMLDocument} document (optional) The document to get the scroll value of
      * @return {Int}  The amount that the document is scrolled to the left
      */
@@ -2644,7 +2665,7 @@ Jet().$package(function(J){
      * 获取当前文档的上边已卷动的宽度
      * Returns the top scroll value of the document 
      * @method getDocumentScrollTop
-     * @memberOf Dom
+     * @memberOf dom
      * @param {HTMLDocument} document (optional) The document to get the scroll value of
      * @return {Int}  The amount that the document is scrolled to the top
      */
@@ -2664,7 +2685,7 @@ Jet().$package(function(J){
 	 * 设置元素的class属性
 	 * 
 	 * @method setClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
@@ -2678,7 +2699,7 @@ Jet().$package(function(J){
 	 * 获取元素的class属性
 	 * 
 	 * @method getClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
@@ -2692,13 +2713,13 @@ Jet().$package(function(J){
 	 * 判断元素是否含有 class
 	 * 
 	 * @method hasClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
 	 */
     hasClass = function(el, className){
-		return J.String.contains(el.className, className, ' ');
+		return J.string.contains(el.className, className, ' ');
 	};
 
 	/**
@@ -2706,14 +2727,14 @@ Jet().$package(function(J){
 	 * 给元素添加 class
 	 * 
 	 * @method addClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
 	 */
 	addClass = function(el, className){
 		if (!hasClass(el, className)){
-			el.className = J.String.clean(el.className + " " + className);
+			el.className = J.string.clean(el.className + " " + className);
 		}
 	};
 
@@ -2722,7 +2743,7 @@ Jet().$package(function(J){
 	 * 给元素移除 class
 	 * 
 	 * @method addClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
@@ -2743,7 +2764,7 @@ Jet().$package(function(J){
 	 * 对元素 class 的切换方法，即：如果元素用此class则移除此class，如果没有此class则添加此class
 	 * 
 	 * @method toggleClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} className class 名称
@@ -2757,7 +2778,7 @@ Jet().$package(function(J){
 	 * 替换元素 oldClassName 为 newClassName
 	 * 
 	 * @method toggleClass
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} oldClassName 被替换的 class 名称
@@ -2787,7 +2808,7 @@ Jet().$package(function(J){
 	 * 设置元素的样式，css 属性需要用驼峰式写法，如：fontFamily
 	 * 
 	 * @method setStyle
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} styleName css 属性名称
@@ -2798,7 +2819,7 @@ Jet().$package(function(J){
     		return;
     	}
     	
-		var name = J.Browser.name;
+		var name = J.browser.name;
 		if(styleName === "float" || styleName === "cssFloat"){
     		if(name === "ie"){
     			styleName = "styleFloat";
@@ -2825,7 +2846,7 @@ Jet().$package(function(J){
 	 * 获取元素的当前实际样式，css 属性需要用驼峰式写法，如：fontFamily
 	 * 
 	 * @method getStyle
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} styleName css 属性名称
@@ -2837,7 +2858,7 @@ Jet().$package(function(J){
     	}
     	
     	var win = getWin(el);
-    	var name = J.Browser.name;
+    	var name = J.browser.name;
     	//J.out(name);
 		if(styleName === "float" || styleName === "cssFloat"){
     		if(name === "ie"){
@@ -2877,7 +2898,7 @@ Jet().$package(function(J){
 	 * 显示元素
 	 * 
 	 * @method show
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 * @param {String} displayStyle 强制指定以何种方式显示，如：block，inline，inline-block等等
@@ -2908,7 +2929,7 @@ Jet().$package(function(J){
 	 * 还原元素原来的display属性
 	 * 
 	 * @method recover
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 */
@@ -2933,7 +2954,7 @@ Jet().$package(function(J){
 	 * 隐藏元素
 	 * 
 	 * @method hide
-	 * @memberOf Dom
+	 * @memberOf dom
 	 * 
 	 * @param {Element} el 元素
 	 */
@@ -2972,7 +2993,7 @@ Jet().$package(function(J){
 				var box = el.getBoundingClientRect();
 				var oDoc = el.ownerDocument;
 				
-				var _fix = J.Browser.ie ? 2 : 0; //修正ie和firefox之间的2像素差异
+				var _fix = J.browser.ie ? 2 : 0; //修正ie和firefox之间的2像素差异
 				
 				_t = box.top - _fix + getScrollTop(oDoc);
 				_l = box.left - _fix + getScrollLeft(oDoc);
@@ -3144,7 +3165,7 @@ Jet().$package(function(J){
 
 
 /**
- * [Browser part]: Event 扩展包
+ * 8.[Browser part]: event 扩展包
  */
 Jet().$package(function(J){
 	var $E,
@@ -3156,14 +3177,14 @@ Jet().$package(function(J){
 		notifyObservers,
 		removeObserver;
 	/**
-	 * Event 名字空间
+	 * event 名字空间
 	 * 
 	 * @namespace
-	 * @name Event
+	 * @name event
 	 */
-	J.Event = J.Event || {};
+	J.event = J.event || {};
 	
-	$E = J.Event;
+	$E = J.event;
 	/*
 	 	经典的彩蛋必备代码:老外称之为 Tweetable Konami code
 		[上上下下左右左右BA]
@@ -3221,7 +3242,7 @@ Jet().$package(function(J){
 		 * 
 		 * 移除事件监听器
 		 * 
-		 * @memberOf Event
+		 * @memberOf event
 		 * @method removeEventListener
 		 * 
 		 * @param element 元素
@@ -3612,7 +3633,7 @@ Jet().$package(function(J){
 	 * 文档加载完成时事件监听器
 	 * 
 	 * @method onDOMReady
-	 * @memberOf Event
+	 * @memberOf event
 	 * 
 	 * @param element 元素
 	 * @param eventType 事件类型，不含on
@@ -3644,7 +3665,7 @@ Jet().$package(function(J){
 	 * 判断文档加载是否完成
 	 * 
 	 * @method isDOMReady
-	 * @memberOf Event
+	 * @memberOf event
 	 * 
 	 * @param element 元素
 	 * @param eventType 事件类型，不含on
@@ -3685,7 +3706,7 @@ Jet().$package(function(J){
 	 * 为自定义Model添加事件监听器
 	 * 
 	 * @method addObserver
-	 * @memberOf Event
+	 * @memberOf event
 	 * 
 	 * @param targetModel 目标 model，即被观察的目标
 	 * @param eventType 事件类型，不含on
@@ -3700,18 +3721,18 @@ Jet().$package(function(J){
 		// 转换成完整的事件描述字符串
 		eventType = "on" + eventType;
 		
-		// 判断对象是否含有$Events对象
-		if(!!!targetModel._$Events){
-			targetModel._$Events={};
+		// 判断对象是否含有$events对象
+		if(!!!targetModel._$events){
+			targetModel._$events={};
 		}
 		
-		// 判断对象的$Events对象是否含有eventType描述的事件类型
-		if(!targetModel._$Events[eventType]){
+		// 判断对象的$events对象是否含有eventType描述的事件类型
+		if(!targetModel._$events[eventType]){
 			//若没有则新建
-			targetModel._$Events[eventType]=[];
+			targetModel._$events[eventType]=[];
 		}
 	
-		handlers = targetModel._$Events[eventType];
+		handlers = targetModel._$events[eventType];
 		length = handlers.length;
 		index = -1;
 	
@@ -3735,7 +3756,7 @@ Jet().$package(function(J){
 	 * 触发自定义Model事件的监听器
 	 * 
 	 * @method notifyObservers
-	 * @memberOf Event
+	 * @memberOf event
 	 * 
 	 * @param targetModel 目标 model，即被观察目标
 	 * @param eventType 事件类型，不含on
@@ -3749,8 +3770,8 @@ Jet().$package(function(J){
 			
 		eventType = "on" + eventType;
 		
-		if(targetModel._$Events && targetModel._$Events[eventType]){
-			handlers = targetModel._$Events[eventType];
+		if(targetModel._$events && targetModel._$events[eventType]){
+			handlers = targetModel._$events[eventType];
 			length = handlers.length;
 			if(length > 0){
 				// 通过循环，执行handlers数组所包含的所有函数function
@@ -3771,7 +3792,7 @@ Jet().$package(function(J){
 	 * 为自定义 Model 移除事件监听器
 	 * 
 	 * @method removeObserver
-	 * @memberOf Event
+	 * @memberOf event
 	 * 
 	 * @param targetModel 目标 model，即被观察的目标
 	 * @param eventType 事件类型，不含on
@@ -3783,7 +3804,7 @@ Jet().$package(function(J){
 			j,
 			handlers,
 			length,
-			events = targetModel._$Events;
+			events = targetModel._$events;
 		
 		if(handler){
 			
@@ -3823,7 +3844,7 @@ Jet().$package(function(J){
 				for(i in events){
 					delete events[i];
 				}
-				delete targetModel._$Events;
+				delete targetModel._$events;
 			}
 		}
 
@@ -3853,12 +3874,12 @@ Jet().$package(function(J){
 
 
 /**
- * [Browser part]: Http 包
+ * 9.[Browser part]: http 包
  */
 Jet().$package(function(J){
-	var $=J.Dom.id,
-		$D=J.Dom,
-		$E=J.Event,
+	var $=J.dom.id,
+		$D=J.dom,
+		$E=J.event,
 		ajax,
 		load,
 		loadCss,
@@ -3872,17 +3893,17 @@ Jet().$package(function(J){
 	}
 	
 	/**
-	 * Http 名字空间
+	 * http 名字空间
 	 * 
 	 * @namespace
-	 * @name Http
+	 * @name http
 	 */
-	J.Http = J.Http || {};
+	J.http = J.http || {};
 
 	/**
 	 * 这是Ajax对象名字空间的一个方法
 	 * 
-	 * @memberOf Http
+	 * @memberOf http
 	 * @method	ajax
 	 * 
 	 * @param {Object} options 一个配置对象
@@ -3987,7 +4008,7 @@ Jet().$package(function(J){
 	/**
 	 * 这是Ajax对象名字空间的一个方法
 	 * 
-	 * @memberOf Http
+	 * @memberOf http
 	 * @method load
 	 * 
 	 * @param {String} type 一个配置对象
@@ -4088,7 +4109,7 @@ Jet().$package(function(J){
         
         
         
-        if(J.Browser.Engine.trident){
+        if(J.browser.engine.trident){
             node.onreadystatechange = function() {
                 var rs = this.readyState;
                 if (rs === "loaded" || rs === "complete") {
@@ -4112,7 +4133,7 @@ Jet().$package(function(J){
             };
 
         // webkit prior to 3.x is no longer supported
-        }else if(J.Browser.Engine.webkit){
+        }else if(J.browser.engine.webkit){
 
             // Safari 3.x supports the load event for script nodes (DOM2)
             $E.on(node, "load", function(){
@@ -4142,7 +4163,7 @@ Jet().$package(function(J){
 			
             node.onload = function(){
             	var o;
-            	//J.out("else:"+J.Browser.Engine.name);
+            	//J.out("else:"+J.browser.engine.name);
                 if(!isTimeout){
                 	isComplete = true;
                 	window.clearTimeout(timer);
@@ -4162,7 +4183,7 @@ Jet().$package(function(J){
 
             node.onerror = function(e){
             	var o;
-            	//J.out("else:"+J.Browser.Engine.name);
+            	//J.out("else:"+J.browser.engine.name);
                 if(!isTimeout){
                 	isComplete = true;
                 	window.clearTimeout(timer);
@@ -4226,7 +4247,7 @@ Jet().$package(function(J){
 	/**
 	 * 加载CSS
 	 * 
-	 * @memberOf Http
+	 * @memberOf http
 	 * @method loadCss
 	 * 
 	 * @param {String} uri 一个uri
@@ -4240,7 +4261,7 @@ Jet().$package(function(J){
 	/**
 	 * 加载Javascript
 	 * 
-	 * @memberOf Http
+	 * @memberOf http
 	 * @method loadScript
 	 * 
 	 * @param {String} uri 一个uri
@@ -4251,10 +4272,10 @@ Jet().$package(function(J){
 		return load("script", uri, options);
 	};
 	
-	J.Http.ajax = ajax;
-	J.Http.load = load;
-	J.Http.loadCss = loadCss;
-	J.Http.loadScript = loadScript;
+	J.http.ajax = ajax;
+	J.http.load = load;
+	J.http.loadCss = loadCss;
+	J.http.loadScript = loadScript;
 });
 
 
@@ -4263,18 +4284,18 @@ Jet().$package(function(J){
 /**
  * cookie类
  * 
- * @namespace J.Cookie
+ * @namespace J.cookie
  */
 Jet().$package(function(J){
 	var domainPrefix = window.location.host;
 	
 	/**
-	 * @namespace Cookie 名字空间
-	 * @name Cookie
+	 * @namespace cookie 名字空间
+	 * @name cookie
 	 */
-	J.Cookie = 
+	J.cookie = 
 	/**
-	 * @lends Cookie
+	 * @lends cookie
 	 */	
 	{
 		
@@ -4332,13 +4353,13 @@ Jet().$package(function(J){
 
 
 /**
- * [Browser part]: Console 控制台
+ * 10.[Browser part]: console 控制台
  */
 Jet().$package(function(J){
-	var $ = J.Dom.id,
-		$D = J.Dom,
-		$E = J.Event,
-		$H = J.Http;
+	var $ = J.dom.id,
+		$D = J.dom,
+		$E = J.event,
+		$H = J.http;
 		
 	
 	
@@ -4381,26 +4402,26 @@ Jet().$package(function(J){
 	/**
 	 * Jet 控制台，用于显示调试信息以及进行一些简单的脚本调试等操作。可以配合 J.debug J.runtime 来进行数据显示和调试.
 	 * 
-	 * @type Console
+	 * @type console
 	 * @namespace
-	 * @name Console
+	 * @name console
 	 */
-	J.Console = {
+	J.console = {
 		/**
-		 * 在Console里显示信息
+		 * 在console里显示信息
 		 * 
 		 * @param {String} msg 信息
-		 * @param {Number} type 信息类型, 可以参考 J.Console.TYPE <br/> TYPE:{<br/>
+		 * @param {Number} type 信息类型, 可以参考 J.console.TYPE <br/> TYPE:{<br/>
 		 *            &nbsp;&nbsp;&nbsp; DEBUG:0,<br/> &nbsp;&nbsp;&nbsp; ERROR:1,<br/>
 		 *            &nbsp;&nbsp;&nbsp; WARNING:2,<br/> &nbsp;&nbsp;&nbsp; INFO:3,<br/>
 		 *            &nbsp;&nbsp;&nbsp; PROFILE:4<br/> }<br/>
 		 * 
 		 * @example
-		 * J.Console.print("这里是提示信息",J.Console.TYPE.ERROR)
+		 * J.console.print("这里是提示信息",J.console.TYPE.ERROR)
 		 */
 		print : function(msg, type){
-			if(J.Console.log){
-				J.Console.log((type === 4 ? (new Date() + ":") : "") + msg);
+			if(J.console.log){
+				J.console.log((type === 4 ? (new Date() + ":") : "") + msg);
 			}
 		}
 	};
@@ -4446,9 +4467,9 @@ Jet().$package(function(J){
 	
 
 	
-	J.extend(J.Console,
+	J.extend(J.console,
 	/**
-	 * @lends Console
+	 * @lends console
 	 */
 	{
 		/**
@@ -4459,7 +4480,7 @@ Jet().$package(function(J){
 		_isCreated : false,
 	
 		/**
-		 * Console表现模板
+		 * console表现模板
 		 * 
 		 * @type String
 		 */
@@ -4506,7 +4527,7 @@ Jet().$package(function(J){
 		_typeInfo : [["log_debug_type", "√"], ["log_error_type", "x"], ["log_warning_type", "!"], ["log_info_type", "i"], ["log_profile_type", "└"]],
 	
 		/**
-		 * 显示Console
+		 * 显示console
 		 */
 		show : function() {
 			if (!this._isCreated) {
@@ -4521,11 +4542,11 @@ Jet().$package(function(J){
 		},
 	
 		/**
-		 * 隐藏Console
+		 * 隐藏console
 		 */
 		hide : function() {
-			J.Console._main.style.display = "none";
-			J.Console._opened = false;
+			J.console._main.style.display = "none";
+			J.console._opened = false;
 			
 		},
 	
@@ -4646,7 +4667,7 @@ Jet().$package(function(J){
 				var _item = document.createElement("li");
 				this._outputEl.appendChild(_item);
 				
-				var _ti = J.Console._typeInfo[type] || J.Console._typeInfo[0];
+				var _ti = J.console._typeInfo[type] || J.console._typeInfo[0];
 				_item.className = _ti[0];
 				_item.innerHTML = '<span class="log_icon">' + _ti[1] + '</span>' + msg;
 		
@@ -4681,7 +4702,7 @@ Jet().$package(function(J){
 		 * 清空log
 		 */
 		clear : function() {
-			J.Console._outputEl.innerHTML = "";
+			J.console._outputEl.innerHTML = "";
 		},
 	
 		/**
@@ -4693,37 +4714,37 @@ Jet().$package(function(J){
 			}
 	
 			// 控制台命令
-			switch (J.Console._inputEl.value) {
+			switch (J.console._inputEl.value) {
 				case "help" :
 					var _rv = "&lt;&lt; Console Help &gt;&gt;<br/>\
 								help  : 控制台帮助<br/>\
 								clear : 清空控制台输出<br/>\
 								hide  : 隐藏控制台，或者使用 Ctrl + `(~) 快捷键"
-					J.Console.out(_rv, 3);
+					J.console.out(_rv, 3);
 					break;
 				case "clear" :
-					J.Console.clear();
+					J.console.clear();
 					break;
 				case "hide" :
 				
-					J.Console.hide();
+					J.console.hide();
 					break;
 				default :
-					var _rv = '<span style="color:#ccff00">' + J.Console._inputEl.value + '</span><br/>';
+					var _rv = '<span style="color:#ccff00">' + J.console._inputEl.value + '</span><br/>';
 					try {
-						_rv += (eval(J.Console._inputEl.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
-						J.Console.out(_rv, 0);
+						_rv += (eval(J.console._inputEl.value) || "").toString().replace(/</g, "&lt;").replace(/>/g, "&gt;")
+						J.console.out(_rv, 0);
 					} catch (e) {
 						_rv += e.description;
-						J.Console.out(_rv, 1);
+						J.console.out(_rv, 1);
 					}
 			}
 	
-			J.Console._inputEl.value = "";
+			J.console._inputEl.value = "";
 		}
 	});
 	
-	J.Console._init();
+	J.console._init();
 
 	
 	
@@ -4738,12 +4759,12 @@ Jet().$package(function(J){
 	
 	
 	/**
-	 * Runtime处理工具静态类
+	 * runtime处理工具静态类
 	 * 
 	 * @namespace runtime处理工具静态类
-	 * @name Runtime
+	 * @name runtime
 	 */
-	J.Runtime = (function() {
+	J.runtime = (function() {
 		/**
 		 * 是否debug环境
 		 * 
@@ -4878,12 +4899,12 @@ Jet().$package(function(J){
 
 
 /**
- * [Jet initialize]: Jet 最终初始化
+ * 11.[Jet initialize]: Jet 最终初始化
  */
 Jet().$package(function(J){
-	var $B = J.Browser,
-		$D = J.Dom,
-		$E = J.Event;
+	var $B = J.browser,
+		$D = J.dom,
+		$E = J.event;
 		
 	$E.onDOMReady(function(){
 		// dom就绪后探测boxModel盒式模型
@@ -4892,7 +4913,7 @@ Jet().$package(function(J){
 		div.style.paddingLeft = "1px";
 
 		document.body.appendChild( div );
-		$B.Support.boxModel = (div.offsetWidth === 2);
+		$B.support.boxModel = (div.offsetWidth === 2);
 		document.body.removeChild( div );
 	});
 	

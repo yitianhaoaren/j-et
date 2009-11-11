@@ -1,6 +1,6 @@
 
 Jet().$package(function(J){
-	var XPath;
+	var xpath;
 
 
 /*
@@ -2839,7 +2839,7 @@ if (!config.hasNative || !config.useNative) {
 	 * 
 	 * ////////////////////////////////////////////////////////////////
 	 */
-	XPath = function(expr, context, ordered) {
+	xpath = function(expr, context, ordered) {
         switch (arguments.length) {
             case 0:
                 expr = '/';
@@ -2879,7 +2879,7 @@ if (!config.hasNative || !config.useNative) {
     };
 
 
-	J.Dom.XPath = XPath;
+	J.dom.xpath = xpath;
 
 
 

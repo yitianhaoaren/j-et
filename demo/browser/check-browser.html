@@ -43,24 +43,24 @@
 	
 		J = new Jet();
 
-		var $=J.Dom.id;
-		var $D=J.Dom;
-		$("Platform1").innerHTML = J.Platform.getPlatform();
-		$("UserAgent").innerHTML = J.Browser.getUserAgent();
-		$("Platform2").innerHTML = J.Platform.name;
-		$("PlatformVer").innerHTML = J.Platform.version;
-		$("BrowserName").innerHTML = J.Browser.name;
-		$("BrowserVer").innerHTML = J.Browser.version;
-		$("EngineName").innerHTML = J.Browser.Engine.name;
-		$("EngineVer").innerHTML = J.Browser.Engine.version;
-		$("Features").innerHTML = "xpath:"+J.Browser.Features.xpath+", air:"+J.Browser.Features.air+", query:"+J.Browser.Features.query;
-		$("Flash").innerHTML = J.Browser.Plugins.flash;
+		var $=J.dom.id;
+
+		$("Platform1").innerHTML = J.platform.getPlatform();
+		$("UserAgent").innerHTML = J.browser.getUserAgent();
+		$("Platform2").innerHTML = J.platform.name;
+		$("PlatformVer").innerHTML = J.platform.version;
+		$("BrowserName").innerHTML = J.browser.name;
+		$("BrowserVer").innerHTML = J.browser.version;
+		$("EngineName").innerHTML = J.browser.engine.name;
+		$("EngineVer").innerHTML = J.browser.engine.version;
+		$("Features").innerHTML = "xpath:"+J.browser.features.xpath+", air:"+J.browser.features.air+", query:"+J.browser.features.query;
+		$("Flash").innerHTML = J.browser.plugins.flash;
 		
 		$("Plugin").innerHTML = (function(){
 			var a=[];
-			window.plug = J.Browser.getPlugins();
-			for(var i=0; i<J.Browser.getPlugins().length; i++){
-				a.push(J.Browser.getPlugins()[i].name);
+			window.plug = J.browser.getPlugins();
+			for(var i=0; i<J.browser.getPlugins().length; i++){
+				a.push(J.browser.getPlugins()[i].name);
 			}
 			
 			return a.join(",<br />");

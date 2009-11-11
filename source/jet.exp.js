@@ -21,8 +21,8 @@ var test="in exp.js";
 Jet().$package(function(J){
 
 
-	var string="sdf ${title},dfsdfsd ${name},dkfkksdf!";
-	var p = J.String.template(string, {
+	var string="sdf <%=title%>,dfsdfsd <%=name%>,dkfkksdf!";
+	var p = J.string.template(string, {
 		title: "我是标题",
 		tel: "18923896900",
 		name: "Kinvix"
@@ -35,10 +35,10 @@ Jet().$package(function(J){
 
 
 Jet().$package(function(J){
-	var $D = J.Dom,
-		$E = J.Event;
+	var $D = J.dom,
+		$E = J.event;
 		
-	J.Drag=function(el){
+	J.drag=function(el){
 		var curDragElementX, curDragElementY, dragStartX, dragStartY;
 	
 		var dragStart = function(e){
@@ -69,11 +69,15 @@ Jet().$package(function(J){
 
 
 Jet().$package(function(J){
-	var $ = J.Dom.id,
-		$D = J.Dom,
-		$E = J.Event;
-		
-	J.Tab = function(triggers,sheets,config){
+	
+	J.ui =J.ui || {};
+	
+	var $ = J.dom.id,
+		$D = J.dom,
+		$E = J.event;
+	
+	
+	J.ui.Tab = function(triggers,sheets,config){
 		this.tabs = [];             //tab的集合
 		this.currentTab = null;     //当前tab
 		this.config = {
@@ -98,7 +102,7 @@ Jet().$package(function(J){
 		}
 	};
 	
-	J.Tab.prototype = {
+	J.ui.Tab.prototype = {
 		/**
 		 * 设置config
 		 * @param {object} config 配置项如{'slideEnabled':true,'defaultIndex':0,'autoInit':false}

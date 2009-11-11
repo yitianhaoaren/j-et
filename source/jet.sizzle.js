@@ -1002,7 +1002,7 @@ adapterSizzle = Sizzle;
 	 * 
 	 * ////////////////////////////////////////////////////////////////
 	 */
-	J.Dom.Sizzle = adapterSizzle;
+	J.dom.sizzle = adapterSizzle;
 
 
 
