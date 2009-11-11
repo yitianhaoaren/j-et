@@ -31,3 +31,91 @@
 　　因此，对于中文字符串来说，如果不希望把字符串编码格式转化成UTF-8格式的（比如原页面和目标页面的charset是一致的时候），只需要使用escape。如果你的页面是GB2312或者其他的编码，而接受参数的页面是UTF-8编码的，就要采用encodeURI或者encodeURIComponent。 
 
 　　另外，encodeURI/encodeURIComponent是在javascript1.5之后引进的，escape则在javascript1.0版本就有。 
+
+
+
+=== 删除加载js文件的scrip节点后，该js文件里面的函数还可以用吗？ ===
+
+　　先来看段代码，如下：
+{{{
+<mce:script type="text/javascript" id="scriptNode" src="test.js" mce_src="test.js"></mce:script>  
+<mce:script type="text/javascript"  
+<!--  
+alert(window.test);  
+test();  
+//--></mce:script>  
+}}}
+
+　　代码很简单，通过script加载一个js文件：test.js，该js文件里面只有简单的一个函数：
+{{{
+funnction test() {  
+    alert('test called');  
+};  
+}}}
+
+　　在IE6下执行的结果：首先alert出该test函数的内容，然后执行test()函数，而该函数输出'test called';
+
+现在我们添加代码，把加载test.js文件的script节点删除，然后继续调用test()函数，如下：
+{{{
+<mce:script type="text/javascript" id="scriptNode" src="test.js" mce_src="test.js"></mce:script>  
+<mce:script type="text/javascript"><!--  
+alert(window.test);  
+test();  
+
+  
+//删除加载test.js文件的script节点  
+var script = document.getElementById('scriptNode');  
+document.body.removeChild(script);  
+  
+//确保已经删除，alert 出null  
+script = document.getElementById('scriptNode');  
+alert(script);  
+  
+//继续调用test函数  
+test();  
+// --></mce:script>  
+}}}
+
+　　执行的结果我们发现，即使加载test.js文件的script节点已经删除，但它里面的函数还是可以继续调用的，并没有提示函数没定义的错误。
+
+原因分析：
+
+　　关键点是区分函数调用和dom节点之间的关系，HTMLDocument中的script节点的作用主要是在于用来加载对应的脚本文件，就是这里的test.js，一旦加载完毕，它就大功告成了，但js引擎对加载到dom中来的脚本会进行解释，而不是简单的文本堆积，js脚本引擎会解析test.js里面的语句并且创建对应的作用域和各个函数对象等，对这个例子来说，一旦加载完毕，我们可以发现js引擎已经创建了一个function obj，并且作为window对象的一个属性，此时已经跟script本身的dom节点已经没有关系了，通过下面的代码我们可以发现：
+
+ 
+{{{
+<mce:script type="text/javascript" id="scriptNode" src="test.js" mce_src="test.js"></mce:script>  
+<mce:script type="text/javascript"><!--  
+alert(window.test);  
+test();  
+  
+//删除加载test.js文件的script节点  
+var script = document.getElementById('scriptNode');  
+document.body.removeChild(script);  
+  
+//确保已经删除，alert 出null  
+script = document.getElementById('scriptNode');  
+alert(script);  
+  
+//继续调用test函数  
+test();  
+  
+//已经是window的一个属性了  
+alert(window.test);  
+// --></mce:script>  
+}}}
+
+　　若此时，我们再执行下面的代码，则可以删除对应的函数对象：
+{{{
+    delete window.test;
+
+　　//再次调用，提示对象不支持此操作的错误，说明函数对象已经移除
+    window.test();
+}}}
+
+小结：
+
+　　通过这个例子，我们可以发现，后续的通过动态创建script脚本进行动态加载js文件或者请求json数据，一旦确定加载完毕，我们可以在对于的回调函数里面移除对应的script节点，防止dom的结构越来越庞大，同时加载成功的js函数我们仍然可以后续继续调用，因为里面的函数和变量均已经attach到window对象了。
+
+
+
