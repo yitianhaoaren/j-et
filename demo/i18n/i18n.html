@@ -15,11 +15,11 @@
 	<script type="text/javascript">
 		Jet().$package(function(J){
 
-	        J.Event.onDOMReady(function() {
-	            J.out("默认是英文："+J.I18n.text.helloWorld);
+	        J.event.onDOMReady(function() {
+	            J.out("默认是英文："+J.i18n.text.helloWorld);
 	            
-	            J.I18n.set("zh-cn");
-	            J.out("切换到中文："+J.I18n.text.helloWorld);
+	            J.i18n.set("zh-cn");
+	            J.out("切换到中文："+J.i18n.text.helloWorld);
 
 	        });
 	    });

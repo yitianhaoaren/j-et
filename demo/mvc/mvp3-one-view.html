@@ -19,12 +19,12 @@
 	
 
 
-	<script type="text/javascript" defer="defer" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.js"></script>
 	<script type="text/javascript">
 	
 		// model 层
 		Jet().$package("whatDoesAnimalDo.model", function(J){
-			var $E = J.Event;
+			var $E = J.event;
 			
 			// animal的数据
 			var animalDictionary = {
@@ -53,7 +53,7 @@
 		
 		// view 层
 		Jet().$package("whatDoesAnimalDo.view", function(J){
-			var $E = J.Event;
+			var $E = J.event;
 			
 			// 用户输入触发onchange事件
 			this.init = function() {
@@ -74,7 +74,7 @@
 		
 		// presenter 层
 		Jet().$package("whatDoesAnimalDo.presenter", function(J){
-			var $E = J.Event;
+			var $E = J.event;
 
 			// 选择视图
 			this.init = function() {
