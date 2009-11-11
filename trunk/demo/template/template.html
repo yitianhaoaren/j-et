@@ -8,14 +8,14 @@
 </head>
 
 <body>
-	<div id="template">
+	<script id="template" type="text/html">
 		<ul>
-			<li>${title}</li>
-			<li>${name}</li>
-			<li>${address}</li>
-			<li>${tel}</li>
+			<li><%=title%></li>
+			<li><%=name%></li>
+			<li><%=address%></li>
+			<li><%=tel%></li>
 		</ul>
-	</div>
+	</script>
 	
 	<div id="out"></div>
 
@@ -31,16 +31,16 @@
 		Jet().$package(function(J){
 		
 		
-			var html=J.Dom.id("template").innerHTML;
-			
-			html = J.String.template(html, {
-				title:"联系人薄",
-				name:"Jetyu",
-				address:"Shenzhen",
-				tel:"88888888"
+			var html=J.dom.id("template").innerHTML;
+
+			html = J.string.template(html, {
+				title: "联系人薄",
+				name: "Jetyu",
+				address: "Shenzhen",
+				tel: "88888888"
 			});
 			
-			J.Dom.id("out").innerHTML=html;
+			J.dom.id("out").innerHTML=html;
 		
 		
 		});
