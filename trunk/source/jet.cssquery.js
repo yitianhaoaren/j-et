@@ -764,7 +764,7 @@ if (!isMSIE) {
 	 */
 
 
-	J.Dom.cssQuery = cssQuery;
+	J.dom.cssQuery = cssQuery;
 
 
 

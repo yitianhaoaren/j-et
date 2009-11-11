@@ -54,16 +54,16 @@
 	<script id="JavascriptCode" type="text/javascript" defer="defer">
 	//<![CDATA[
 		Jet().$package(function(J){
-			var $H = J.Http;
-			J.Http.loadScript("../../source/jet.exp.js");
-			//J.Http.loadScript("../../source/jet.test1.js");
-			//J.Http.loadScript("../../source/jet.test2.js");
+			var $H = J.http;
+			J.http.loadScript("../../source/jet.exp.js");
+			//J.http.loadScript("../../source/jet.test1.js");
+			//J.http.loadScript("../../source/jet.test2.js");
 		});
 		Jet().$package(function(J){
-			J.Dom.setStyle(J.Dom.id("Content"),"background","white");
-			J.Dom.setStyle(J.Dom.id("Content"),"height","100px");
-			J.Dom.setStyle(J.Dom.id("Content"),"width","600px");
-			J.Dom.id("Content").innerHTML="Hello world, ^_^!";
+			J.dom.setStyle(J.dom.id("Content"),"background","white");
+			J.dom.setStyle(J.dom.id("Content"),"height","100px");
+			J.dom.setStyle(J.dom.id("Content"),"width","600px");
+			J.dom.id("Content").innerHTML="Hello world, ^_^!";
 			J.out(1);
 		});
 	//]]>
@@ -87,10 +87,10 @@
 	<script type="text/javascript">
 	//<![CDATA[
 		Jet().$package(function(J){
-			J.Http.loadScript("../../source/jet.exp.js");
+			J.http.loadScript("../../source/jet.exp.js");
 		});
 		Jet().$package("Playground",function(J){
-			var $D = J.Dom;
+			var $D = J.dom;
 			var CodeEditor = $D.id("CodeEditor");
 			var CodeRunContainer = window.frames["CodeRunContainer"];
 			

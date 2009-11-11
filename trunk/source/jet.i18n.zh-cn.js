@@ -20,7 +20,7 @@
  */
 Jet().$package(function(J){
 
-	J.I18n.add({
+	J.i18n.add({
 		"zh-cn":{
 			// 数字
 			number:"ddd,ddd.dd",
