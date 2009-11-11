@@ -2,19 +2,29 @@
 
 = 文件说明 =
 {{{
-./build/    (压缩后的JET文件)
-./source/    (JET源代码)
-./source/    (JET源代码)
-./source/    (JET源代码)
-./source/    (JET源代码)
-./source/    (JET源代码)
+./build/     (压缩后的JET文件)
+./demo/      (JET演示文档)
+./doc/       (JET说明文档)
 ./sdk/
-  +- jre6    (java虚拟机目录)
-  +- jsdoc-toolkit    (jsdoc文档生成工具)
-  |- compress-with-yuicompressor.bat    (JET的源代码压缩脚本)
-  |- generate-doc-with-jsdos-toolkit.bat    (JET文档生成脚本)
-  |- yuicompressor-2.4.2.jar    (yuicompressor主程序)
+    +- jre6             (java虚拟机目录)
+    +- jsdoc-toolkit    (jsdoc文档生成工具)
+    |- compress-with-yuicompressor.bat        (JET的源代码压缩脚本)
+    |- generate-doc-with-jsdos-toolkit.bat    (JET文档生成脚本)
+    |- yuicompressor-2.4.2.jar                (yuicompressor主程序)
+./source/    (JET源代码)
+    +- assets       (css等相关文件)
+    +- firebug      (firebug控制台相关文件)
+    |- jet.exp.js            (JET扩展)
+    |- jet.i18n.js           (JET国际化)
+    |- jet.js                (JET核心)
+    |- jet.mod.cssquery.js   (JET的cssQuery模块包)
+    |- jet.mod.jquery.js     (JET的jQuery模块包)
+    |- jet.mod.json.js       (JET的json模块包)
+    |- jet.mod.sizzle.js     (JET的sizzle模块包)
+    |- jet.mod.xpath.js      (JET的xpath模块包)
+
 }}}
+
 
  * 执行compress-with-yuicompressor.bat即可将source目录中的源代码压缩生成到build目录下边
 
