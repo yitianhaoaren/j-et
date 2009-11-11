@@ -749,7 +749,19 @@ Jet().$package(function(J){
 		return beExtendObj;
     };
     
-    // 通用分时处理函数
+	/**
+	 * 通用分时处理函数
+	 * 
+	 * @method timedChunk
+	 * @memberOf Jet.prototype
+	 * 
+	 * 
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * };
+	 * 
+	 */
     timedChunk = function(items, process, context, isShift, callback) {
         var todo = items.concat(), delay = 25;
         if(isShift){
@@ -937,12 +949,6 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	/*
-	pass = function(func){
-		var args = Array.prototype.slice.call(arguments, 1);
-		return rebuild(func, {contextObj: null, arguments: args});
-	};
-	*/
 	pass = function(func, var_args) {
 		var slice = Array.prototype.slice;
 		var a = slice.call(arguments, 1);
@@ -951,6 +957,12 @@ Jet().$package(function(J){
 			return func.apply(context, a.concat(slice.call(arguments)));
 		};
 	};
+	/*
+	pass = function(func){
+		var args = Array.prototype.slice.call(arguments, 1);
+		return rebuild(func, {contextObj: null, arguments: args});
+	};
+	*/
 	
 	/**
 	 * 给函数绑定一个上下文对象再执行
@@ -976,20 +988,19 @@ Jet().$package(function(J){
 	*/
 	
 	/**
-	 * Binds a function to an object. The returned function will always use the
-	 * passed in {@code obj} as {@code this}.
-	 *
-	 * Example:
-	 *
-	 *   g = bind(f, obj, a, b)
-	 *   g(c, d) // will do f.call(obj, a, b, c, d)
-	 *
-	 * @param {Function} f The function to bind the object to
-	 * @param {Object} obj The object that should act as this when the function
-	 *     is called
-	 * @param {*} var_args Rest arguments that will be used as the initial
-	 *     arguments when the function is called
-	 * @return {Function} A new function that has bound this
+	 * 将一个函数绑定给一个对象作方法，返回的函数将总被传入{@code obj} as {@code this}
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Function} func 要绑定的函数
+	 * @param {Object} contextObj 要绑定的对象
+	 * @param {Mixed} args 参数列表，长度任意
+	 * @return {Function} 返回一个被绑定this上下文对象的函数
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 *   funcB = J.bind(funcA, obj, a, b)
+	 *   funcB(c, d) // 相当于执行 funcA.call(obj, a, b, c, d)
+	 * };
 	 */
 	
 	bind = function(func, context, var_args) {
@@ -1126,6 +1137,9 @@ Jet().$package(function(J){
 		byteLength;
 	
 
+	
+	var cache = {};
+	  
 	/**
 	 * 多行或单行字符串模板处理
 	 * 
@@ -1144,24 +1158,6 @@ Jet().$package(function(J){
 	 * 	});
 	 * };
 	 */
-	/*
-	template = function(str, obj){
-		var p,
-			RE;
-	
-		for(p in obj){
-			if(obj.hasOwnProperty(p)){
-				// RE = new RegExp("\\${" + p + "}","g");
-				// str = str.replace(RE, o[p]);
-				str = str.split("${" + p + "}").join(obj[p]);
-			}
-		}
-		return str;
-	};
-	*/
-
-	var cache = {};
-	  
 	template = function(str, data){
 		// Figure out if we're getting a template, or if we need to
 		// load the template - and be sure to cache the result.
@@ -1193,7 +1189,22 @@ Jet().$package(function(J){
 	};
 
 	
+	/*
+	template = function(str, obj){
+		var p,
+			RE;
 	
+		for(p in obj){
+			if(obj.hasOwnProperty(p)){
+				// RE = new RegExp("\\${" + p + "}","g");
+				// str = str.replace(RE, o[p]);
+				str = str.split("${" + p + "}").join(obj[p]);
+			}
+		}
+		return str;
+	};
+	*/
+
 	
 	
 
@@ -1471,7 +1482,13 @@ Jet().$package(function(J){
 		return text;
 	};
 	
-	
+	/**
+	 * 。。。。
+	 * 
+	 * @memberOf string
+	 * @param {Object} obj 要转换成查询字符串的对象
+	 * @return {String} 返回转换后的查询字符串
+	 */
 	toQueryPair = function(key, value) {
 		return encodeURIComponent(String(key)) + "=" + encodeURIComponent(String(value));
 	};
@@ -2976,6 +2993,9 @@ Jet().$package(function(J){
     
     /**
 	 * 获取对象坐标
+	 *
+	 * @method getClientXY
+	 * @memberOf dom
 	 * 
 	 * @param {HTMLElement} el
 	 * @return Array [top,left]
@@ -3011,6 +3031,9 @@ Jet().$package(function(J){
 	/**
 	 * 设置dom坐标
 	 * 
+	 * @method setClientXY
+	 * @memberOf dom
+	 
 	 * @param {HTMLElement} el
 	 * @param {string|number} x 横坐标
 	 * @param {string|number} y 纵坐标
@@ -3024,6 +3047,9 @@ Jet().$package(function(J){
 	/**
 	 * 获取对象坐标
 	 * 
+	 * @method getXY
+	 * @memberOf dom
+	 *
 	 * @param {HTMLElement} el
 	 * @return Array [top,left]
 	 * @type Array
@@ -3038,6 +3064,8 @@ Jet().$package(function(J){
 
 	/**
 	 * 设置dom坐标
+	 * @method setXY
+	 * @memberOf dom
 	 * 
 	 * @param {HTMLElement} el
 	 * @param {string|number} x 横坐标
@@ -3051,6 +3079,16 @@ Jet().$package(function(J){
 		setStyle(el, "top", parseInt(y) - _mt + "px");
 	};
 	
+	/**
+	 * 获取对象坐标
+	 *
+	 * @method getRelativeXY
+	 * @memberOf dom
+	 * 
+	 * @param {HTMLElement} el
+	 * @return Array [top,left]
+	 * @type Array
+	 */
 	getRelativeXY = function(el, relativeEl) {
 		var xyEl = getXY(el);
 		var xyRelativeEl = getXY(relativeEl);
@@ -3061,7 +3099,15 @@ Jet().$package(function(J){
 		return xy;
 	}
 	
-
+	/**
+	 * 获取对象坐标
+	 *
+	 * @method getSelection
+	 * @memberOf dom
+	 * 
+	 * @param {Window} win
+	 * @return {String} 返回选择的文本
+	 */
 	getSelection = function(win) {
 		win = win || window;
 		doc = win.document;
@@ -3080,7 +3126,16 @@ Jet().$package(function(J){
 	
 	};
 
-	// FireFox 下获取 input 或者 textarea 中选中的文字
+
+	/**
+	 * FireFox 下获取 input 或者 textarea 中选中的文字
+	 *
+	 * @method getTextFieldSelection
+	 * @memberOf dom
+	 * 
+	 * @param {HTMLElement} el
+	 * @return {String} 返回选择的文本
+	 */
 	getTextFieldSelection = function(e) {
 		if (e.selectionStart != undefined && e.selectionEnd != undefined) {
 			var start = e.selectionStart;
