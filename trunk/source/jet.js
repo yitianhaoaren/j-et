@@ -174,7 +174,7 @@
 				 * //var Tencent = {};
 				 * //Tencent.WebQQ = {};
 				 * 
-				 * J.$namespace("Tencent.WebQQ");
+				 * J.$namespace("tencent.webqq");
 				 * 
 				 * //注：Jet的$namespace方法与其他JS框架的namespace的方法不同，其他框架如YUI是在其YAHOO对像下创
 				 * //建命名空间，而Jet的$namespace测试直接在顶级命名空间window的下边直接创建命名空间。
@@ -210,9 +210,9 @@
 				 * };
 				 * 
 				 * @example
-				 * //创建一个名字为Tencent.Kinvix的package包：
-				 * Jet().$package("Tencent.Kinvix", function(J){
-				 * 	//这时上下文对象this指向window下的Tencent.Kinvix对象
+				 * //创建一个名字为tencent.kinvix的package包：
+				 * Jet().$package("tencent.kinvix", function(J){
+				 * 	//这时上下文对象this指向window对象下的tencent.kinvix对象
 				 * 	alert("Hello world! This is " + this);
 				 * };
 				 * 
@@ -259,22 +259,22 @@
 				 * //创建一个匿名package包：
 				 * Jet().$package(function(J){
 				 * 	// 输出undefined
-				 * 	J.out(J.checkPackage("Tencent.Kinvix"));
+				 * 	J.out(J.checkPackage("tencent.kinvix"));
 				 * };
 				 * 
 				 * 
 				 * @example
-				 * //创建一个名字为Tencent.Kinvix的package包：
-				 * Jet().$package("Tencent.Kinvix", function(J){
-				 * 	//这时上下文对象this指向window下的Tencent.Kinvix对象
+				 * //创建一个名字为tencent.kinvix的package包：
+				 * Jet().$package("tencent.kinvix", function(J){
+				 * 	//这时上下文对象this指向window下的tencent.kinvix对象
 				 * 	alert("Hello world! This is " + this);
 				 * };
 				 * 
 				 * Jet().$package(function(J){
-				 * 	// J.checkPackage("Tencent.Kinvix")结果返回的将是Tencent.Kinvix的引用
-				 * 	var kinvix = J.checkPackage("Tencent.Kinvix");
+				 * 	// J.checkPackage("tencent.kinvix")结果返回的将是tencent.kinvix的引用
+				 * 	var kinvix = J.checkPackage("tencent.kinvix");
 				 * 	if(kinvix){
-				 * 		J.out("Tencent.Kinvix包已加载...");
+				 * 		J.out("tencent.kinvix包已加载...");
 				 * 	}
 				 * };
 				 * 
