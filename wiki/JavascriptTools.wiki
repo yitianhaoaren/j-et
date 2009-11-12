@@ -1,4 +1,5 @@
 #summary Javascript 开发工具
+#labels 工具
 
 = 编辑器 =
 
@@ -55,19 +56,23 @@ http://www.mozilla.org/js/spidermonkey/
  * 语法检查和快速调试－javascriptlint
 http://www.javascriptlint.com/
 这个工具的代码基于Douglas Crockford’s的jslint，在代码检查方面很强大，可以说非常苛刻。如果从头开始写代码，建议经常用它来检查代码，能明显提高代码的质量。下载时不要从代码库check out最新版本，而是下载稳定的0.3.0版本。
+{{{
 $ cd jsl-0.3.0/src/ #这里的jsl-0.3.0是解压缩目录
 $ make -f Makefile.ref all
 $ cd Linux_All_DBG.OBJ/
 $ cp jsl jscpucfg /home/xp/bin/js/ #/home/xp/bin/js/要拷贝到的目录，可以任意位置
 $ cd /home/xp/bin/js/
 $ jsl -help:conf > jsl.conf #生成默认配置文件
-另外需要在.vimrc中加入
+}}}
 
-"设置javascriptlint
+另外需要在.vimrc中加入
+{{{
+设置javascript lint
 autocmd FileType javascript set makeprg=/home/xp/bin/js/jsl -nologo -nofilelisting -nosummary -nocontext -conf '/home/xp/bin/js/jsl.conf' -process %
 autocmd FileType javascript set errorformat=%f(%l): %m
 autocmd FileType javascript inoremap <silent> <F9> <C-O>:make<CR>
 autocmd FileType javascript map <silent> <F9> :make<CR>
+}}}
 使用时使用:make命令即可，或者使用F9快捷键。还需要理解的是quickfix，输入命令help quickfix看以下文档，主要涉及的命令有:cw :cn :cp等。
 截屏（点击可查看大图）
 
