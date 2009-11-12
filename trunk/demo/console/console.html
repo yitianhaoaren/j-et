@@ -13,8 +13,8 @@
 		<div id="example">
 			<h3>JET demo</h3>
 			<div class="exampleContainer"> 
-				<button id="Button_1" onclick="J.console.show()">打开控制台</button> 
-				<button id="Button_2" onclick="J.console.hide()">关闭控制台</button> 
+				<button id="Button_1" onclick="J.console.enable()">打开控制台</button> 
+				<button id="Button_2" onclick="J.console.disable()">关闭控制台</button> 
 				<!--button id="Button_3" onclick="showAll()">所有类型输出</button--> 
 
 			</div>
@@ -57,7 +57,7 @@ J.console.out("PROFILE",J.console.TYPE.PROFILE);
 			$C=J.console,
 			$D=J.dom,
 			$E=J.event;
-			
+		
 		function showAll() {
 					$C.print("ERROR",$C.TYPE.ERROR);
 					$C.print("WARNING",$C.TYPE.WARNING);

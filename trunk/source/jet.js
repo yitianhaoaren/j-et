@@ -31,7 +31,7 @@
 		},
 		
 		option = {
-			console: true,
+			console: false,
 			debug: DEBUG.SHOW_ALL
 		},
 		
@@ -4602,6 +4602,24 @@ Jet().$package(function(J){
 		hide : function() {
 			J.console._main.style.display = "none";
 			J.console._opened = false;
+			
+		},
+		
+		/**
+		 * 开启console
+		 */
+		enable : function() {
+			J.option.console = true;
+			this.show();
+			
+		},
+		
+		/**
+		 * 关闭console
+		 */
+		disable : function() {
+			J.option.console = false;
+			this.hide();
 			
 		},
 	
