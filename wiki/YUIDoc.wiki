@@ -1,4 +1,5 @@
 #summary YUI Doc 是一个很好的 JavaScript API 文档生成工具
+#labels 工具
 http://developer.yahoo.com/yui/yuidoc
 
 == 简介 ==
@@ -67,5 +68,3 @@ REM 生成文档存放的位置
 　　保存并运行test.bat后，就会发现D:\yui\src中多了parser和generator两个目录，而generator中正是你要的文档。
 
 　　学会使用工具仅仅是开始了一小步，仔细看看YUI Doc的官方文档吧，利用其来促使我们写出更高效优雅的前端代码并惠及更多的人才是一大步。
-
-
