@@ -23,12 +23,12 @@ Jet().$package(function(J){
 	
 		var dragStart = function(e){
 			e.preventDefault();
-			curDragElementX=parseInt($D.getStyle(el,"left"))||0;
-			curDragElementY=parseInt($D.getStyle(el,"top"))||0;
-			dragStartX=e.pageX;
-			dragStartY=e.pageY;
-			$E.on(document,"mousemove",dragMove);
-			$E.on(document,"mouseup",dragStop);
+			curDragElementX = parseInt($D.getStyle(el,"left")) || 0;
+			curDragElementY = parseInt($D.getStyle(el,"top")) || 0;
+			dragStartX = e.pageX;
+			dragStartY = e.pageY;
+			$E.on(document, "mousemove", dragMove);
+			$E.on(document, "mouseup", dragStop);
 		};
 
 		var dragMove = function(e){
