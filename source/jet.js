@@ -91,7 +91,7 @@
 			 * 
 			 * @example
 			 * //范例：
-			 * Jet().$package("Tencent.WebQQ", function(J){
+			 * Jet().$package("tencent.qqweb", function(J){
 			 * 	var $ = J.dom.id,
 			 * 	$D = J.dom,
 			 * 	$E = J.event,
@@ -170,11 +170,11 @@
 				 * @returns {Object} 返回对最末命名空间的引用
 				 * 
 				 * @example
-				 * //在全局环境中创建Tencent.WebQQ名字空间, $namespace完成的操作相当于在全局环境中执行如下语句：
-				 * //var Tencent = {};
-				 * //Tencent.WebQQ = {};
+				 * //在全局环境中创建tencent.qqweb名字空间, $namespace完成的操作相当于在全局环境中执行如下语句：
+				 * //var tencent = {};
+				 * //tencent.qqweb = {};
 				 * 
-				 * J.$namespace("tencent.webqq");
+				 * J.$namespace("tencent.qqweb");
 				 * 
 				 * //注：Jet的$namespace方法与其他JS框架的namespace的方法不同，其他框架如YUI是在其YAHOO对像下创
 				 * //建命名空间，而Jet的$namespace测试直接在顶级命名空间window的下边直接创建命名空间。
