@@ -4817,8 +4817,20 @@ Jet().$package(function(J){
 		}
 	});
 	
-	J.console._init();
-
+	var topNamespace = this;
+	if(J.query.console){
+		
+		if(J.query.console == "firebug"){
+			topNamespace.console.out = function(msg){
+				topNamespace.console.log(msg);
+			};
+			J.console = topNamespace.console;
+		}else if(J.query.console == "true"){
+			J.console._init();
+			J.console.show();
+		}
+	}
+	
 	
 	
 	
