@@ -2802,7 +2802,9 @@ Jet().$package(function(J){
 	 * @param {String} newClassName 要替换成的 class 名称
 	 */
     replaceClass = function(el, oldClassName, newClassName){
-    	el.className = (" "+el.className+" ").replace(" "+oldClassName+" "," "+newClassName+" ");
+    	removeClass(el, oldClassName);
+    	addClass(el, newClassName);
+    	//el.className = (" "+el.className+" ").replace(" "+oldClassName+" "," "+newClassName+" ");
     };
     /*
     replaceClass2 = function(el, oldClassName, newClassName){
