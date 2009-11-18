@@ -1057,15 +1057,6 @@ Jet().$package(function(J){
 		return format;
 	};
 	
-	/*
-	var Class = {
-	   create: function() {
-	     return function() {
-	       this.initialize.apply(this, arguments);
-	     }
-	   }
-	}
-	 */
 	
 	Class = function(obj){
 		var tempClass = function() {
@@ -1074,12 +1065,7 @@ Jet().$package(function(J){
 		tempClass.prototype = obj;
 		return tempClass;
 	};
-	
-	
 
-
-	
-	
 	
 	J.isUndefined = isUndefined;
 	J.isNull = isNull;
