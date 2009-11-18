@@ -3240,8 +3240,8 @@ Jet().$package(function(J){
 	var $E,
 		addEventListener,
 		removeEventListener,
-		onDOMReady,
-		isDOMReady,
+		onDomReady,
+		isDomReady,
 		addObserver,
 		notifyObservers,
 		removeObserver;
@@ -3701,31 +3701,31 @@ Jet().$package(function(J){
 	 * 
 	 * 文档加载完成时事件监听器
 	 * 
-	 * @method onDOMReady
+	 * @method onDomReady
 	 * @memberOf event
 	 * 
 	 * @param element 元素
 	 * @param eventType 事件类型，不含on
 	 * @param handler 事件处理器
 	 */
-	onDOMReady = function( f ) {
+	onDomReady = function( f ) {
 	    // If the DOM is already loaded, execute the function right away
-	    if ( onDOMReady.done ) return f();
+	    if ( onDomReady.done ) return f();
 	
 	    // If we’ve already added a function
-	    if ( onDOMReady.timer ) {
+	    if ( onDomReady.timer ) {
 	        // Add it to the list of functions to execute
-	        onDOMReady.ready.push( f  );
+	        onDomReady.ready.push( f  );
 	    } else {
 	        // Attach an event for when the page finishes  loading,
 	        // just in case it finishes first. Uses addEvent.
-	        $E.on(window, "load", isDOMReady);
+	        $E.on(window, "load", isDomReady);
 	
 	        // Initialize the array of functions to execute
-	        onDOMReady.ready = [ f ];
+	        onDomReady.ready = [ f ];
 	
 	        //  Check to see if the DOM is ready as quickly as possible
-	        onDOMReady.timer = setInterval( isDOMReady, 300 );
+	        onDomReady.timer = setInterval( isDomReady, 300 );
 	    }
 	}
 	
@@ -3733,7 +3733,7 @@ Jet().$package(function(J){
 	 * 
 	 * 判断文档加载是否完成
 	 * 
-	 * @method isDOMReady
+	 * @method isDomReady
 	 * @memberOf event
 	 * 
 	 * @param element 元素
@@ -3741,9 +3741,9 @@ Jet().$package(function(J){
 	 * @param handler 事件处理器
 	 */
 	// Checks to see if the DOM is ready for navigation
-	isDOMReady = function() {
+	isDomReady = function() {
 	    // If we already figured out that the page is ready, ignore
-	    if ( onDOMReady.done ) return false;
+	    if ( onDomReady.done ) return false;
 	
 	    // Check to see if a number of functions and elements are
 	    // able to be accessed
@@ -3751,16 +3751,16 @@ Jet().$package(function(J){
 	          document.getElementById && document.body ) {
 	
 	        // If they’re ready, we can stop checking
-	        clearInterval( onDOMReady.timer );
-	        onDOMReady.timer = null;
+	        clearInterval( onDomReady.timer );
+	        onDomReady.timer = null;
 	
 	        // Execute all the functions that were waiting
-	        for ( var i = 0; i < onDOMReady.ready.length; i++ )
-	            onDOMReady.ready[i]();
+	        for ( var i = 0; i < onDomReady.ready.length; i++ )
+	            onDomReady.ready[i]();
 	
 	        // Remember that we’re now done
-	        onDOMReady.ready = null;
-	        onDOMReady.done = true;
+	        onDomReady.ready = null;
+	        onDomReady.done = true;
 	    }
 	}
 	
@@ -3925,7 +3925,7 @@ Jet().$package(function(J){
 	$E.on = $E.addEventListener;
 	$E.off = $E.removeEventListener;
 	
-	$E.onDOMReady = onDOMReady;
+	$E.onDomReady = onDomReady;
 	
 	// Model 事件方法
 	$E.addObserver = addObserver;
@@ -5005,7 +5005,7 @@ Jet().$package(function(J){
 		$D = J.dom,
 		$E = J.event;
 		
-	$E.onDOMReady(function(){
+	$E.onDomReady(function(){
 		// dom就绪后探测boxModel盒式模型
 		var div = document.createElement("div");
 		div.style.width = "1px";
