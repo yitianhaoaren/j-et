@@ -418,9 +418,10 @@ Jet().$package(function(J){
 		pass,
 		bind,
 		bindNoEvent,
+
+		formatDate,
 		
-		
-		formatDate;
+		Class;
 
 	/**
 	 * 判断变量的值是否是 undefined
@@ -1056,6 +1057,29 @@ Jet().$package(function(J){
 		return format;
 	};
 	
+	/*
+	var Class = {
+	   create: function() {
+	     return function() {
+	       this.initialize.apply(this, arguments);
+	     }
+	   }
+	}
+	 */
+	
+	Class = function(obj){
+		var tempClass = function() {
+			this.init.apply(this, arguments);
+		}
+		tempClass.prototype = obj;
+		return tempClass;
+	};
+	
+	
+
+
+	
+	
 	
 	J.isUndefined = isUndefined;
 	J.isNull = isNull;
@@ -1089,6 +1113,8 @@ Jet().$package(function(J){
 	J.bindNoEvent = bindNoEvent;
 	
 	J.formatDate = formatDate;
+	
+	J.Class = Class;
 
 });
 
