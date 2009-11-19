@@ -403,6 +403,7 @@ Jet().$package(function(J){
 		
 		random,
 		extend,
+		now,
 		timedChunk,
 		forEach,
 		getLength,
@@ -727,7 +728,62 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	extend = function(beExtendObj, extendObj1, extendObj2 /*, ...*/){
+	
+	/*
+	function clone(jsonObj) {   
+	    var buf;   
+	    if (jsonObj instanceof Array) {   
+	        buf = [];   
+	        var i = jsonObj.length;   
+	        while (i--) {   
+	            buf[i] = clone(jsonObj[i]);   
+	        }   
+	        return buf;   
+	    }else if (jsonObj instanceof Object){   
+	        buf = {};   
+	        for (var k in jsonObj) {   
+	            buf[k] = clone(jsonObj[k]);   
+	        }   
+	        return buf;   
+	    }else{   
+	        return jsonObj;   
+	    }   
+	} 
+	Object.prototype.Clone=function(){
+		
+		function CloneModel(){};
+		CloneModel.prototype = this;
+		var objClone=new CloneModel();
+		
+		var strMsg="";
+		for( v in objClone){ 
+			switch (typeof objClone[v]){
+				case "function":
+				//如果是方法，不需要进行clone
+				 
+				break;
+				case "object":
+				///////////////////////////////////////////////////////////////////////
+				//如果是对象，采用Clone重新得到，这样做的目的在于能够进行深度Clone
+				//因为JavaScript是一个Object Based的语言，不然内部对象是指向原来的引用
+				///////////////////////////////////////////////////////////////////////
+				objClone[v]=objClone[v].Clone();
+				 
+				break;
+				default:
+				///////////////////////////////////////////////////////////////////////
+				//其余数据类型情况下全部重新赋值
+				//这样做的目的就是保证数值在内存中的存放是在新对象的空间中
+				//而不仅仅指向Parent Object的一个refrence
+				///////////////////////////////////////////////////////////////////////
+				objClone[v]=objClone[v];
+			} 
+		}
+		return objClone;
+	}
+	*/
+	
+	extend = function(beExtendObj, extendObj1, extendObj2){
     	var a = arguments,
     		i,
     		p,
@@ -736,19 +792,109 @@ Jet().$package(function(J){
     		
     	if(a.length === 1){
     		beExtendObj = this;
+    		i=0;
     	}else{
     		beExtendObj = a[0] || {};
+    		i=1;
     	}
     	
-    	for(i=1; i<arguments.length; i++){
+    	for(; i<arguments.length; i++){
     		extendObj = arguments[i];
 			for(p in extendObj){
-				beExtendObj[p] = extendObj[p];
+				var src = beExtendObj[p],
+					obj = extendObj[p];
+				if ( src === obj ){
+					continue;
+				}
+				
+				if ( obj && typeof obj === "object" && !obj.nodeType && !J.isFunction(obj)){
+					src = beExtendObj[p] = {};
+					src = extend( beExtendObj[p], 
+						// Never move original objects, clone them
+						obj || ( obj.length != null ? [ ] : { } ));
+
+				// Don't bring in undefined values
+				}else if ( obj !== undefined ){
+					beExtendObj[p] = obj;
+				}
 			}
     	}
 
 		return beExtendObj;
     };
+    
+    
+    /*
+	extend = function(beExtendObj, target, extendObj2) {
+		
+		// copy reference to target object
+		var target = arguments[0] || {}, 
+		i = 2, 
+		length = arguments.length, 
+		options;
+	
+	
+		target = arguments[1] || {};
+
+
+	
+		// Handle case when target is a string or something (possible in deep copy)
+		if ( typeof target !== "object" && !J.isFunction(target) ){
+			target = {};
+		}
+		// extend jQuery itself if only one argument is passed
+		if ( length == i ) {
+			target = this;
+			--i;
+		}
+	
+		for ( ; i < length; i++ ){
+			// Only deal with non-null/undefined values
+			if ( (options = arguments[ i ]) != null ){
+				// Extend the base object
+				for ( var name in options ) {
+					var src = target[ name ], 
+						copy = options[ name ];
+	
+					// Prevent never-ending loop
+					if ( target === copy ){
+						continue;
+					}
+					// Recurse if we're merging object values
+					if ( copy && typeof copy === "object" && !copy.nodeType ){
+						target[ name ] = extend( target, 
+							// Never move original objects, clone them
+							src || ( copy.length != null ? [ ] : { } )
+						, copy );
+	
+					// Don't bring in undefined values
+					}else if ( copy !== undefined ){
+						target[ name ] = copy;
+					}
+				}
+			}
+		}
+		// Return the modified object
+		return target;
+	};
+    */
+    
+    /**
+	 * 获取当前时间的函数
+	 * 
+	 * @method now
+	 * @memberOf Jet.prototype
+	 * 
+	 * 
+	 * 
+	 * @example
+	 * alert(J.now());
+	 * 
+	 */
+    now = function(){
+		return +new Date;
+	}
+	
     
 	/**
 	 * 通用分时处理函数
@@ -1082,6 +1228,8 @@ Jet().$package(function(J){
 	J.getLength = getLength;
 	J.random = random;
 	J.extend = extend;
+	
+	J.now = now;
 	J.timedChunk = timedChunk;
 	
 	
@@ -2359,6 +2507,7 @@ Jet().$package(function(J){
 	// init debug console
 	if (!topNamespace.console) {
 	    console = topNamespace.console = {
+	    	out: function() {},
 	        log: function() {},
 	        debug: function() {},
 	        info: function() {},
