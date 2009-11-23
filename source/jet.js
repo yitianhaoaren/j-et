@@ -2355,20 +2355,25 @@ Jet().$package(function(J){
 		 adjustBehaviors();
 	}
 	
+	var filterDot = function(string){
+		//return J.string.replaceAll(string, "\.", "_");
+		return String(string).replace(/\./gi,"_");
+	};
+	
 	// 给html标签添加不同浏览器的参数className
 	var addHtmlClassName = function() {
 		var htmlTag = document.documentElement;
     	htmlClassName = [htmlTag.className];
     	htmlClassName.push('javascriptEnabled');
     	htmlClassName.push(platform.name);
-    	htmlClassName.push(platform.name + platform.version);
+    	htmlClassName.push(platform.name + filterDot(platform.version));
     	htmlClassName.push(browser.name);
-    	htmlClassName.push(browser.name + browser.version);
+    	htmlClassName.push(browser.name + filterDot(browser.version));
     	htmlClassName.push(engine.name);
-    	htmlClassName.push(engine.name + engine.version);
+    	htmlClassName.push(engine.name + filterDot(engine.version));
     	if(browser.plugins.flash){
     		htmlClassName.push("flash");
-    		htmlClassName.push("flash" + browser.plugins.flash);
+    		htmlClassName.push("flash" + filterDot(browser.plugins.flash));
     	}
     	htmlTag.className = htmlClassName.join(' ');
 	}
