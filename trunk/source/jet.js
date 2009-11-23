@@ -2576,6 +2576,9 @@ Jet().$package(function(J){
 		replaceClass,
 		setStyle,
 		getStyle,
+		setCssText,
+		getCssText,
+		addCssText,
 		show,
 		recover,
 		hide,
@@ -3075,6 +3078,46 @@ Jet().$package(function(J){
     
     /**
 	 * 
+	 * 给元素添加cssText
+	 *  
+	 * @method addCssText
+	 * @memberOf dom
+	 * 
+	 * @param {Element} el 元素
+	 * @param {String} cssText css 属性
+	 */
+    addCssText = function(el, cssText){
+    	el.style.cssText += ';' + cssText;
+    };
+    
+    /**
+	 * 
+	 * 给元素设置cssText
+	 *  
+	 * @method setCssText
+	 * @memberOf dom
+	 * 
+	 * @param {Element} el 元素
+	 * @param {String} cssText css 属性
+	 */
+    setCssText = function(el, cssText){
+    	el.style.cssText = cssText;
+    };
+    /**
+	 * 
+	 * 获取元素的cssText
+	 *  
+	 * @method getCssText
+	 * @memberOf dom
+	 * 
+	 * @param {Element} el 元素
+	 */
+    getCssText = function(el){
+    	return el.style.cssText;
+    };
+    
+    /**
+	 * 
 	 * 显示元素
 	 * 
 	 * @method show
@@ -3352,6 +3395,10 @@ Jet().$package(function(J){
 	
 	$D.setStyle = setStyle;
 	$D.getStyle = getStyle;
+	
+	$D.setCssText = setCssText;
+	$D.getCssText = getCssText;
+	$D.addCssText = addCssText;
 	
 	$D.show = show;
 	$D.recover = recover;
