@@ -6,12 +6,7 @@
 <link href="../../source/jet.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 
-.styleA{
-	border:1px solid blue;
-	width:200px;
-	height:100px;
-	overflow:hidden;
-}
+
 .styleB{
 	padding:5px 0;
 }
@@ -21,12 +16,12 @@
 <body>
 	<div id="Div1" class="styleA">bbbbbb</div>
 	<div class="styleB">
-		<label>属性名：</label><input id="styleName" type="text" size="35" value="backgroundColor" />
-		<label>值：</label><input id="styleValue" type="text" size="35" value="red" />
+		<label>cssText：</label><input id="cssText" type="text" size="35" value="width:300px;height:200px;background:red;" />
 	</div>
 	<div class="styleB">
 		<input id="setButton" type="button" size="35" value="设置样式" />
 		<input id="getButton" type="button" size="35" value="获取样式" />
+		<input id="addButton" type="button" size="35" value="添加样式" />
 	</div>
 	
 
@@ -39,28 +34,38 @@
 		var $D=J.dom;
 		var $E=J.event;
 		var Div1 = $("Div1");
-		var styleName = $("styleName");
-		var styleValue = $("styleValue");
+		var cssText = $("cssText");
 		var setButton = $("setButton");
 		var getButton = $("getButton");
+		var addButton = $("addButton");
+		
+		
+		$D.setCssText(Div1, "color:green; border:1px solid blue; width:200px; height:100px;	color:green; overflow:hidden;");
 
 		var fnSet1 = function(e){
-			$D.setStyle(Div1, styleName.value, styleValue.value);
+			$D.setCssText(Div1, cssText.value);
 
 		};
 		var fnSet2 = function(e){
 			if(e.keyCode == 13){
-				$D.setStyle(Div1, styleName.value, styleValue.value);
+				$D.setCssText(Div1, cssText.value);
 			}
 		};
 		var fn2 = function(e){
-			J.out($D.getStyle(Div1, styleName.value));
+			alert($D.getCssText(Div1));
 		};
 		
-		$E.on(styleValue, "keypress", fnSet2);
+		var fnSet3 = function(e){
+			$D.addCssText(Div1, cssText.value);
+
+		};
+		
+
+		$E.on(cssText, "keypress", fnSet2);
 		$E.on(setButton, "click", fnSet1);
 		$E.on(getButton, "click", fn2);
-
+		$E.on(addButton, "click", fnSet3);
+		
 
 	</script>
 </body>
