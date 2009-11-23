@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Tween 动画 - JET</title>
+	<title>move 动画 - JET</title>
 	<style>
 		#box{
 			position:relative;
@@ -30,7 +30,7 @@
 
 			//////////////////////////////////////////////////////////
 
-			var fun = $T.Quart.easeIn, iDuration = 100;
+			var fun = $T.Elastic.easeInOut, iDuration = 100;
 
 			function start(){
 				var oM = $("box").style, t=0, c=500, d=iDuration;
