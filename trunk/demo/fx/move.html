@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Tween 动画 - JET</title>
+	<style>
+		#box{
+			position:relative;
+			width:100px;
+			background:blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		123
+	</div>
+	<div>
+	  <input id="start" type="button" value=" 开始 " />
+	</div>
+	
+	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.fx.js"></script>
+	<script>
+		Jet().$package(function(J){
+			var $ = J.dom.id,
+				$D = J.dom,
+				$E = J.event,
+				$T = J.fx.tween;
+
+			//////////////////////////////////////////////////////////
+
+			var fun = $T.Quart.easeIn, iDuration = 100;
+
+			function start(){
+				var oM = $("box").style, t=0, c=500, d=iDuration;
+				oM.left="0px";
+				clearTimeout(start._t);
+				
+				function _run(){
+					if(t<d){
+						t++;
+						/*
+						t: current time（当前时间）；
+						b: beginning value（初始值）；
+						c: change in value（变化量）；
+						d: duration（持续时间）。
+
+						*/
+						oM.left = Math.ceil(fun(t,0,c,d)) + "px";
+						start._t = setTimeout(_run, 10);
+					}else{
+						oM.left = c + "px";
+
+					}
+				}
+				_run();
+			}
+
+			////////////////////////////////////////////////////////
+
+			$E.on($("start"),"click", function(){
+				start();
+			});
+			
+		});
+	</script>
+</body>
+</html>
