@@ -3,29 +3,29 @@
 
 = 文件说明 =
 {{{
-./build/     (压缩后的JET文件)
-./demo/      (JET演示文档)
-./doc/       (JET说明文档)
-./sdk/
-    +- [jre6]             (java虚拟机目录)
-    +- [jsdoc-toolkit]    (jsdoc文档生成工具)
+./build/     [压缩后的JET文件]
+./demo/      [JET演示文档]
+./doc/       [JET说明文档]
+./sdk/       [开发工具箱]
+    +- [jre6]             [java虚拟机目录]
+    +- [jsdoc-toolkit]    [jsdoc文档生成工具]
     |- compress-with-yuicompressor.bat        (JET的源代码压缩脚本)
     |- generate-doc-with-jsdos-toolkit.bat    (JET文档生成脚本)
     |- yuicompressor-2.4.2.jar                (yuicompressor主程序)
-./source/    (JET源代码)
-    +- [assets]       (css等相关文件)
-    +- [firebug]      (firebug控制台相关文件)
-    |- jet.exp.js            (JET通用扩展)
-    |- jet.i18n.js           (JET国际化)
-    |- jet.js                (JET核心)
-    |- jet.cssquery.js   (JET的cssQuery选择器包)
-    |- jet.fx.js     (JET的fx动画包)
-    |- jet.jquery.js     (JET的jQuery模块包)
-    |- jet.json.js       (JET的json模块包)
-    |- jet.mini.js     (JET的mini选择器包)
-    |- jet.sizzle.js     (JET的sizzle模块包)
-    |- jet.ui.js     (JET的ui模块包)
-    |- jet.xpath.js      (JET的xpath模块包)
+./source/    [JET源代码]
+    +- [assets]       [css等相关文件]
+    +- [firebug]      [firebug控制台相关文件]
+    |- jet.exp.js          (JET通用扩展)
+    |- jet.i18n.js         (JET国际化)
+    |- jet.js              (JET核心)
+    |- jet.cssquery.js     (JET的cssQuery选择器包)
+    |- jet.fx.js           (JET的fx动画包)
+    |- jet.jquery.js       (JET的jQuery模块包)
+    |- jet.json.js         (JET的json模块包)
+    |- jet.mini.js         (JET的mini选择器包)
+    |- jet.sizzle.js       (JET的sizzle模块包)
+    |- jet.ui.js           (JET的ui模块包)
+    |- jet.xpath.js        (JET的xpath模块包)
 
 }}}
 
