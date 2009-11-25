@@ -1,4 +1,5 @@
 #summary JET 更新日志
+#labels Featured
 
 === 2009.11.22 ===
 
