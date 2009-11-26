@@ -2741,7 +2741,16 @@ Jet().$package(function(J){
         	n = d.createElement(type);
 
         for (p in attrObj) {
-			n.setAttribute(p, attrObj[p]);
+        	var map = {
+        		"class":function(){
+        			n.className = attrObj[p];
+        		}
+        	}
+			if(map[p]){
+				map[p]();
+			}else{
+				n.setAttribute(p, attrObj[p]);
+			}
         }
 
         return n;
