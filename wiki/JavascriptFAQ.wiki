@@ -396,3 +396,51 @@ time1:1756，time2:9003
 time1:1575，time2:9040
 
      可以看出，在firefox下，之间函数调用的效率基本上比eval方式快5倍，另外从这里也可以看出firefox在dom element query的性能明显比IE好得多。
+
+
+=== 7.Javascript触发A标记的点击事件 ===
+
+问题：有一个列表，每一个条目都是这篇文章的部分内容，类似这样：
+{{{
+<div class="list">
+ 
+<div class ="item">
+第一篇文章
+</div>
+ 
+<div class ="item">
+第二篇文章
+</div>
+.....
+</div>
+}}}
+而且在每个条目的div的右上角都有一个“评论”链接，点击就会展开所有的评论，并且显示评论框，这个链接的形式如下：
+{{{
+<a class="comment-mod" href="#">评论</a>
+}}}
+如果用户直接查看文章列表，那么所有的评论以及评论框都是不显示的，但是如果用户通过别的页面比如首页的个人动态直接定位到这篇日志，那么评论就应该全部显示。而列表页和查看单个条目的页面是同一个页面，这就要求我判断一下用户是否定位到该篇日志，如果是，就通过JS来触发 A 标签的点击事件。
+一开始我尝试了一些方法，想当然地以为 A 标签和按钮一样是有 onclick() 事件的，结果发现没有，后来从网上搜了一些资料之后，成功解决了这个问题^_^ 。解决办法是针对 IE 和 FF编写不同的逻辑，部分代码如下：
+{{{
+var comment = document.getElementsByTagName('a')[0];
+ 
+if (document.all) {
+ // For IE 
+ 
+comment.click();
+} else if (document.createEvent) {
+   //FOR DOM2
+ 
+var ev = document.createEvent('HTMLEvents');
+ ev.initEvent('click', false, true);
+ comment.dispatchEvent(ev);
+}
+
+}}}
+
+上面的代码在IE6, IE7 和 FireFox 3 下通过测试。
+一点学习心得，记录在此。
+参考资料：http://ued.koubei.com/?p=400
+
+
+
+=== 8. ===
