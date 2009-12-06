@@ -2325,14 +2325,19 @@ Jet().$package(function(J){
     */
 	
     // 探测浏览器的内核并存入 browser.engine 对象
-	if(browser.ie && browser.ie < 7){
-		engine.set("trident", toFixedVersion("4"));
-	}
+	
     (s = ua.match(/trident\/([\d.]+)/)) ? engine.set("trident",toFixedVersion(s[1])):
     (s = ua.match(/gecko\/([\d.]+)/)) ? engine.set("gecko",toFixedVersion(s[1])) :
     (s = ua.match(/applewebkit\/([\d.]+)/)) ? engine.set("webkit",toFixedVersion(s[1])) :
     (s = ua.match(/presto\/([\d.]+)/)) ? engine.set("presto",toFixedVersion(s[1])) : 0;
-	
+    
+	if(browser.ie){
+		if(browser.ie == 6){
+			engine.set("trident", toFixedVersion("4"));
+		}else if(browser.ie == 7 || browser.ie == 8){
+			engine.set("trident", toFixedVersion("5"));
+		}
+	}
     
     
     /**
@@ -4416,11 +4421,10 @@ Jet().$package(function(J){
 
         // webkit prior to 3.x is no longer supported
         }else if(J.browser.engine.webkit){
-
+			
             // Safari 3.x supports the load event for script nodes (DOM2)
             $E.on(node, "load", function(){
             	var o;
-            	
                 if(!isTimeout){
                 	isComplete = true;
                 	window.clearTimeout(timer);
