@@ -409,12 +409,12 @@ Jet().$package(function(J){
 		getLength,
 		emptyFn,
 		toArray,
+		toString,
 		clone,
 		$return,
 		$try,
 		
-		removeArr,
-		replaceArr,
+
 		rebuild,
 		pass,
 		bind,
@@ -621,6 +621,19 @@ Jet().$package(function(J){
 	toArray = function(o){
 		var type = $typeof(o);
 		return (type) ? ((type != 'array' && type != 'arguments') ? [o] : o) : [];
+	};
+	
+	/**
+	 * 将任意变量转换为字符串的方法
+	 * 
+	 * @method toString
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {Mixed} o 任意变量
+	 * @return {String} 返回转换后的字符串
+	 */
+	toString = function(o){
+		return (o + "");
 	};
 	
 	/**
@@ -1008,46 +1021,7 @@ Jet().$package(function(J){
     emptyFn = function(){};
     
 
-    
-    /**
-	 * 从数组中移除一个或多个数组成员
-	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
-	 */
-	removeArr = function(arr, members){
-		var members = J.toArray(members),
-			i,
-			j;
-		for(i=0; i<members.length; i++){
-			for(j=0; j<arr.length; j++){
-				if(arr[j] === members[i]){
-					arr.splice(j,1);
-				}
-			}
-		}
-		return true;
-	};
-	
-	/**
-	 * 替换一个数组成员
-	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Object} oldValue 当前数组成员
-	 * @param {Object} newValue 要替换成的值
-	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
-	 */
-	replaceArr = function(arr, oldValue, newValue){
-		var i;
-		for(i=0; i<arr.length; ij++){
-			if(arr[i] === oldValue){
-				arr[i] = newValue;
-				return true;
-			}
-		}
-		return false;
-	};
-		
+
 		
 	/**
 	 * 函数的重构方法
@@ -1238,8 +1212,7 @@ Jet().$package(function(J){
 	J.$try = $try;
 	
 	J.toArray = toArray;
-	J.removeArr = removeArr;
-	J.replaceArr = replaceArr;
+	J.toString = toString;
 	
 	J.rebuild = rebuild;
 	J.pass = pass;
@@ -1760,7 +1733,9 @@ Jet().$package(function(J){
 	 */
 	J.array = J.array || {};
 	var $A = J.array,
-		indexOf;
+		indexOf,
+		remove,
+		replace;
 	
 	
 	
@@ -1791,7 +1766,51 @@ Jet().$package(function(J){
         return -1;
     };
     
+    
+        
+    /**
+	 * 从数组中移除一个或多个数组成员
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
+	 */
+	remove = function(arr, members){
+		var members = J.toArray(members),
+			i,
+			j;
+		for(i=0; i<members.length; i++){
+			for(j=0; j<arr.length; j++){
+				if(arr[j] === members[i]){
+					arr.splice(j,1);
+				}
+			}
+		}
+		return true;
+	};
+	
+	/**
+	 * 替换一个数组成员
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Object} oldValue 当前数组成员
+	 * @param {Object} newValue 要替换成的值
+	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
+	 */
+	replace = function(arr, oldValue, newValue){
+		var i;
+		for(i=0; i<arr.length; ij++){
+			if(arr[i] === oldValue){
+				arr[i] = newValue;
+				return true;
+			}
+		}
+		return false;
+	};
+		
+    
     $A.indexOf = indexOf;
+    $A.remove = remove;
+    $A.replace = replace;
     
 });
 
