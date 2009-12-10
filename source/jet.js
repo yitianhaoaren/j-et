@@ -3949,22 +3949,24 @@ Jet().$package(function(J){
 	 */
 	onDomReady = function( f ) {
 	    // If the DOM is already loaded, execute the function right away
-	    if ( onDomReady.done ) return f();
+	    if ( onDomReady.done ) {
+	    	return f();
+	    }
 	
 	    // If we’ve already added a function
 	    if ( onDomReady.timer ) {
 	        // Add it to the list of functions to execute
-	        onDomReady.ready.push( f  );
+	        onDomReady.ready.push( f );
 	    } else {
+	        // 初始化onDomReady后要执行的function的数组
+	        onDomReady.ready = [ f ];
+	        
 	        // Attach an event for when the page finishes  loading,
 	        // just in case it finishes first. Uses addEvent.
 	        $E.on(window, "load", isDomReady);
 	
-	        // Initialize the array of functions to execute
-	        onDomReady.ready = [ f ];
-	
 	        //  Check to see if the DOM is ready as quickly as possible
-	        onDomReady.timer = setInterval( isDomReady, 300 );
+	        onDomReady.timer = window.setInterval( isDomReady, 300 );
 	    }
 	}
 	
@@ -3982,26 +3984,31 @@ Jet().$package(function(J){
 	// Checks to see if the DOM is ready for navigation
 	isDomReady = function() {
 	    // If we already figured out that the page is ready, ignore
-	    if ( onDomReady.done ) return false;
+	    if ( onDomReady.done ) {
+	    	return true;
+	    }
 	
 	    // Check to see if a number of functions and elements are
 	    // able to be accessed
-	    if ( document && document.getElementsByTagName && 
-	          document.getElementById && document.body ) {
-	
+	    if ( document && document.getElementsByTagName && document.getElementById && document.body ) {
+	    	// Remember that we’re now done
+			onDomReady.done = true;
+			
 	        // If they’re ready, we can stop checking
-	        clearInterval( onDomReady.timer );
+	        window.clearInterval( onDomReady.timer );
 	        onDomReady.timer = null;
 	
 	        // Execute all the functions that were waiting
-	        for ( var i = 0; i < onDomReady.ready.length; i++ )
+	        for ( var i = 0; i < onDomReady.ready.length; i++ ){
 	            onDomReady.ready[i]();
-	
-	        // Remember that we’re now done
+	        }
+
 	        onDomReady.ready = null;
-	        onDomReady.done = true;
+	        
+	        return true;
 	    }
 	}
+	
 	
 	
 	
