@@ -820,7 +820,7 @@ Jet().$package(function(J){
 					continue;
 				}
 				
-				if ( obj && typeof obj === "object" && !obj.nodeType && !J.isFunction(obj)){
+				if ( obj && isObject(obj) && !obj.nodeType && !isFunction(obj)){
 					src = beExtendObj[p] = {};
 					src = extend( beExtendObj[p], 
 						// Never move original objects, clone them
@@ -1777,15 +1777,17 @@ Jet().$package(function(J){
 	remove = function(arr, members){
 		var members = J.toArray(members),
 			i,
-			j;
+			j,
+			flag = false;
 		for(i=0; i<members.length; i++){
 			for(j=0; j<arr.length; j++){
 				if(arr[j] === members[i]){
 					arr.splice(j,1);
+					flag = true;
 				}
 			}
 		}
-		return true;
+		return flag;
 	};
 	
 	/**
@@ -5018,6 +5020,7 @@ Jet().$package(function(J){
 		},
 
 		log: function(msg, type){
+			
 			this._log_record.push([msg,type]);
 		},
 
@@ -5066,6 +5069,8 @@ Jet().$package(function(J){
 			J.console._inputEl.value = "";
 		}
 	});
+	
+	//alert(J.$typeof(J.console._log_record));
 	
 	var topNamespace = this;
 	if(J.query.console){
