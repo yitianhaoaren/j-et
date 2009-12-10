@@ -5072,7 +5072,7 @@ Jet().$package(function(J){
 	
 	//alert(J.$typeof(J.console._log_record));
 	
-	var topNamespace = this;
+	var topNamespace = window;
 	if(J.query.console){
 		
 		if(J.query.console == "firebug"){
