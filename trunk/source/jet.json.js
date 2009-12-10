@@ -509,7 +509,7 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 }());
 
 
-	J.JSON = JSON;
+	J.json = JSON;
 
 
 });
