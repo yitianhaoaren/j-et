@@ -4,8 +4,7 @@
 = 国内Javascript框架列表 =
 (字母顺序)
 
-  * Como [http://comsome.com/] - kevincomo@gmail.com
-  * JET [http://code.google.com/p/j-et/] - kinvix@gmail.com
-  * JSI [http://code.google.com/p/jsi/] - 五风楼客 
-  * KindEditor [http://code.google.com/p/kindeditor/] - luolonghao@gmail.com
-
+  * *Como* [http://comsome.com/] - kevincomo@gmail.com
+  * *JET* [http://code.google.com/p/j-et/] - kinvix@gmail.com
+  * *JSI* [http://code.google.com/p/jsi/] - 五风楼客 
+  * *KindEditor* [http://code.google.com/p/kindeditor/] - luolonghao@gmail.com
