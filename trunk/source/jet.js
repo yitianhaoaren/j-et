@@ -2620,6 +2620,8 @@ Jet().$package(function(J){
 		getScrollWidth,
 		getClientHeight,
 		getClientWidth,
+		getOffsetHeight,
+		getOffsetWidth,
 		getClientXY,
 		setClientXY,
 		getXY,
@@ -2834,14 +2836,9 @@ Jet().$package(function(J){
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
     getClientHeight = function(el) {
-    	var name = J.browser.engine.name;
-    	if(name=="webkit" || name=="presto"){
-    		el = el || w;
-    		return el.innerHeight; // Safari, Opera
-    	}else{
-    		el = el || documentElement;
-    		return el.clientHeight; // IE, Gecko
-    	}
+    	el = el || w;
+    	// IE, Gecko || Safari, Opera
+    	return el.clientHeight || el.innerHeight;
     };
     
     /**
@@ -2854,14 +2851,37 @@ Jet().$package(function(J){
      */
     
     getClientWidth = function(el) {
-    	var name = J.browser.engine.name;
-    	if(name==="webkit" || name==="presto"){
-    		el = el || w;
-    		return el.innerWidth; // Safari, Opera
-    	}else{
-    		el = el || documentElement;
-    		return el.clientWidth; // IE, Gecko
-    	}
+    	el = el || documentElement;
+    	// IE, Gecko || Safari, Opera
+    	return el.clientWidth || el.innerWidth;
+    };
+    
+    
+        /**
+     * 获取当前视窗的高度
+     * Returns the current height of the viewport.
+     * 
+     * @method getViewportHeight
+     * @memberOf dom
+     * @return {Int} The height of the viewable area of the page (excludes scrollbars).
+     */
+    getOffsetHeight = function(el) {
+    	el = el || documentElement;
+    	return el.offsetHeight;
+    };
+    
+    /**
+     * 获取元素的client宽度
+     * Returns the current width of the viewport.
+     * @method getViewportWidth
+     * @memberOf dom
+     * @param {Element} el 要获取client宽度的元素
+     * @return {Number} 宽度值.
+     */
+    
+    getOffsetWidth = function(el) {
+    	el = el || documentElement;
+    	return el.offsetWidth;
     };
     
     /**
@@ -3349,15 +3369,15 @@ Jet().$package(function(J){
 	}
 	
 	/**
-	 * 获取对象坐标
+	 * 获取选择的文本
 	 *
-	 * @method getSelection
+	 * @method getSelectionText
 	 * @memberOf dom
 	 * 
 	 * @param {Window} win
 	 * @return {String} 返回选择的文本
 	 */
-	getSelection = function(win) {
+	getSelectionText = function(win) {
 		win = win || window;
 		doc = win.document;
 		if (win.getSelection) {
@@ -3385,11 +3405,11 @@ Jet().$package(function(J){
 	 * @param {HTMLElement} el
 	 * @return {String} 返回选择的文本
 	 */
-	getTextFieldSelection = function(e) {
-		if (e.selectionStart != undefined && e.selectionEnd != undefined) {
-			var start = e.selectionStart;
-			var end = e.selectionEnd;
-			return e.value.substring(start, end);
+	getTextFieldSelection = function(el) {
+		if (el.selectionStart != undefined && el.selectionEnd != undefined) {
+			var start = el.selectionStart;
+			var end = el.selectionEnd;
+			return el.value.substring(start, end);
 		}else{
 			return ""; // Not supported on this browser
 		}
@@ -3455,6 +3475,9 @@ Jet().$package(function(J){
 	
 	$D.getClientHeight = getClientHeight;
 	$D.getClientWidth = getClientWidth;
+	
+	$D.getOffsetHeight = getOffsetHeight;
+	$D.getOffsetWidth = getOffsetWidth;
 	
 	$D.getClientXY = getClientXY;
 	$D.setClientXY = setClientXY;
