@@ -17,34 +17,50 @@
 Jet().$package(function(J){
 	var $D = J.dom,
 		$E = J.event;
-		
-	J.drag = function(el){
-		var curDragElementX, curDragElementY, dragStartX, dragStartY;
+
+	J.Drag = new J.Class({
+		init:function(apperceiveEl, effectEl){
+			var curDragElementX, curDragElementY, dragStartX, dragStartY;
+			this.apperceiveEl = apperceiveEl;
+			this.effectEl = effectEl || apperceiveEl;
+			
+			var context = this;
+			
+			this.dragStart = function(e){
+				e.preventDefault();
+				curDragElementX = parseInt($D.getStyle(context.effectEl,"left")) || 0;
+				curDragElementY = parseInt($D.getStyle(context.effectEl,"top")) || 0;
+				dragStartX = e.pageX;
+				dragStartY = e.pageY;
+				$E.on(document, "mousemove", context.dragMove);
+				$E.on(document, "mouseup", context.dragStop);
+			};
 	
-		var dragStart = function(e){
-			e.preventDefault();
-			curDragElementX = parseInt($D.getStyle(el,"left")) || 0;
-			curDragElementY = parseInt($D.getStyle(el,"top")) || 0;
-			dragStartX = e.pageX;
-			dragStartY = e.pageY;
-			$E.on(document, "mousemove", dragMove);
-			$E.on(document, "mouseup", dragStop);
-		};
-
-		var dragMove = function(e){
-			if(!el){
-				return;
-			}
-			el.style.left=curDragElementX+(e.pageX-dragStartX)+"px";
-			el.style.top=curDragElementY+(e.pageY-dragStartY)+"px";
-		};
-
-		var dragStop = function(e){  
-			$E.off(document,"mousemove",dragMove);
-			$E.off(document,"mouseup",dragStop);
-		};
-		$E.on(el,"mousedown",dragStart);
-	};
+			this.dragMove = function(e){
+				if(!context.effectEl){
+					return;
+				}
+				context.effectEl.style.left = curDragElementX+(e.pageX-dragStartX)+"px";
+				context.effectEl.style.top = curDragElementY+(e.pageY-dragStartY)+"px";
+			};
+	
+			this.dragStop = function(e){
+				$E.off(document, "mousemove", context.dragMove);
+				$E.off(document, "mouseup", context.dragStop);
+			};
+			
+			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
+		},
+		lock : function() {
+			$E.off(this.apperceiveEl, "mousedown", this.dragStart);
+		},
+		unlock : function(){
+			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
+		}
+	});
+	
+	
+	
 });
 
 
