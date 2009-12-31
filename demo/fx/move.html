@@ -23,44 +23,18 @@
 	<script type="text/javascript" src="../../source/jet.fx.js"></script>
 	<script>
 		Jet().$package(function(J){
-			var $ = J.dom.id,
-				$D = J.dom,
+			var $D = J.dom,
 				$E = J.event,
 				$T = J.fx.tween;
 
-			//////////////////////////////////////////////////////////
-
-			var fun = $T.Elastic.easeInOut, iDuration = 100;
-
-			function start(){
-				var oM = $("box").style, t=0, c=500, d=iDuration;
-				oM.left="0px";
-				clearTimeout(start._t);
-				
-				function _run(){
-					if(t<d){
-						t++;
-						/*
-						t: current time（当前时间）；
-						b: beginning value（初始值）；
-						c: change in value（变化量）；
-						d: duration（持续时间）。
-
-						*/
-						oM.left = Math.ceil(fun(t,0,c,d)) + "px";
-						start._t = setTimeout(_run, 10);
-					}else{
-						oM.left = c + "px";
-
-					}
-				}
-				_run();
-			}
 
 			////////////////////////////////////////////////////////
 
-			$E.on($("start"),"click", function(){
-				start();
+			$E.on($D.id("start"),"click", function(){
+				var box = $D.id("box");
+				
+				var a = new J.fx.Animation(box, "left", 100, 100, $T.Elastic.easeInOut);
+				a.start();
 			});
 			
 		});

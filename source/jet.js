@@ -407,7 +407,7 @@ Jet().$package(function(J){
 		timedChunk,
 		forEach,
 		getLength,
-		emptyFn,
+		emptyFunc,
 		toArray,
 		toString,
 		clone,
@@ -1018,7 +1018,7 @@ Jet().$package(function(J){
 	 * 
 	 * @memberOf Jet.prototype
 	 */
-    emptyFn = function(){};
+    emptyFunc = function(){};
     
 
 
@@ -1207,7 +1207,7 @@ Jet().$package(function(J){
 	J.timedChunk = timedChunk;
 	
 	
-	J.emptyFn = emptyFn;
+	J.emptyFunc = emptyFunc;
 	J.$return = $return;
 	J.$try = $try;
 	
@@ -2611,6 +2611,7 @@ Jet().$package(function(J){
 		getCssText,
 		addCssText,
 		show,
+		isShow,
 		recover,
 		hide,
 		
@@ -2836,9 +2837,14 @@ Jet().$package(function(J){
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
     getClientHeight = function(el) {
-    	el = el || w;
-    	// IE, Gecko || Safari, Opera
-    	return el.clientHeight || el.innerHeight;
+    	var name = J.browser.engine.name;
+    	if(name=="webkit" || name=="presto"){
+    		el = el || w;
+    		return el.innerHeight; // Safari, Opera
+    	}else{
+    		el = el || documentElement;
+    		return el.clientHeight; // IE, Gecko
+    	}
     };
     
     /**
@@ -2851,9 +2857,14 @@ Jet().$package(function(J){
      */
     
     getClientWidth = function(el) {
-    	el = el || documentElement;
-    	// IE, Gecko || Safari, Opera
-    	return el.clientWidth || el.innerWidth;
+    	var name = J.browser.engine.name;
+    	if(name==="webkit" || name==="presto"){
+    		el = el || w;
+    		return el.innerWidth; // Safari, Opera
+    	}else{
+    		el = el || documentElement;
+    		return el.clientWidth; // IE, Gecko
+    	}
     };
     
     
@@ -2866,8 +2877,14 @@ Jet().$package(function(J){
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
     getOffsetHeight = function(el) {
-    	el = el || documentElement;
-    	return el.offsetHeight;
+    	var name = J.browser.engine.name;
+    	if(name=="webkit" || name=="presto"){
+    		el = el || w;
+    		return el.offsetHeight; // Safari, Opera
+    	}else{
+    		el = el || documentElement;
+    		return el.offsetHeight; // IE, Gecko
+    	}
     };
     
     /**
@@ -2880,8 +2897,14 @@ Jet().$package(function(J){
      */
     
     getOffsetWidth = function(el) {
-    	el = el || documentElement;
-    	return el.offsetWidth;
+    	var name = J.browser.engine.name;
+    	if(name==="webkit" || name==="presto"){
+    		el = el || w;
+    		return el.offsetWidth; // Safari, Opera
+    	}else{
+    		el = el || documentElement;
+    		return el.offsetWidth; // IE, Gecko
+    	}
     };
     
     /**
@@ -3212,6 +3235,24 @@ Jet().$package(function(J){
     
     /**
 	 * 
+	 * 判断元素是否是显示状态
+	 * 
+	 * @method isShow
+	 * @memberOf dom
+	 * 
+	 * @param {Element} el 元素
+	 */
+    isShow = function(el){
+    	var display = getStyle(el, "display");
+    	if(display === "none"){
+    		return false;
+    	}else{
+    		return true;
+    	}
+    };
+    
+    /**
+	 * 
 	 * 还原元素原来的display属性
 	 * 
 	 * @method recover
@@ -3464,6 +3505,7 @@ Jet().$package(function(J){
 	$D.addCssText = addCssText;
 	
 	$D.show = show;
+	$D.isShow = isShow;
 	$D.recover = recover;
 	$D.hide = hide;
 	
@@ -4781,7 +4823,7 @@ Jet().$package(function(J){
 		 * @param {number} time 响应时间
 		 * @ignore
 		 */
-		receive : J.emptyFn,
+		receive : J.emptyFunc,
 	
 		/**
 		 * 添加监控规则,
@@ -4797,7 +4839,7 @@ Jet().$package(function(J){
 		 * J.Report.addRule("http://imgcache.qq.com/data2.js","http://imgcache.qq.com/ok?flag1=3234&flag2=%status%&1=%percent%&flag4=123456");
 		 * @ignore
 		 */
-		addRule : J.emptyFn
+		addRule : J.emptyFunc
 	};
 	
 	

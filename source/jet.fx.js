@@ -22,6 +22,9 @@ Jet().$package(function(J){
  * tween模块
  */
 Jet().$package(function(J){
+	var $D = J.dom,
+		$E = J.event,
+		$T = J.fx.tween;
 	/*
 	http://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html
 	
@@ -196,7 +199,52 @@ Jet().$package(function(J){
 			}
 		}
 	}
+	
+	
+	var Animation = new J.Class({
+		init : function(el, style, begin, end, fx, total){
+			var current = 0,
+				fx = fx,
+				total = total || 20;
+				
+			clearTimeout(this._timer);
+			
+			if(begin > end){
+				
+			}else{
+				
+			}
+			var value;
+			var _run = this._run = function(){
 
+				if(current < total){
+					current++;
+					/*
+					current:当前比率
+					begin:0%时输出的实际值
+					end:100%时输出的实际值
+					total:总比率
+					*/
+					value = Math.ceil(fx(current, begin, end, total));
+					$D.setStyle(el, style, value + "px");
+					this._timer = setTimeout(_run, 30);
+				}else{
+					//$D.setStyle(el, style, end + "px"));
+					$E.notifyObservers(this, "finish");
+				}
+			};
+		
+			
+			
+		},
+
+		start : function(){
+			this._run();
+		}
+	});
+	
+	
+	J.fx.Animation = Animation;
 	J.fx.tween = tween;
 });
 
