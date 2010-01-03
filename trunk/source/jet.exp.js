@@ -40,8 +40,11 @@ Jet().$package(function(J){
 				if(!context.effectEl){
 					return;
 				}
-				context.effectEl.style.left = curDragElementX+(e.pageX-dragStartX)+"px";
-				context.effectEl.style.top = curDragElementY+(e.pageY-dragStartY)+"px";
+				var x = curDragElementX+(e.pageX-dragStartX);
+				var y = curDragElementY+(e.pageY-dragStartY);
+				context.effectEl.style.left = x+"px";
+				context.effectEl.style.top = y+"px";
+				$E.notifyObservers(this, "move",{x:x, y:y});
 			};
 	
 			this.dragStop = function(e){
