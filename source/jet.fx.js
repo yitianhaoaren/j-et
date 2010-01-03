@@ -56,8 +56,11 @@ Jet().$package(function(J){
 
 	*/
 	var tween = {
-		Linear: function(t,b,c,d){ return c*t/d + b; },
-		Quad: {
+		// linear：无缓动效果；
+		linear: function(t,b,c,d){ return c*t/d + b; },
+		
+		// quadratic：二次方的缓动（t^2）；
+		quadratic: {
 			easeIn: function(t,b,c,d){
 				return c*(t/=d)*t + b;
 			},
@@ -69,7 +72,9 @@ Jet().$package(function(J){
 				return -c/2 * ((--t)*(t-2) - 1) + b;
 			}
 		},
-		Cubic: {
+		
+		// cubic：三次方的缓动（t^3）；
+		cubic: {
 			easeIn: function(t,b,c,d){
 				return c*(t/=d)*t*t + b;
 			},
@@ -81,7 +86,9 @@ Jet().$package(function(J){
 				return c/2*((t-=2)*t*t + 2) + b;
 			}
 		},
-		Quart: {
+		
+		// quartic：四次方的缓动（t^4）；
+		quartic: {
 			easeIn: function(t,b,c,d){
 				return c*(t/=d)*t*t*t + b;
 			},
@@ -93,7 +100,9 @@ Jet().$package(function(J){
 				return -c/2 * ((t-=2)*t*t*t - 2) + b;
 			}
 		},
-		Quint: {
+		
+		// quintic：五次方的缓动（t^5）；
+		quintic: {
 			easeIn: function(t,b,c,d){
 				return c*(t/=d)*t*t*t*t + b;
 			},
@@ -105,7 +114,9 @@ Jet().$package(function(J){
 				return c/2*((t-=2)*t*t*t*t + 2) + b;
 			}
 		},
-		Sine: {
+		
+		// sinusoidal：正弦曲线的缓动（sin(t)）；
+		sinusoidal: {
 			easeIn: function(t,b,c,d){
 				return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
 			},
@@ -116,7 +127,9 @@ Jet().$package(function(J){
 				return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
 			}
 		},
-		Expo: {
+		
+		// exponential：指数曲线的缓动（2^t）；
+		exponential: {
 			easeIn: function(t,b,c,d){
 				return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
 			},
@@ -130,7 +143,9 @@ Jet().$package(function(J){
 				return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
 			}
 		},
-		Circ: {
+		
+		// circular：圆形曲线的缓动（sqrt(1-t^2)）；
+		circular: {
 			easeIn: function(t,b,c,d){
 				return -c * (Math.sqrt(1 - (t/=d)*t) - 1) + b;
 			},
@@ -142,7 +157,9 @@ Jet().$package(function(J){
 				return c/2 * (Math.sqrt(1 - (t-=2)*t) + 1) + b;
 			}
 		},
-		Elastic: {
+		
+		// elastic：指数衰减的正弦曲线缓动；
+		elastic: {
 			easeIn: function(t,b,c,d,a,p){
 				if (t==0) return b;  if ((t/=d)==1) return b+c;  if (!p) p=d*.3;
 				if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
@@ -163,7 +180,9 @@ Jet().$package(function(J){
 				return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
 			}
 		},
-		Back: {
+		
+		// back：超过范围的三次方缓动（(s+1)*t^3 - s*t^2）；
+		back: {
 			easeIn: function(t,b,c,d,s){
 				if (s == undefined) s = 1.70158;
 				return c*(t/=d)*t*((s+1)*t - s) + b;
@@ -178,7 +197,9 @@ Jet().$package(function(J){
 				return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
 			}
 		},
-		Bounce: {
+		
+		// bounce：指数衰减的反弹缓动。
+		bounce: {
 			easeIn: function(t,b,c,d){
 				return c - tween.Bounce.easeOut(d-t, 0, c, d) + b;
 			},
@@ -203,34 +224,34 @@ Jet().$package(function(J){
 	
 	var Animation = new J.Class({
 		init : function(el, style, begin, end, fx, total){
-			var current = 0,
-				fx = fx,
-				total = total || 20;
-				
-			clearTimeout(this._timer);
-			
-			if(begin > end){
-				
-			}else{
-				
-			}
-			var value;
-			var _run = this._run = function(){
 
-				if(current < total){
-					current++;
+			var fx = fx,
+				total = total || 20,
+				context = this,
+				value;
+
+
+			var _run = this._run = function(){
+				
+				if(context.current < total){
+					context.current++;
 					/*
 					current:当前比率
 					begin:0%时输出的实际值
 					end:100%时输出的实际值
 					total:总比率
 					*/
-					value = Math.ceil(fx(current, begin, end, total));
+					if(begin > end){
+						value = begin - Math.ceil(fx(context.current, 0, (begin - end), total));
+					}else{
+						value = begin + Math.ceil(fx(context.current, 0, (end - begin), total));
+					}
+					
 					$D.setStyle(el, style, value + "px");
-					this._timer = setTimeout(_run, 30);
+					context._timer = setTimeout(_run, 30);
 				}else{
-					//$D.setStyle(el, style, end + "px"));
-					$E.notifyObservers(this, "finish");
+					//$D.setStyle(el, style, end + "px");
+					$E.notifyObservers(context, "finish");
 				}
 			};
 		
@@ -239,6 +260,9 @@ Jet().$package(function(J){
 		},
 
 		start : function(){
+			clearTimeout(this._timer);
+			this.current = 0;
+			//$D.setStyle(this.el, this.style, this.begin + "px");
 			this._run();
 		}
 	});

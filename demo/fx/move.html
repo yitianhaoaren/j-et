@@ -5,7 +5,8 @@
 	<title>move 动画 - JET</title>
 	<style>
 		#box{
-			position:relative;
+			position:absolute;
+			top:200px;
 			width:100px;
 			background:blue;
 		}
@@ -17,6 +18,7 @@
 	</div>
 	<div>
 	  <input id="start" type="button" value=" 开始 " />
+	  <input id="start2" type="button" value=" 开始2 " />
 	</div>
 	
 	<script type="text/javascript" src="../../source/jet.js"></script>
@@ -26,15 +28,18 @@
 			var $D = J.dom,
 				$E = J.event,
 				$T = J.fx.tween;
-
-
+			var box = $D.id("box");
+			var a = new J.fx.Animation(box, "left", -200, 0, $T.elastic.easeInOut);
+			var b = new J.fx.Animation(box, "left", 0, -200, $T.elastic.easeInOut);
 			////////////////////////////////////////////////////////
 
 			$E.on($D.id("start"),"click", function(){
-				var box = $D.id("box");
-				
-				var a = new J.fx.Animation(box, "left", 100, 100, $T.Elastic.easeInOut);
+
 				a.start();
+			});
+			
+			$E.on($D.id("start2"),"click", function(){
+				b.start();
 			});
 			
 		});

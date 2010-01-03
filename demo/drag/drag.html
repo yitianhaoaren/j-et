@@ -49,8 +49,15 @@
 				
 			var p = new J.Drag($D.id("titleBar1"), $D.id("m1"));
 			var q = new J.Drag($D.id("m2"));
-			$E.on(lockButton, "click", function(){q.lock();});
-			$E.on(unlockButton, "click", function(){q.unlock();});
+			$E.on(lockButton, "click", function(){
+				p.lock();
+				q.lock();
+				
+			});
+			$E.on(unlockButton, "click", function(){
+				p.unlock();
+				q.unlock();
+			});
 		});
 		
 	//]]>
