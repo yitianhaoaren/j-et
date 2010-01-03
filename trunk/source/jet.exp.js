@@ -44,7 +44,7 @@ Jet().$package(function(J){
 				var y = curDragElementY+(e.pageY-dragStartY);
 				context.effectEl.style.left = x+"px";
 				context.effectEl.style.top = y+"px";
-				$E.notifyObservers(this, "move",{x:x, y:y});
+				$E.notifyObservers(context, "move", {x:x, y:y});
 			};
 	
 			this.dragStop = function(e){
