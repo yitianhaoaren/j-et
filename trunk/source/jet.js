@@ -3932,7 +3932,8 @@ Jet().$package(function(J){
 			            var h = w._allHandlers[handlerId];  // get handler info
 			            // If handler info matches type and handler function, we found it.
 			            if (h.eventType == eventType && h.handler == handler){
-			                return i;
+			            	handlersIndex.push(i);
+			                return handlersIndex;
 			            }
 			        }
 				}else{
