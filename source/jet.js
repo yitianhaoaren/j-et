@@ -2636,7 +2636,7 @@ Jet().$package(function(J){
 		getDoc,
 		getWin,
 		w,
-		documentElement;
+		getDocumentElement;
 	/**
 	 * dom 名字空间
 	 * 
@@ -2655,11 +2655,15 @@ Jet().$package(function(J){
 	$D.win = w;
 	$D.doc = w.document;
 	
-	if($B.support.compatMode === 'CSS1Compat'){
-		documentElement = document.documentElement;
-	}else{
-		documentElement = document.body;
-	}
+	
+	getDocumentElement = function(){
+		if($B.support.compatMode === 'CSS1Compat'){
+			return document.documentElement;
+		}else{
+			return document.body;
+		}
+		
+	};
 	
 	/**
 	 * 获取元素所属的根文档
@@ -2842,7 +2846,7 @@ Jet().$package(function(J){
     		el = el || w;
     		return el.innerHeight; // Safari, Opera
     	}else{
-    		el = el || documentElement;
+    		el = el || getDocumentElement();
     		return el.clientHeight; // IE, Gecko
     	}
     };
@@ -2862,7 +2866,7 @@ Jet().$package(function(J){
     		el = el || w;
     		return el.innerWidth; // Safari, Opera
     	}else{
-    		el = el || documentElement;
+    		el = el || getDocumentElement();
     		return el.clientWidth; // IE, Gecko
     	}
     };
@@ -2882,7 +2886,7 @@ Jet().$package(function(J){
     		el = el || w;
     		return el.offsetHeight; // Safari, Opera
     	}else{
-    		el = el || documentElement;
+    		el = el || getDocumentElement();
     		return el.offsetHeight; // IE, Gecko
     	}
     };
@@ -2902,7 +2906,7 @@ Jet().$package(function(J){
     		el = el || w;
     		return el.offsetWidth; // Safari, Opera
     	}else{
-    		el = el || documentElement;
+    		el = el || getDocumentElement();
     		return el.offsetWidth; // IE, Gecko
     	}
     };
@@ -3479,7 +3483,7 @@ Jet().$package(function(J){
 	J.filename = J.src.replace(/(.*\/){0,}([^\\]+).*/ig,"$2");
 	//J.out(J.src+" _ "+J.filename)
 	J.path = J.src.split(J.filename)[0];
-
+	
 	
 	$D.getDoc = getDoc;
 	
@@ -3531,6 +3535,7 @@ Jet().$package(function(J){
 	
 	$D.getTextFieldSelection = getTextFieldSelection;
 	
+	$D.getDocumentElement = getDocumentElement;
 	
 	
 	
@@ -4971,6 +4976,7 @@ Jet().$package(function(J){
 			this._main.style.display="none";
 			this._main.className = "consoleBox";
 			this._main.innerHTML = this._html;
+			//alert(window.document.body)
 			window.document.body.appendChild(this._main);
 			
 			
@@ -5154,8 +5160,10 @@ Jet().$package(function(J){
 			};
 			J.console = topNamespace.console;
 		}else if(J.query.console == "true"){
-			J.console._init();
-			J.console.show();
+			$E.onDomReady(function(){
+				J.console._init();
+				J.console.show();
+			});
 		}
 	}
 	

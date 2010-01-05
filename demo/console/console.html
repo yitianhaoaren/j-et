@@ -4,6 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>JET demo</title>
 	<link href="../../source/assets/jet.reset.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../source/jet.js"></script>
 </head>
 
 <body>
@@ -15,55 +16,33 @@
 			<div class="exampleContainer"> 
 				<button id="Button_1" onclick="J.console.enable()">打开控制台</button> 
 				<button id="Button_2" onclick="J.console.disable()">关闭控制台</button> 
-				<!--button id="Button_3" onclick="showAll()">所有类型输出</button--> 
+				<button id="Button_3" onclick="showAll()">所有类型输出</button> 
 
 			</div>
 		</div> 
 		<p> 
 		通过控制台，我们可以代替alert方式调试，随时可以输出信息</p> 
-		 
-		 
-		<p> 
-		<strong>相关代码</strong></p> 
-	 
-		<p> 
-			<textarea name="code" class="Javascript" cols="80" rows="10"> 
-//打开控制台
-J.console.show();
 
-//关闭控制台
-J.console.hide();
-	
-//演示
-//格式 J.console.out(信息,信息类型)
-J.console.out("ERROR",J.console.TYPE.ERROR);
-J.console.out("WARNING",J.console.TYPE.WARNING);
-J.console.out("INFO",J.console.TYPE.INFO);
-J.console.out("DEBUG",J.console.TYPE.DEBUG);
-J.console.out("PROFILE",J.console.TYPE.PROFILE);
-			</textarea>
-		</p> 
-	 
 	</div> 
 
 
 
 
-	<script type="text/javascript" defer="defer" hasJet="true" src="../../source/jet.js"></script>
-	<script defer="defer">
+	
+	<script>
 		var J = new Jet(),
-			$=J.dom.id,
-			$C=J.console,
-			$D=J.dom,
-			$E=J.event;
+			$ = J.dom.id,
+			$C = J.console,
+			$D = J.dom,
+			$E = J.event;
 		
 		function showAll() {
-					$C.print("ERROR",$C.TYPE.ERROR);
-					$C.print("WARNING",$C.TYPE.WARNING);
-					$C.print("INFO",$C.TYPE.INFO);
-					$C.print("DEBUG",$C.TYPE.DEBUG);
-					$C.print("PROFILE",$C.TYPE.PROFILE);
-				}
+			J.out("ERROR",$C.TYPE.ERROR);
+			J.out("WARNING",$C.TYPE.WARNING);
+			J.out("INFO",$C.TYPE.INFO);
+			J.out("DEBUG",$C.TYPE.DEBUG);
+			J.out("PROFILE",$C.TYPE.PROFILE);
+		}
 		
 
 	</script>
