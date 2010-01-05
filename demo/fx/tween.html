@@ -7,7 +7,7 @@
 <body>
 	<div style="padding-left:50px;">
 	  <div style="position:relative; border:1px solid #000000; width:550px; height:50px;">
-		<div id="idMove" style="width:50px; height:50px; background:#930; position:absolute;"></div>
+		<div id="idMove" style="width:50px; height:50px; background:blue; position:absolute;"></div>
 	  </div>
 	  <div style="position:relative;width:550px;height:200px; margin-top:50px;">
 		<div id="idChart" style="border:1px solid #000;height:200px;"> </div>
@@ -17,38 +17,38 @@
 	<div>
 	  <p> Tween类型： <br />
 		<label>
-		  <input name="vTween" type="radio" value="Linear" checked="checked" />
+		  <input name="vTween" type="radio" value="linear" checked="checked" />
 		  Linear </label>
 		<label>
-		  <input name="vTween" type="radio" value="Quad" />
+		  <input name="vTween" type="radio" value="quadratic" />
 		  Quadratic </label>
 		<label>
-		  <input name="vTween" type="radio" value="Cubic" />
+		  <input name="vTween" type="radio" value="cubic" />
 		  Cubic </label>
 		<label>
-		  <input name="vTween" type="radio" value="Quart" />
+		  <input name="vTween" type="radio" value="quartic" />
 		  Quartic </label>
 		<label>
-		  <input name="vTween" type="radio" value="Quint" />
+		  <input name="vTween" type="radio" value="quintic" />
 		  Quintic </label>
 		<label>
-		  <input name="vTween" type="radio" value="Sine" />
+		  <input name="vTween" type="radio" value="sinusoidal" />
 		  Sinusoidal </label>
 		<br />
 		<label>
-		  <input name="vTween" type="radio" value="Expo" />
+		  <input name="vTween" type="radio" value="exponential" />
 		  Exponential </label>
 		<label>
-		  <input name="vTween" type="radio" value="Circ" />
+		  <input name="vTween" type="radio" value="circular" />
 		  Circular </label>
 		<label>
-		  <input name="vTween" type="radio" value="Elastic" />
+		  <input name="vTween" type="radio" value="elastic" />
 		  Elastic </label>
 		<label>
-		  <input name="vTween" type="radio" value="Back" />
+		  <input name="vTween" type="radio" value="back" />
 		  Back </label>
 		<label>
-		  <input name="vTween" type="radio" value="Bounce" />
+		  <input name="vTween" type="radio" value="bounce" />
 		  Bounce </label>
 	  </p>
 	  <p> ease类型： <br />
@@ -98,7 +98,7 @@
 
 						*/
 						oM.left = Math.ceil(fun(t,0,c,d)) + "px";
-						oL.left = Math.ceil($T.Linear(t,0,iChart,d)) + "px";
+						oL.left = Math.ceil($T.linear(t,0,iChart,d)) + "px";
 						Move._t = setTimeout(_run, 10);
 					}else{
 						oM.left = c + "px";
@@ -113,7 +113,7 @@
 			function Chart(){
 				var a = [];
 				for (var i = 0; i < iChart; i++) {
-					a.push('<div style="background-color:#f60;font-size:0;width:3px;height:3px;position:absolute;left:' + (i-1) + 'px;top:' + (Math.ceil(fun(i,200,-200,iChart))) + 'px;"><\/div>');
+					a.push('<div style="background:red;font-size:0;width:3px;height:3px;position:absolute;left:' + (i-1) + 'px;top:' + (Math.ceil(fun(i,200,-200,iChart))) + 'px;"><\/div>');
 				}
 				$("idChart").innerHTML = a.join("");
 			}
@@ -134,7 +134,7 @@
 				var sTween, sEase;
 				Each(arrTween, function(o){ if(o.checked){ sTween = o.value; } })
 				Each(arrEase, function(o){ if(o.checked){ sEase = o.value; } })
-				fun = sTween == "Linear" ? $T.Linear : $T[sTween][sEase];
+				fun = sTween == "linear" ? $T.linear : $T[sTween][sEase];
 			}
 
 			$E.on($("idRun"),"click", function(){
