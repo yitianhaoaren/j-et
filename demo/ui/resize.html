@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>鼠标拖拽</title>
+	<title>resize</title>
 	<link rel="stylesheet" href="../../source/assets/jet.reset2.css" type="text/css" />
 	<link rel="stylesheet" href="../../source/assets/jet.960grid.css" />
 	<style>
@@ -12,16 +12,17 @@
 		top:100px;
 		width:300px;   
 		height:200px;  
-		background: blue;
+		background: red;
 		border:2px solid gray;
 	}
-	.draggable2{  
+	.draggable2{
+		display:none;
 		position:absolute;  
 		left:200px;
 		top:200px;
 		width:300px;   
 		height:200px;  
-		background: red;  
+		background: blue;  
 	}
 	#titleBar1{
 		background:yellow;
@@ -47,16 +48,19 @@
 			var lockButton = $D.id("lock"),
 				unlockButton = $D.id("unlock");
 				
-			var p = new J.Drag($D.id("titleBar1"), $D.id("m1"));
-			var q = new J.Drag($D.id("m2"));
+			var p = new J.ui.Resize($D.id("m1"),$D.id("m1"));
+			
+			var onResize = function(o){
+				J.out("widht:"+o.width+", height:"+o.height);
+			};
+			
+			$E.addObserver(p, "resize", onResize);
+			
 			$E.on(lockButton, "click", function(){
 				p.lock();
-				q.lock();
-				
 			});
 			$E.on(unlockButton, "click", function(){
 				p.unlock();
-				q.unlock();
 			});
 		});
 		
