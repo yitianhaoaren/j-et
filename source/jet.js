@@ -3677,7 +3677,7 @@ Jet().$package(function(J){
 		 */
 		addEventListener = function(element, eventType, handler) {
 
-			if ($E._find(element, eventType, handler) != -1){
+			if ($E._find(arguments) != -1){
 				return;
 			}
 		
@@ -3890,8 +3890,9 @@ Jet().$package(function(J){
 		 * @ignore
 		 */
 	    removeEventListener = function(element, eventType, handler) {
+	    	
 	        // Find this handler in the element._handlers[] array.
-	        var handlersIndex = $E._find(element, eventType, handler);
+	        var handlersIndex = $E._find(arguments);
 	        if (handlersIndex == -1) return;  // If the handler was not registered, do nothing
 	        // Get the window of this element.
 	        var d = element.document || element;
@@ -3913,8 +3914,12 @@ Jet().$package(function(J){
 	
 	    // A utility function to find a handler in the element._handlers array
 	    // Returns an array index or -1 if no matching handler is found
-	    $E._find = function(element, eventType, handler) {
-	        var handlers = element._handlers;
+	    $E._find = function(args) {
+	    	var element = args[0],
+				eventType = args[1],
+				handler = args[2],
+				handlers = element._handlers;
+				
 	        if (!handlers){
 	        	return -1;  // if no handlers registered, nothing found
 	        }
@@ -3924,39 +3929,36 @@ Jet().$package(function(J){
 	        var w = d.parentWindow;
 	
 	        var handlersIndex = [];
-	        
-	        
-	        if(eventType){
-				if(handler){
-					// Loop through the handlers associated with this element, looking
-			        // for one with the right type and function.
-			        // We loop backward because the most recently registered handler
-			        // is most likely to be the first removed one.
-			        for(var i = handlers.length-1; i >= 0; i--) {
-			            var handlerId = handlers[i];        // get handler id
-			            var h = w._allHandlers[handlerId];  // get handler info
-			            // If handler info matches type and handler function, we found it.
-			            if (h.eventType == eventType && h.handler == handler){
-			            	handlersIndex.push(i);
-			                return handlersIndex;
-			            }
-			        }
-				}else{
-					
-					for(var i = handlers.length-1; i >= 0; i--) {
-			            var handlerId = handlers[i];        // get handler id
-			            var h = w._allHandlers[handlerId];  // get handler info
-			            // If handler info matches type and handler function, we found it.
-			            if (h.eventType == eventType){
-			                handlersIndex.push(i);
-			            }
-			        }
-			        if(handlersIndex.length>0){
-			        	return handlersIndex;
-			        }
-					
-				}
-			}else{
+
+			if(args.length === 3){
+				// Loop through the handlers associated with this element, looking
+		        // for one with the right type and function.
+		        // We loop backward because the most recently registered handler
+		        // is most likely to be the first removed one.
+		        for(var i = handlers.length-1; i >= 0; i--) {
+		            var handlerId = handlers[i];        // get handler id
+		            var h = w._allHandlers[handlerId];  // get handler info
+		            // If handler info matches type and handler function, we found it.
+		            if (h.eventType == eventType && h.handler == handler){
+		            	handlersIndex.push(i);
+		                return handlersIndex;
+		            }
+		        }
+			}else if(args.length === 2){
+				
+				for(var i = handlers.length-1; i >= 0; i--) {
+		            var handlerId = handlers[i];        // get handler id
+		            var h = w._allHandlers[handlerId];  // get handler info
+		            // If handler info matches type and handler function, we found it.
+		            if (h.eventType == eventType){
+		                handlersIndex.push(i);
+		            }
+		        }
+		        if(handlersIndex.length>0){
+		        	return handlersIndex;
+		        }
+				
+			}else if(args.length === 1){
 
 				for(var i = handlers.length-1; i >= 0; i--) {
 		            handlersIndex.push(i);
