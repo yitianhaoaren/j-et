@@ -12,11 +12,18 @@
 	<script type="text/javascript">
 		Jet().$package(function(J){
 			var $E=J.event,
-				pp;
-			pp=function(){
-				J.out("窗口发生resize事件, at "+new Date());
+				funcA,
+				funcB;
+				
+			funcA = function(){
+				J.out("窗口发生resizeA事件, at "+new Date());
 			};
-	        $E.on(window, "resize", pp);
+			funcB = function(){
+				J.out("窗口发生resizeB事件, at "+new Date());
+			};
+			
+	        $E.on(window, "resize", funcA);
+			$E.on(window, "resize", funcB);
 	    });
 
     </script>
