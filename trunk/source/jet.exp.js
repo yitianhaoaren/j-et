@@ -29,7 +29,13 @@ Jet().$package(function(J){
 			}else{
 				this.effectEl = effectEl || apperceiveEl;
 			}
-
+			
+			
+			var ieSelectFix = function(e) {
+				e.preventDefault();
+	            //return false;
+	        };
+	        
 			this.dragStart = function(e){
 				e.preventDefault();
 				e.stopPropagation();
@@ -39,6 +45,11 @@ Jet().$package(function(J){
 				dragStartY = e.pageY;
 				$E.on(document, "mousemove", context.dragMove);
 				$E.on(document, "mouseup", context.dragStop);
+				if(J.browser.ie){
+					$E.on(document.body, "selectstart", ieSelectFix);
+				}
+				
+				
 				$E.notifyObservers(context, "start", {x:curDragElementX, y:curDragElementY});
 			};
 	
@@ -71,6 +82,9 @@ Jet().$package(function(J){
 			this.dragStop = function(e){
 				$E.off(document, "mousemove", context.dragMove);
 				$E.off(document, "mouseup", context.dragStop);
+				if(J.browser.ie){
+					$E.off(document.body, "selectstart", ieSelectFix);
+				}
 				$E.notifyObservers(context, "finish", {x:context._oldX, y:context._oldY});
 			};
 			
@@ -102,7 +116,17 @@ Jet().$package(function(J){
 		$E = J.event;
 
 	var id = 0;
-	
+	var handleNames = {
+			t:"t",
+			r:"r",
+			b:"b",
+			l:"l",
+			rt:"rt",
+			rb:"rb",
+			lb:"lb",
+			lt:"lt"
+		};
+		
 	J.ui.Resize = new J.Class({
 		init: function(apperceiveEl, effectEl, option){
 			var context = this;
@@ -128,32 +152,21 @@ Jet().$package(function(J){
 			
 			this.id = this.getId();
 
-			var handleNames = {
-				t:"t",
-				rt:"rt",
-				r:"r",
-				rb:"rb",
-				b:"b",
-				lb:"lb",
-				l:"l",
-				lt:"lt"
-			};
+			
 			
 			var styles = {
-				t:"cursor:n-resize; left:0; top:-5px; width:100%; height:5px;",
-				rt:"cursor:ne-resize; right:-5px; top:-5px; width:5px; height:5px;",
-				r:"cursor:e-resize; right:-5px; top:0; width:5px; height:100%;",
-				rb:"cursor:se-resize; right:-5px; bottom:-5px; width:5px; height:5px;",
-				b:"cursor:s-resize; left:0; bottom:-5px; width:100%; height:5px;",
-				lb:"cursor:sw-resize; left:-5px; bottom:-5px; width:5px; height:5px;",
-				l:"cursor:w-resize; left:-5px; top:0; width:5px; height:100%;",
-				lt:"cursor:nw-resize; left:-5px; top:-5px; width:5px; height:5px;"
+				t:"cursor:n-resize; z-index:1; left:0; top:-5px; width:100%; height:5px;",
+				r:"cursor:e-resize; z-index:1; right:-5px; top:0; width:5px; height:100%;",
+				b:"cursor:s-resize; z-index:1; left:0; bottom:-5px; width:100%; height:5px;",
+				l:"cursor:w-resize; z-index:1; left:-5px; top:0; width:5px; height:100%;",
+				rt:"cursor:ne-resize; z-index:2; right:-5px; top:-5px; width:5px; height:5px;",
+				rb:"cursor:se-resize; z-index:2; right:-5px; bottom:-5px; width:5px; height:5px;",
+				lt:"cursor:nw-resize; z-index:2; left:-5px; top:-5px; width:5px; height:5px;",
+				lb:"cursor:sw-resize; z-index:2; left:-5px; bottom:-5px; width:5px; height:5px;"
 			};
 			
-			this._resizeContainerEl = $D.node("div");
-			
-			
-			$D.setCssText(this._resizeContainerEl, "width:0; height:0;");
+			//this._resizeContainerEl = $D.node("div");
+			//$D.setCssText(this._resizeContainerEl, "width:0; height:0;");
 			
 			
 			for(var p in handleNames){
@@ -161,12 +174,13 @@ Jet().$package(function(J){
 					"id": "window_" + this.id + "_resize_" + handleNames[p]
 				});
 
-				this._resizeContainerEl.appendChild(tempEl);
-				$D.setCssText(tempEl, "position:absolute; overflow:hidden; " + styles[p]);
+				//this._resizeContainerEl.appendChild(tempEl);
+				this.apperceiveEl.appendChild(tempEl);
+				$D.setCssText(tempEl, "position:absolute; overflow:hidden; background:url("+J.path+"assets/images/transparent.gif);" + styles[p]);
 				this["_dragController_" + handleNames[p]] = new J.ui.Drag(tempEl, false);
 
 			}
-			this.apperceiveEl.appendChild(this._resizeContainerEl);
+			//this.apperceiveEl.appendChild(this._resizeContainerEl);
 			// 左侧
 			this._onDragLeftStart = function(xy){
 				context._startLeft = context._left = context.getLeft();
@@ -265,29 +279,33 @@ Jet().$package(function(J){
 				context._onDragTop(xy);
 			};
 
-			$E.addObserver(this["_dragController_" + handleNames.l], "start", this._onDragLeftStart);
-			$E.addObserver(this["_dragController_" + handleNames.l], "move", this._onDragLeft);
+			
 
 			$E.addObserver(this["_dragController_" + handleNames.t], "start", this._onDragTopStart);
 			$E.addObserver(this["_dragController_" + handleNames.t], "move", this._onDragTop);
-			
-			$E.addObserver(this["_dragController_" + handleNames.lt], "start", this._onDragLeftTopStart);
-			$E.addObserver(this["_dragController_" + handleNames.lt], "move", this._onDragLeftTop);
-			
-			$E.addObserver(this["_dragController_" + handleNames.lb], "start", this._onDragLeftBottomStart);
-			$E.addObserver(this["_dragController_" + handleNames.lb], "move", this._onDragLeftBottom);
-			
+
 			$E.addObserver(this["_dragController_" + handleNames.r], "start", this._onDragRightStart);
 			$E.addObserver(this["_dragController_" + handleNames.r], "move", this._onDragRight);
 			
 			$E.addObserver(this["_dragController_" + handleNames.b], "start", this._onDragBottomStart);
 			$E.addObserver(this["_dragController_" + handleNames.b], "move", this._onDragBottom);
 			
+			$E.addObserver(this["_dragController_" + handleNames.l], "start", this._onDragLeftStart);
+			$E.addObserver(this["_dragController_" + handleNames.l], "move", this._onDragLeft);
+			
+			
+			
 			$E.addObserver(this["_dragController_" + handleNames.rb], "start", this._onDragRightBottomStart);
 			$E.addObserver(this["_dragController_" + handleNames.rb], "move", this._onDragRightBottom);
 			
 			$E.addObserver(this["_dragController_" + handleNames.rt], "start", this._onDragRightTopStart);
 			$E.addObserver(this["_dragController_" + handleNames.rt], "move", this._onDragRightTop);
+			
+			$E.addObserver(this["_dragController_" + handleNames.lt], "start", this._onDragLeftTopStart);
+			$E.addObserver(this["_dragController_" + handleNames.lt], "move", this._onDragLeftTop);
+			
+			$E.addObserver(this["_dragController_" + handleNames.lb], "start", this._onDragLeftBottomStart);
+			$E.addObserver(this["_dragController_" + handleNames.lb], "move", this._onDragLeftBottom);
 		},
 		
 		setWidth : function(w){
@@ -328,10 +346,17 @@ Jet().$package(function(J){
 		},
 		
 		lock : function() {
-			$D.hide(this._resizeContainerEl);
+			//$D.hide(this._resizeContainerEl);
+
+			for(var p in handleNames){
+				this["_dragController_" + handleNames[p]].lock();
+			}
 		},
 		unlock : function(){
-			$D.show(this._resizeContainerEl);
+			//$D.show(this._resizeContainerEl);
+			for(var p in handleNames){
+				this["_dragController_" + handleNames[p]].unlock();
+			}
 		}
 	});
 	
