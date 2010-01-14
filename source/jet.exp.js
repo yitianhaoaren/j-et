@@ -95,6 +95,12 @@ Jet().$package(function(J){
 		},
 		unlock : function(){
 			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
+		},
+		show : function(){
+			$D.show(this.apperceiveEl);
+		},
+		hide : function(){
+			$D.hide(this.apperceiveEl);
 		}
 	});
 	
@@ -142,18 +148,14 @@ Jet().$package(function(J){
 			this.size = option.size || 5;
 			this.minWidth = option.minWidth || 0;
 			this.minHeight = option.minHeight || 0;
-			
-			
+
 			this._left = this.getLeft();
 			this._top = this.getTop();
 			this._width = this.getWidth();
 			this._height = this.getHeight();
-			
-			
+
 			this.id = this.getId();
 
-			
-			
 			var styles = {
 				t:"cursor:n-resize; z-index:1; left:0; top:-5px; width:100%; height:5px;",
 				r:"cursor:e-resize; z-index:1; right:-5px; top:0; width:5px; height:100%;",
@@ -164,23 +166,18 @@ Jet().$package(function(J){
 				lt:"cursor:nw-resize; z-index:2; left:-5px; top:-5px; width:5px; height:5px;",
 				lb:"cursor:sw-resize; z-index:2; left:-5px; bottom:-5px; width:5px; height:5px;"
 			};
-			
-			//this._resizeContainerEl = $D.node("div");
-			//$D.setCssText(this._resizeContainerEl, "width:0; height:0;");
-			
-			
+
 			for(var p in handleNames){
 				var tempEl = $D.node("div", {
 					"id": "window_" + this.id + "_resize_" + handleNames[p]
 				});
 
-				//this._resizeContainerEl.appendChild(tempEl);
 				this.apperceiveEl.appendChild(tempEl);
 				$D.setCssText(tempEl, "position:absolute; overflow:hidden; background:url("+J.path+"assets/images/transparent.gif);" + styles[p]);
 				this["_dragController_" + handleNames[p]] = new J.ui.Drag(tempEl, false);
 
 			}
-			//this.apperceiveEl.appendChild(this._resizeContainerEl);
+
 			// 左侧
 			this._onDragLeftStart = function(xy){
 				context._startLeft = context._left = context.getLeft();
@@ -189,11 +186,14 @@ Jet().$package(function(J){
 			this._onDragLeft = function(xy){
 				var w = context._startWidth - xy.x;
 				var x = context._startLeft + xy.x;
-				if(w >= context.minWidth){
-					context.setLeft(x);
-					context.setWidth(w);
-					$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
+				if(w < context.minWidth){
+					w = context.minWidth;
+					x = context._startLeft + (context._startWidth - w);
 				}
+				context.setLeft(x);
+				context.setWidth(w);
+				$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
+				
 			};
 			
 			// 上侧
@@ -204,11 +204,13 @@ Jet().$package(function(J){
 			this._onDragTop = function(xy){
 				var h = context._startHeight - xy.y;
 				var y = context._startTop + xy.y;
-				if(h >= context.minHeight){
-					context.setTop(y);
-					context.setHeight(h);
-					$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
+				if(h < context.minHeight){
+					h = context.minHeight;
+					y = context._startTop + (context._startHeight - h);
 				}
+				context.setTop(y);
+				context.setHeight(h);
+				$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
 			};
 			
 			
@@ -219,10 +221,11 @@ Jet().$package(function(J){
 			};			
 			this._onDragRight = function(xy){
 				var w = context._startWidth + xy.x;
-				if(w >= context.minWidth){
-					context.setWidth(w);
-					$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
+				if(w < context.minWidth){
+					w = context.minWidth;
 				}
+				context.setWidth(w);
+				$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
 			};
 			
 			
@@ -232,10 +235,11 @@ Jet().$package(function(J){
 			};			
 			this._onDragBottom = function(xy){
 				var h = context._startHeight + xy.y;
-				if(h >= context.minHeight){
-					context.setHeight(h);
-					$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
+				if(h < context.minHeight){
+					h = context.minHeight;
 				}
+				context.setHeight(h);
+				$E.notifyObservers(context, "resize", {width:context._width, height:context._height});
 			};
 			
 			// 左上
@@ -346,16 +350,23 @@ Jet().$package(function(J){
 		},
 		
 		lock : function() {
-			//$D.hide(this._resizeContainerEl);
-
 			for(var p in handleNames){
 				this["_dragController_" + handleNames[p]].lock();
 			}
 		},
 		unlock : function(){
-			//$D.show(this._resizeContainerEl);
 			for(var p in handleNames){
 				this["_dragController_" + handleNames[p]].unlock();
+			}
+		},
+		show : function() {
+			for(var p in handleNames){
+				this["_dragController_" + handleNames[p]].show();
+			}
+		},
+		hide : function(){
+			for(var p in handleNames){
+				this["_dragController_" + handleNames[p]].hide();
 			}
 		}
 	});
