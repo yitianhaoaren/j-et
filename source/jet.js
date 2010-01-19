@@ -1178,6 +1178,79 @@ Jet().$package(function(J){
 	};
 	
 	
+	
+	/**
+	 * 创建Class类的类
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Object} extend 集成的对象，可以不写
+	 * @param {Object} extend 集成的对象，可以不写
+	 * @return {Object} 返回生成的日期时间字符串
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	var Person = new J.Class({
+	 *  	init : function(name){
+	 *  		this.name = name;
+	 *  		alert("init");
+	 *  	},
+	 *  	showName : function(){
+	 *  		alert(this.name);
+	 *  
+	 *  	}
+	 *  
+	 *  });
+	 *  
+	 *  // 继承Person
+	 * 	var Person2 = new J.Class({extend : Person}, {
+	 *  	init : function(name){
+	 *  		this.name = name;
+	 *  		alert("init");
+	 *  	},
+	 *  	showName : function(){
+	 *  		alert(this.name);
+	 *  
+	 *  	}
+	 *  
+	 *  });
+	 * 	
+	 * };
+	 * 
+	 */
+	Class = function(){
+		var length = arguments.length;
+		var option = arguments[length-1];
+		var newClass;
+		option.init = option.init || function(){};
+		
+		if(length === 2){
+			var superClass = arguments[0].extend;
+			
+			var tempClass = function() {};
+			tempClass.prototype = superClass.prototype;
+
+			newClass = function() {
+				this.init.apply(this, arguments);
+			}
+			newClass.prototype = new tempClass();
+			newClass.prototype.constructor = newClass;
+			J.extend(newClass.prototype, option);
+			newClass.prototype.init = function(){
+				superClass.prototype.init.apply(this, arguments);
+				option.init.apply(this, arguments);
+			}
+			
+		}else if(length === 1){
+			newClass = function() {
+				this.init.apply(this, arguments);
+			}
+			newClass.prototype = option;
+		}
+		
+		return newClass;
+	};
+	
+	/*
 	Class = function(obj){
 		var tempClass = function() {
 			this.init.apply(this, arguments);
@@ -1185,35 +1258,8 @@ Jet().$package(function(J){
 		tempClass.prototype = obj;
 		return tempClass;
 	};
-/*
-Function.method('inherits', function (parent) {
-    var d = {}, p = (this.prototype = new parent());
-    this.method('uber', function uber(name) {
-        if (!(name in d)) {
-            d[name] = 0;
-        }        
-        var f, r, t = d[name], v = parent.prototype;
-        if (t) {
-            while (t) {
-                v = v.constructor.prototype;
-                t -= 1;
-            }
-            f = v[name];
-        } else {
-            f = p[name];
-            if (f == this[name]) {
-                f = v[name];
-            }
-        }
-        d[name] += 1;
-        r = f.apply(this, Array.prototype.slice.apply(arguments, [1]));
-        d[name] -= 1;
-        return r;
-    });
-    return this;
-});
+	*/
 
-*/
 	
 	J.isUndefined = isUndefined;
 	J.isNull = isNull;

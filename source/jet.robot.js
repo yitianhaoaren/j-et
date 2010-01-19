@@ -12,20 +12,24 @@
  */
 
  /**
- * robot
+ * robot 包
  */
 Jet().$package(function(J){
 	J.robot = J.robot || {};
 	
 });
 /**
- * tween模块
+ * Robot 类
  */
-Jet().$package("KDV", function(J){
+Jet().$package(function(J){
 	var $D = J.dom,
 		$E = J.event;
 
-	var Robot = new J.Class({extend: robot}, {
+	var Robot = new J.Class({
+		init : function(){
+			J.out("I'm a robot!");
+		},
+		
 		a : 1
 	
 	});
