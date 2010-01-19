@@ -422,6 +422,8 @@ Jet().$package(function(J){
 
 		formatDate,
 		
+		Publish,
+		
 		Class;
 
 	/**
@@ -1259,7 +1261,34 @@ Jet().$package(function(J){
 		return tempClass;
 	};
 	*/
-
+	
+	
+	Publish = function(){
+		this.subscribers = [];
+	};
+	
+	Publish.prototype.subscribe = function(func){
+		var alreadyExists = J.array.some(this.subscribers, function(el){
+			return el === func;
+		});
+		if(!alreadyExists){
+			this.subscribers.push(func);
+		}
+		return func;
+	};
+	
+	Publish.prototype.deliver = function(data){
+		J.array.forEach(this.subscribers, function(fn){
+			fn(data);
+		});
+	};
+	
+	Publish.prototype.unsubscribe = function(func){
+		this.subscribers = J.array.filter(this.subscribers, function(el){
+			return el !== func;
+		});
+		return func;
+	};
 	
 	J.isUndefined = isUndefined;
 	J.isNull = isNull;
@@ -1296,6 +1325,8 @@ Jet().$package(function(J){
 	J.formatDate = formatDate;
 	
 	J.Class = Class;
+	
+	J.Publish = Publish;
 
 });
 
@@ -1882,11 +1913,117 @@ Jet().$package(function(J){
 		}
 		return false;
 	};
-		
+	
+	
+
+	
+	
+	/**
+	 * 遍历数组，把每个数组元素作为第一个参数来执行函数
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
+	 * @memberOf Array.prototype
+	 * 
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 */
+	forEach = function(arr, fun /*, thisp*/) {
+		var len = arr.length;
+		if (typeof fun != "function") {
+			throw new TypeError();
+		}
+		var thisp = arguments[1];
+		for (var i = 0; i < len; i++) {
+			if (i in arr) {
+				fun.call(thisp, arr[i], i, arr);
+			}
+		}
+	};
+	
+	/**
+	 * 用一个自定义函数来过滤数组
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
+	 * @memberOf Array.prototype
+	 * 
+	 * @param {Function} fun 过滤函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Array}返回筛选出的新数组
+	 */
+	filter = function(arr, fun) {
+		var len = arr.length;
+		if (typeof fun != "function") {
+		  throw new TypeError();
+		}
+		var res   = [];
+		var thisp = arguments[1];
+		for (var i = 0; i < len; i++) {
+			if (i in arr) {
+				var val = arr[i]; // in case fun mutates this
+				if (fun.call(thisp, val, i, arr)) {
+					res.push(val);
+				}
+			}
+		}
+		return res;
+	};
+	
+	
+	
+
+
+	
+	/**
+	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果有任意一个或多个数组成员使得函数执行结果返回 true，则最终返回 true，否则返回 false
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
+	 * @memberOf Array.prototype
+	 * 
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Boolean}
+	 */
+	some = function(arr, fun /*, thisp*/) {
+		var len = arr.length;
+		if (typeof fun != "function") {
+			throw new TypeError();
+		}
+
+		var thisp = arguments[1];
+		for (var i = 0; i < len; i++) {
+			if (i in arr && fun.call(thisp, arr[i], i, arr)) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     
     $A.indexOf = indexOf;
     $A.remove = remove;
     $A.replace = replace;
+	
+	$A.forEach = forEach;
+	$A.filter = filter;
+	$A.some = some;
+	
     
 });
 
