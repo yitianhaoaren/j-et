@@ -11,15 +11,9 @@
  * 
  */
 
- /**
- * robot
- */
-Jet().$package(function(J){
-	J.robot = J.robot || {};
-	
-});
+
 /**
- * tween模块
+ * kdv 包
  */
 Jet().$package("kdv", function(J){
 	var $D = J.dom,
@@ -27,9 +21,13 @@ Jet().$package("kdv", function(J){
 
 		
 		
-	// Kevity - a robot by (your name here)
-	var Kinvix = J.Class({extend: J.robot.Robot}, {
+	// Kinvix - a robot by (your name here)
+	var Kinvix = new J.Class({extend: J.robot.Robot}, {
 		init : function(){
+			this.name = "Kinvix";
+		},
+		
+		run : function(){
 			while(true) {
 				// Replace the next 4 lines with any behavior you would like
 				this.ahead(100);
@@ -50,12 +48,7 @@ Jet().$package("kdv", function(J){
 		
 	});
 	
-
-	
-
-		
-		
-
+	kdv.Kinvix = Kinvix;
 
 });
 
