@@ -533,8 +533,7 @@ Jet().$package(function(J){
 				_this = this,
 				intervalId,
 				delayId;
-			J.forEach(this.tabs, function(){
-				var tab = this;
+			J.array.forEach(this.tabs, function(tab, index, tabs){
 				$E.on(tab.trigger, 'mouseover' , clear);
 				$E.on(tab.sheet, 'mouseover' , clear);
 				
@@ -578,9 +577,7 @@ Jet().$package(function(J){
 			var config = this.config,
 				_this = this;
 
-			J.forEach(this.tabs, function(){
-				var tab = this;
-
+			J.array.forEach(this.tabs, function(tab, index, tabs){
 				$E.on(tab.trigger,config['triggerEvent'], function(){
 					_this.select.call(_this,tab);
 				});
