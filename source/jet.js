@@ -401,19 +401,19 @@ Jet().$package(function(J){
 		isFunction,
 		$typeof,
 		
-		random,
-		extend,
-		now,
-		timedChunk,
-		forEach,
-		getLength,
-		emptyFunc,
-		toArray,
-		toString,
-		clone,
 		$return,
 		$try,
 		
+		emptyFunc,
+		
+		random,
+		extend,
+		clone,
+		now,
+		timedChunk,
+
+		getLength,
+
 
 		rebuild,
 		pass,
@@ -611,41 +611,16 @@ Jet().$package(function(J){
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	};
 	
-	/**
-	 * 将任意变量转换为数组的方法
-	 * 
-	 * @method toArray
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {Mixed} o 任意变量
-	 * @return {Array} 返回转换后的数组
-	 */
-	toArray = function(o){
-		var type = $typeof(o);
-		return (type) ? ((type != 'array' && type != 'arguments') ? [o] : o) : [];
-	};
+	
 	
 	/**
-	 * 将任意变量转换为字符串的方法
-	 * 
-	 * @method toString
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {Mixed} o 任意变量
-	 * @return {String} 返回转换后的字符串
-	 */
-	toString = function(o){
-		return (o + "");
-	};
-	
-	/**
-	 * 克隆一个变量
+	 * 克隆一个对象
 	 * 
 	 * @method clone
 	 * @memberOf Jet.prototype
 	 * 
-	 * @param {Mixed} o 任意类型的变量
-	 * @return {Mixed} 返回通过克隆创建的变量
+	 * @param {Object} o 要克隆的对象
+	 * @return {Object} 返回通过克隆创建的对象
 	 * 
 	 * @example
 	 * Jet().$package(function(J){
@@ -655,21 +630,11 @@ Jet().$package(function(J){
 	 * };
 	 */
 	clone = function(o){
-		var i,
-			cloned;
-		if(J.isObject(o)){
-			cloned = {};
-		}else if(isArray(o) || isArguments(o)){
-			cloned = [];
-		}else{
-			// 如果非数组和对象类型则直接返回此变量的值
-			return o;
-		}
-		for(i in o){
-			cloned[i] = o[i];
-		}
+		var tempClass = function(){};
+		tempClass.prototype = o;
+		
 		// 返回新克隆的对象
-		return cloned;
+		return (new tempClass());
 	};
 
 	
@@ -743,61 +708,6 @@ Jet().$package(function(J){
 	 * };
 	 * 
 	 */
-	
-	/*
-	function clone(jsonObj) {   
-	    var buf;   
-	    if (jsonObj instanceof Array) {   
-	        buf = [];   
-	        var i = jsonObj.length;   
-	        while (i--) {   
-	            buf[i] = clone(jsonObj[i]);   
-	        }   
-	        return buf;   
-	    }else if (jsonObj instanceof Object){   
-	        buf = {};   
-	        for (var k in jsonObj) {   
-	            buf[k] = clone(jsonObj[k]);   
-	        }   
-	        return buf;   
-	    }else{   
-	        return jsonObj;   
-	    }   
-	} 
-	Object.prototype.Clone=function(){
-		
-		function CloneModel(){};
-		CloneModel.prototype = this;
-		var objClone=new CloneModel();
-		
-		var strMsg="";
-		for( v in objClone){ 
-			switch (typeof objClone[v]){
-				case "function":
-				//如果是方法，不需要进行clone
-				 
-				break;
-				case "object":
-				///////////////////////////////////////////////////////////////////////
-				//如果是对象，采用Clone重新得到，这样做的目的在于能够进行深度Clone
-				//因为JavaScript是一个Object Based的语言，不然内部对象是指向原来的引用
-				///////////////////////////////////////////////////////////////////////
-				objClone[v]=objClone[v].Clone();
-				 
-				break;
-				default:
-				///////////////////////////////////////////////////////////////////////
-				//其余数据类型情况下全部重新赋值
-				//这样做的目的就是保证数值在内存中的存放是在新对象的空间中
-				//而不仅仅指向Parent Object的一个refrence
-				///////////////////////////////////////////////////////////////////////
-				objClone[v]=objClone[v];
-			} 
-		}
-		return objClone;
-	}
-	*/
-	
 	extend = function(beExtendObj, extendObj1, extendObj2){
     	var a = arguments,
     		i,
@@ -946,54 +856,7 @@ Jet().$package(function(J){
         }, delay);
     }
     
-    /**
-	 * 对对象或数组的每一个元素执行指定的函数
-	 * 
-	 * @method forEach
-	 * @memberOf Jet.prototype
-	 * 
-	 * @param {Mixed} o 要遍历的对象或数组
-	 * @param {Function} fn 要执行的函数
-	 * @param {Array} args 要传入的参数数组
-	 * @return {Mixed} 返回遍历完的对象或数组
-	 */
-    forEach = function(object, fn, args){
-		var name,
-			i = 0,
-			length = object.length;
 
-		if(args){
-			if(length === undefined){
-				for(name in object){
-					if(fn.apply(object[name], args) === false){
-						break;
-					}
-				}
-			}else{
-				for( ; i < length;){
-					if(fn.apply(object[i++], args) === false){
-						break;
-					}
-				}
-			}
-
-		// A special, fast, case for the most common use of each
-		}else{
-			//J.out(length)
-			if(length === undefined){
-				for(name in object){
-					if(fn.call(object[name], name, object[name]) === false){
-						break;
-					}
-				}
-			}else{
-				for(var value = object[0]; (i < length && fn.call( value, i, value ) !== false); value = object[++i]){
-				}
-			}
-		}
-
-		return object;
-	};
 	
 	/**
 	 * 获取对象自身具有的属性和方法的数量
@@ -1225,6 +1088,7 @@ Jet().$package(function(J){
 		var newClass;
 		option.init = option.init || function(){};
 		
+		// 如果参数中有要继承的父类
 		if(length === 2){
 			var superClass = arguments[0].extend;
 			
@@ -1234,14 +1098,27 @@ Jet().$package(function(J){
 			newClass = function() {
 				this.init.apply(this, arguments);
 			}
-			newClass.prototype = new tempClass();
-			newClass.prototype.constructor = newClass;
-			J.extend(newClass.prototype, option);
-			newClass.prototype.init = function(){
-				superClass.prototype.init.apply(this, arguments);
-				option.init.apply(this, arguments);
-			}
 			
+			// 加一个对父类原型引用的静态属性
+			newClass.superClass = superClass.prototype;
+			
+			// 指定原型
+			newClass.prototype = new tempClass();
+			
+			// 重新指定构造函数
+			newClass.prototype.constructor = newClass;
+			
+			J.extend(newClass.prototype, option);
+			
+			// 重载init方法，插入对父类init的调用
+			newClass.prototype.init = function(){
+				// 调用父类的构造函数
+				newClass.superClass.init.apply(this, arguments);
+				// 调用此类自身的构造函数
+				option.init.apply(this, arguments);
+			};
+			
+		// 如果参数中没有父类，则单纯构建一个类
 		}else if(length === 1){
 			newClass = function() {
 				this.init.apply(this, arguments);
@@ -1299,9 +1176,14 @@ Jet().$package(function(J){
 	J.isArray = isArray;
 	J.isFunction = isFunction;
 	J.$typeof = $typeof;
-
+	
+	J.$return = $return;
+	J.$try = $try;
+	
+	J.emptyFunc = emptyFunc;
+	
 	J.clone = clone;
-	J.forEach = forEach;
+
 	J.getLength = getLength;
 	J.random = random;
 	J.extend = extend;
@@ -1309,13 +1191,6 @@ Jet().$package(function(J){
 	J.now = now;
 	J.timedChunk = timedChunk;
 	
-	
-	J.emptyFunc = emptyFunc;
-	J.$return = $return;
-	J.$try = $try;
-	
-	J.toArray = toArray;
-	J.toString = toString;
 	
 	J.rebuild = rebuild;
 	J.pass = pass;
@@ -1348,6 +1223,7 @@ Jet().$package(function(J){
 	 */
 	J.string = J.string || {};
 	var $S = J.string,
+		toString,
 		template,
 		isURL,
 		mapQuery,
@@ -1373,8 +1249,20 @@ Jet().$package(function(J){
 		substitute,
 		replaceAll,
 		byteLength;
+		
 	
-
+	/**
+	 * 将任意变量转换为字符串的方法
+	 * 
+	 * @method toString
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {Mixed} o 任意变量
+	 * @return {String} 返回转换后的字符串
+	 */
+	toString = function(o){
+		return (o + "");
+	};
 	
 	var cache = {};
 	  
@@ -1792,7 +1680,7 @@ Jet().$package(function(J){
     
 		
 		
-
+	$S.toString = toString;
 	$S.template = template;
 	$S.isURL = isURL;
 	$S.mapQuery = mapQuery;
@@ -1838,7 +1726,19 @@ Jet().$package(function(J){
 	 */
 	J.array = J.array || {};
 	var $A = J.array,
+		// javascript1.6扩展
 		indexOf,
+		lastIndexOf,
+		forEach,
+		filter,
+		some,
+		map,
+		every,
+		// javascript1.8扩展
+		reduce,
+		reduceRight,
+		
+		toArray,
 		remove,
 		replace;
 	
@@ -1874,45 +1774,29 @@ Jet().$package(function(J){
     
         
     /**
-	 * 从数组中移除一个或多个数组成员
+	 * 反向查找数组元素在数组中的索引下标
 	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
-	 */
-	remove = function(arr, members){
-		var members = J.toArray(members),
-			i,
-			j,
-			flag = false;
-		for(i=0; i<members.length; i++){
-			for(j=0; j<arr.length; j++){
-				if(arr[j] === members[i]){
-					arr.splice(j,1);
-					flag = true;
-				}
-			}
-		}
-		return flag;
-	};
-	
-	/**
-	 * 替换一个数组成员
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
+	 * @memberOf Array.prototype
 	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Object} oldValue 当前数组成员
-	 * @param {Object} newValue 要替换成的值
-	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
+	 * @param {Object} obj 要查找的数组元素
+	 * @param {Number} fromIndex 开始的索引编号
+	 * 
+	 * @return {Number}返回反向查找的索引编号
 	 */
-	replace = function(arr, oldValue, newValue){
-		var i;
-		for(i=0; i<arr.length; ij++){
-			if(arr[i] === oldValue){
-				arr[i] = newValue;
-				return true;
-			}
-		}
-		return false;
-	};
+    lastIndexOf = function (arr, obj, fromIndex) {
+        if (fromIndex == null) {
+            fromIndex = arr.length - 1;
+        } else if (fromIndex < 0) {
+            fromIndex = Math.max(0, arr.length + fromIndex);
+        }
+        for (var i = fromIndex; i >= 0; i--) {
+            if (arr[i] === obj){
+                return i;
+            }
+        }
+        return -1;
+    };
 	
 	
 
@@ -2003,26 +1887,217 @@ Jet().$package(function(J){
 	};
 	
 
+	/**
+	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，并把函数的返回结果以映射的方式存入到返回的数组中
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
+	 * @memberOf Array.prototype
+	 * 
+	 * @param {Function} fun 过滤函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Array}返回映射后的新数组
+	 */
+    map = function(arr, fun /*, thisp*/) {
+        var len = arr.length;
+        if (typeof fun != "function") {
+            throw new TypeError();
+        }
+        var res   = new Array(len);
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++) {
+            if (i in arr) {
+                res[i] = fun.call(thisp, arr[i], i, arr);
+            }
+        }
 
-	
-	
-	
-	
-	
-	
+        return res;
+    };
 	
 	
 	
 	
 	
     
-    $A.indexOf = indexOf;
-    $A.remove = remove;
-    $A.replace = replace;
+
+	reduce = function(fun /*, initial*/){
+		var len = arr.length >>> 0;
+		if (typeof fun != "function"){
+			throw new TypeError();
+		}
+		// no value to return if no initial value and an empty array
+		if (len == 0 && arguments.length == 1){
+			throw new TypeError();
+		}
+		var i = 0;
+		if (arguments.length >= 2){
+			var rv = arguments[1];
+		}
+		else{
+			do{
+			    if (i in arr){
+			      rv = arr[i++];
+			      break;
+			    }
+			
+			    // if array contains no values, no initial value to return
+			    if (++i >= len){
+			    	throw new TypeError();
+			    }
+			}
+			while (true);
+		}
+		
+		for (; i < len; i++){
+			if (i in arr){
+				rv = fun.call(null, rv, arr[i], i, arr);
+			}
+		}
+		
+		return rv;
+	};
 	
+	
+	
+
+	reduceRight = function(arr, fun /*, initial*/){
+		var len = arr.length >>> 0;
+		if (typeof fun != "function"){
+			throw new TypeError();
+		}
+		// no value to return if no initial value, empty array
+		if (len == 0 && arguments.length == 1){
+			throw new TypeError();
+		}
+		var i = len - 1;
+		if (arguments.length >= 2){
+			var rv = arguments[1];
+		}
+		else{
+			do{
+				if (i in arr){
+					rv = arr[i--];
+					break;
+				}
+		
+				// if array contains no values, no initial value to return
+				if (--i < 0){
+					throw new TypeError();
+				}
+			}
+			while(true);
+		}
+		
+		for (; i >= 0; i--){
+			if (i in arr){
+				rv = fun.call(null, rv, arr[i], i, arr);
+			}
+		}
+		
+		return rv;
+	};
+
+    
+    
+    
+    /**
+	 * 将任意变量转换为数组的方法
+	 * 
+	 * @method toArray
+	 * @memberOf Jet.prototype
+	 * 
+	 * @param {Mixed} o 任意变量
+	 * @return {Array} 返回转换后的数组
+	 */
+	toArray = function(o){
+		var type = J.$typeof(o);
+		return (type) ? ((type != 'array' && type != 'arguments') ? [o] : o) : [];
+	};
+	
+	
+	
+	
+	/**
+	 * 从数组中移除一个或多个数组成员
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
+	 */
+	remove = function(arr, members){
+		var members = toArray(members),
+			i,
+			j,
+			flag = false;
+		for(i=0; i<members.length; i++){
+			for(j=0; j<arr.length; j++){
+				if(arr[j] === members[i]){
+					arr.splice(j,1);
+					flag = true;
+				}
+			}
+		}
+		return flag;
+	};
+	
+	/**
+	 * 替换一个数组成员
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {Object} oldValue 当前数组成员
+	 * @param {Object} newValue 要替换成的值
+	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
+	 */
+	replace = function(arr, oldValue, newValue){
+		var i;
+		for(i=0; i<arr.length; ij++){
+			if(arr[i] === oldValue){
+				arr[i] = newValue;
+				return true;
+			}
+		}
+		return false;
+	};
+	
+	/**
+	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
+	 * @memberOf Array.prototype
+	 * 
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Boolean}
+	 */
+    every = function(arr, fun) {
+        var len = arr.length;
+        if (typeof fun != "function") {
+            throw new TypeError();
+        }
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++) {
+            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
+                return false;
+            }
+        }
+        return true;
+    };
+	
+    
+    $A.indexOf = indexOf;
+    $A.lastIndexOf = lastIndexOf;
 	$A.forEach = forEach;
 	$A.filter = filter;
 	$A.some = some;
+	$A.map = map;
+	$A.every = every;
+	$A.reduce = reduce;
+	$A.reduceRight = reduceRight;
+	
+	
+	$A.toArray = toArray;
+	$A.remove = remove;
+    $A.replace = replace;
 	
     
 });
@@ -2600,7 +2675,7 @@ Jet().$package(function(J){
 	// 给html标签添加不同浏览器的参数className
 	var addHtmlClassName = function() {
 		var htmlTag = document.documentElement;
-    	htmlClassName = [htmlTag.className];
+    	var htmlClassName = [htmlTag.className];
     	htmlClassName.push('javascriptEnabled');
     	htmlClassName.push(platform.name);
     	htmlClassName.push(platform.name + filterDot(platform.version));
@@ -2841,6 +2916,7 @@ Jet().$package(function(J){
 		getRelativeXY,
 		
 		getSelection,
+		getSelectionText,
 		getTextFieldSelection,
 		
 	
@@ -3635,7 +3711,7 @@ Jet().$package(function(J){
 	 */
 	getSelectionText = function(win) {
 		win = win || window;
-		doc = win.document;
+		var doc = win.document;
 		if (win.getSelection) {
 			// This technique is the most likely to be standardized.
 			// getSelection() returns a Selection object, which we do not document.
@@ -3743,6 +3819,7 @@ Jet().$package(function(J){
 	$D.setXY = setXY;
 	$D.getRelativeXY = getRelativeXY;
 	$D.getSelection = getSelection;
+	$D.getSelectionText = getSelectionText;
 	
 	$D.getTextFieldSelection = getTextFieldSelection;
 	
