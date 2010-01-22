@@ -1047,9 +1047,9 @@ Jet().$package(function(J){
 	/**
 	 * 创建Class类的类
 	 * 
-	 * @memberOf Jet.prototype
-	 * @param {Object} extend 集成的对象，可以不写
-	 * @param {Object} extend 集成的对象，可以不写
+	 * @class Class
+	 * @param {Object} option = {extend: superClass} 在option对象的extend属性中指定要继承的对象，可以不写
+	 * @param {Object} object 扩展的对象
 	 * @return {Object} 返回生成的日期时间字符串
 	 * 
 	 * @example
@@ -1085,48 +1085,60 @@ Jet().$package(function(J){
 	Class = function(){
 		var length = arguments.length;
 		var option = arguments[length-1];
-		var newClass;
+		
 		option.init = option.init || function(){};
 		
 		// 如果参数中有要继承的父类
 		if(length === 2){
+			/**
+			 * @ignore
+			 */
 			var superClass = arguments[0].extend;
 			
+			/**
+			 * @ignore
+			 */
 			var tempClass = function() {};
 			tempClass.prototype = superClass.prototype;
-
-			newClass = function() {
+			
+			/**
+			 * @ignore
+			 */
+			var subClass = function() {
 				this.init.apply(this, arguments);
 			}
 			
 			// 加一个对父类原型引用的静态属性
-			newClass.superClass = superClass.prototype;
+			subClass.superClass = superClass.prototype;
 			
 			// 指定原型
-			newClass.prototype = new tempClass();
+			subClass.prototype = new tempClass();
 			
 			// 重新指定构造函数
-			newClass.prototype.constructor = newClass;
+			subClass.prototype.constructor = subClass;
 			
-			J.extend(newClass.prototype, option);
+			J.extend(subClass.prototype, option);
 			
 			// 重载init方法，插入对父类init的调用
-			newClass.prototype.init = function(){
+			subClass.prototype.init = function(){
 				// 调用父类的构造函数
-				newClass.superClass.init.apply(this, arguments);
+				subClass.superClass.init.apply(this, arguments);
 				// 调用此类自身的构造函数
 				option.init.apply(this, arguments);
 			};
 			
+			return subClass;
+			
 		// 如果参数中没有父类，则单纯构建一个类
 		}else if(length === 1){
-			newClass = function() {
+			var newClass = function() {
 				this.init.apply(this, arguments);
 			}
 			newClass.prototype = option;
+			return newClass;
 		}
 		
-		return newClass;
+		
 	};
 	
 	/*
@@ -1140,10 +1152,39 @@ Jet().$package(function(J){
 	*/
 	
 	
+	
+	/**
+	 * 创建一个消息源发布者的类
+	 * 
+	 * @class Publish
+	 * @return {Object} 返回生成的消息源
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	var onMsg = new J.Publish();
+	 *  var funcA = function(option){
+	 *  	alert(option);
+	 *  };
+	 *  // 注册一个事件的观察者
+	 * 	onMsg.subscribe(funcA);
+	 * 	var option = "demo";
+	 * 	onMsg.deliver(option);
+	 * 	onMsg.unsubscribe(funcA);
+	 * 	onMsg.deliver(option);
+	 * 	
+	 * };
+	 * 
+	 */
 	Publish = function(){
 		this.subscribers = [];
 	};
 	
+	/**
+	 * 注册观察者
+	 * @memberOf Publish.prototype
+	 * @param {Function} func 要注册的观察者
+	 * @return {Function} 返回结果
+	 */
 	Publish.prototype.subscribe = function(func){
 		var alreadyExists = J.array.some(this.subscribers, function(el){
 			return el === func;
@@ -1154,12 +1195,24 @@ Jet().$package(function(J){
 		return func;
 	};
 	
-	Publish.prototype.deliver = function(data){
+	/**
+	 * 触发事件
+	 * @memberOf Publish.prototype
+	 * @param {Mixed} msg 要注册的观察者
+	 * @return {Function} 返回结果
+	 */
+	Publish.prototype.deliver = function(msg){
 		J.array.forEach(this.subscribers, function(fn){
-			fn(data);
+			fn(msg);
 		});
 	};
 	
+	/**
+	 * 注销观察者
+	 * @memberOf Publish.prototype
+	 * @param {Function} func 要注销的观察者
+	 * @return {Function} 返回结果
+	 */
 	Publish.prototype.unsubscribe = function(func){
 		this.subscribers = J.array.filter(this.subscribers, function(el){
 			return el !== func;
@@ -1255,7 +1308,7 @@ Jet().$package(function(J){
 	 * 将任意变量转换为字符串的方法
 	 * 
 	 * @method toString
-	 * @memberOf Jet.prototype
+	 * @memberOf string
 	 * 
 	 * @param {Mixed} o 任意变量
 	 * @return {String} 返回转换后的字符串
@@ -1750,9 +1803,9 @@ Jet().$package(function(J){
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:indexOf
 	 * @memberOf array
-	 * @name indexOf
+	 * @function
 	 * 
-	 * @param {Array} arr 要查找的数组
+	 * @param {Array} arr 要执行操作的数组
 	 * @param {Object} obj 要查找的数组的元素
 	 * @param {Number} fromIndex 开始的索引编号
 	 * 
@@ -1784,8 +1837,10 @@ Jet().$package(function(J){
 	 * 反向查找数组元素在数组中的索引下标
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:lastIndexOf
-	 * @memberOf Array.prototype
+	 * @memberOf array
+	 * @function
 	 * 
+	 * @param {Array} arr 要执行操作的数组
 	 * @param {Object} obj 要查找的数组元素
 	 * @param {Number} fromIndex 开始的索引编号
 	 * 
@@ -1818,8 +1873,10 @@ Jet().$package(function(J){
 	 * 遍历数组，把每个数组元素作为第一个参数来执行函数
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
-	 * @memberOf Array.prototype
+	 * @memberOf array
+	 * @function
 	 * 
+	 * @param {Array} arr 要执行操作的数组
 	 * @param {Function} fun 要执行的函数
 	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
 	 * 
@@ -1846,8 +1903,10 @@ Jet().$package(function(J){
 	 * 用一个自定义函数来过滤数组
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:filter
-	 * @memberOf Array.prototype
+	 * @memberOf array
+	 * @function
 	 * 
+	 * @param {Array} arr 要执行操作的数组
 	 * @param {Function} fun 过滤函数
 	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
 	 * 
@@ -1885,8 +1944,10 @@ Jet().$package(function(J){
 	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果有任意一个或多个数组成员使得函数执行结果返回 true，则最终返回 true，否则返回 false
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:some
-	 * @memberOf Array.prototype
+	 * @memberOf array
+	 * @function
 	 * 
+	 * @param {Array} arr 要执行操作的数组
 	 * @param {Function} fun 要执行的函数
 	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
 	 * 
@@ -1918,9 +1979,11 @@ Jet().$package(function(J){
 	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，并把函数的返回结果以映射的方式存入到返回的数组中
 	 * 
 	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:map
-	 * @memberOf Array.prototype
+	 * @memberOf array
+	 * @function
 	 * 
-	 * @param {Function} fun 过滤函数
+	 * @param {Array} arr 要执行操作的数组
+	 * @param {Function} fun 要执行的函数
 	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
 	 * 
 	 * @return {Array}返回映射后的新数组
@@ -1946,18 +2009,62 @@ Jet().$package(function(J){
         return res;
     };
 	
+    
+    /**
+	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
+	 * @memberOf array
+	 * @function
+	 * 
+	 * @param {Array} arr 要执行操作的数组
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Boolean}
+	 */
+    every = Array.prototype.every 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.every.apply(arguments[0], args);
+		}
+		: function(arr, fun) {
+        var len = arr.length;
+        if (typeof fun != "function") {
+            throw new TypeError();
+        }
+        var thisp = arguments[1];
+        for (var i = 0; i < len; i++) {
+            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
+                return false;
+            }
+        }
+        return true;
+    };
 	
 	
 	
 	
     
-
+	/**
+	 * 对该数组的每项和前一次调用的结果运行一个函数，收集最后的结果。
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.8_Reference:Objects:Array:reduce
+	 * @memberOf array
+	 * @function
+	 * 
+	 * @param {Array} arr 要执行操作的数组
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Boolean}
+	 */
 	reduce = Array.prototype.reduce 
 		? function(){
 			var args = Array.prototype.slice.call(arguments, 1);
 			return Array.prototype.reduce.apply(arguments[0], args);
 		}
-		: function(fun /*, initial*/){
+		: function(arr, fun /*, initial*/){
 		var len = arr.length >>> 0;
 		if (typeof fun != "function"){
 			throw new TypeError();
@@ -1996,7 +2103,19 @@ Jet().$package(function(J){
 	
 	
 	
-
+	/**
+	 * 同上，但从右向左执行。
+	 * 
+	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.8_Reference:Objects:Array:reduceRight
+	 * @memberOf array
+	 * @function
+	 * 
+	 * @param {Array} arr 要执行操作的数组
+	 * @param {Function} fun 要执行的函数
+	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
+	 * 
+	 * @return {Boolean}
+	 */
 	reduceRight = Array.prototype.reduceRight 
 		? function(){
 			var args = Array.prototype.slice.call(arguments, 1);
@@ -2045,9 +2164,7 @@ Jet().$package(function(J){
     /**
 	 * 将任意变量转换为数组的方法
 	 * 
-	 * @method toArray
-	 * @memberOf Jet.prototype
-	 * 
+	 * @memberOf array
 	 * @param {Mixed} o 任意变量
 	 * @return {Array} 返回转换后的数组
 	 */
@@ -2062,7 +2179,7 @@ Jet().$package(function(J){
 	/**
 	 * 从数组中移除一个或多个数组成员
 	 * 
-	 * @memberOf Jet.prototype
+	 * @memberOf array
 	 * @param {Array} arr 要移除的数组成员，可以是单个成员也可以是成员的数组
 	 */
 	remove = function(arr, members){
@@ -2084,7 +2201,7 @@ Jet().$package(function(J){
 	/**
 	 * 替换一个数组成员
 	 * 
-	 * @memberOf Jet.prototype
+	 * @memberOf array
 	 * @param {Object} oldValue 当前数组成员
 	 * @param {Object} newValue 要替换成的值
 	 * @return {Boolean} 如果找到旧值并成功替换则返回 true，否则返回 false
@@ -2100,30 +2217,7 @@ Jet().$package(function(J){
 		return false;
 	};
 	
-	/**
-	 * 遍历数组，把每个数组元素作为第一个参数来执行函数，如果所有的数组成员都使得函数执行结果返回 true，则最终返回 true，否则返回 false
-	 * 
-	 * @link http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Objects:Array:every
-	 * @memberOf Array.prototype
-	 * 
-	 * @param {Function} fun 要执行的函数
-	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
-	 * 
-	 * @return {Boolean}
-	 */
-    every = function(arr, fun) {
-        var len = arr.length;
-        if (typeof fun != "function") {
-            throw new TypeError();
-        }
-        var thisp = arguments[1];
-        for (var i = 0; i < len; i++) {
-            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
-                return false;
-            }
-        }
-        return true;
-    };
+	
 	
     
     $A.indexOf = indexOf;
@@ -2135,8 +2229,7 @@ Jet().$package(function(J){
 	$A.every = every;
 	$A.reduce = reduce;
 	$A.reduceRight = reduceRight;
-	
-	
+
 	$A.toArray = toArray;
 	$A.remove = remove;
     $A.replace = replace;
@@ -2984,7 +3077,11 @@ Jet().$package(function(J){
 	$D.win = w;
 	$D.doc = w.document;
 	
-	
+	/**
+	 * 获取DocumentElement
+	 * 
+	 * @memberOf dom
+	 */
 	getDocumentElement = function(){
 		if($B.support.compatMode === 'CSS1Compat'){
 			return document.documentElement;
