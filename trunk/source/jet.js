@@ -1131,6 +1131,9 @@ Jet().$package(function(J){
 			
 		// 如果参数中没有父类，则单纯构建一个类
 		}else if(length === 1){
+			/**
+			 * @ignore
+			 */
 			var newClass = function() {
 				this.init.apply(this, arguments);
 			}
