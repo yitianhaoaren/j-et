@@ -1738,6 +1738,7 @@ Jet().$package(function(J){
 		reduce,
 		reduceRight,
 		
+		// JET扩展
 		toArray,
 		remove,
 		replace;
@@ -1757,7 +1758,13 @@ Jet().$package(function(J){
 	 * 
 	 * @return {Number}返回正向查找的索引编号
 	 */
-	indexOf = function (arr, obj, fromIndex) {
+	indexOf = Array.prototype.indexOf 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.indexOf.apply(arguments[0], args);
+		}
+		: function (arr, obj, fromIndex) {
+
         if (fromIndex == null) {
             fromIndex = 0;
         } else if (fromIndex < 0) {
@@ -1784,7 +1791,12 @@ Jet().$package(function(J){
 	 * 
 	 * @return {Number}返回反向查找的索引编号
 	 */
-    lastIndexOf = function (arr, obj, fromIndex) {
+    lastIndexOf = Array.prototype.lastIndexOf 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.lastIndexOf.apply(arguments[0], args);
+		}
+		: function (arr, obj, fromIndex) {
         if (fromIndex == null) {
             fromIndex = arr.length - 1;
         } else if (fromIndex < 0) {
@@ -1812,7 +1824,12 @@ Jet().$package(function(J){
 	 * @param {Object} contextObj 执行函数时的上下文对象，可以省略
 	 * 
 	 */
-	forEach = function(arr, fun /*, thisp*/) {
+	forEach = Array.prototype.forEach 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.forEach.apply(arguments[0], args);
+		}
+		: function(arr, fun /*, thisp*/) {
 		var len = arr.length;
 		if (typeof fun != "function") {
 			throw new TypeError();
@@ -1836,7 +1853,12 @@ Jet().$package(function(J){
 	 * 
 	 * @return {Array}返回筛选出的新数组
 	 */
-	filter = function(arr, fun) {
+	filter = Array.prototype.filter 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.filter.apply(arguments[0], args);
+		}
+		: function(arr, fun) {
 		var len = arr.length;
 		if (typeof fun != "function") {
 		  throw new TypeError();
@@ -1870,7 +1892,12 @@ Jet().$package(function(J){
 	 * 
 	 * @return {Boolean}
 	 */
-	some = function(arr, fun /*, thisp*/) {
+	some = Array.prototype.some 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.some.apply(arguments[0], args);
+		}
+		: function(arr, fun /*, thisp*/) {
 		var len = arr.length;
 		if (typeof fun != "function") {
 			throw new TypeError();
@@ -1898,7 +1925,12 @@ Jet().$package(function(J){
 	 * 
 	 * @return {Array}返回映射后的新数组
 	 */
-    map = function(arr, fun /*, thisp*/) {
+    map = Array.prototype.map 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.map.apply(arguments[0], args);
+		}
+		: function(arr, fun /*, thisp*/) {
         var len = arr.length;
         if (typeof fun != "function") {
             throw new TypeError();
@@ -1920,7 +1952,12 @@ Jet().$package(function(J){
 	
     
 
-	reduce = function(fun /*, initial*/){
+	reduce = Array.prototype.reduce 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.reduce.apply(arguments[0], args);
+		}
+		: function(fun /*, initial*/){
 		var len = arr.length >>> 0;
 		if (typeof fun != "function"){
 			throw new TypeError();
@@ -1960,7 +1997,12 @@ Jet().$package(function(J){
 	
 	
 
-	reduceRight = function(arr, fun /*, initial*/){
+	reduceRight = Array.prototype.reduceRight 
+		? function(){
+			var args = Array.prototype.slice.call(arguments, 1);
+			return Array.prototype.reduceRight.apply(arguments[0], args);
+		}
+		: function(arr, fun /*, initial*/){
 		var len = arr.length >>> 0;
 		if (typeof fun != "function"){
 			throw new TypeError();
