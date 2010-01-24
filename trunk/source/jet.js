@@ -4699,6 +4699,7 @@ Jet().$package(function(J){
 		$D=J.dom,
 		$E=J.event,
 		ajax,
+		comet,
 		load,
 		loadCss,
 		loadScript;
@@ -4750,7 +4751,7 @@ Jet().$package(function(J){
 			contentType: options.contentType ? options.contentType : "utf-8",
 			type: options.type || "xml"
 		};
-		uri = uri || "",
+		uri = uri || "";
 		timeout = options.timeout;
 		
 		
@@ -4820,11 +4821,63 @@ Jet().$package(function(J){
 	};
 
 	
+	/**
+	 * comet方法
+	 * 
+	 * @memberOf http
+	 * @method	comet
+	 * @param {String} uri uri地址
+	 * @param {Object} options 配置对象
+	 * @return {Object} 返回一个comet dom对象
+	 */
+	comet = function(uri, options){
+		uri = uri || "";
+		options = {
+			method: options.method || "GET",
+			data: options.data || null,
+			arguments: options.arguments || null,
+
+			onSuccess: options.onSuccess || function(){},
+
+			contentType: options.contentType ? options.contentType : "utf-8"
+		};
+
+		
+		if(J.browser.ie){
+			var hfile = new ActiveXObject("htmlfile");
+			hfile.write('<iframe name="_cometIframe" src="about:blank"></iframe>') || hfile.close();
+			hfile.parentWindow.__comet__ = window;
+			hfile.body.onload = function() {
+				options.onSuccess(hfile._cometIframe);
+			};
+			hfile._cometIframe.location.href = uri;
+			return hfile;
+		}
+		else if(J.browser.chrome){
+			var f1 = document.body.appendChild($D.node("iframe"));
+			f1.style.display = "none";
+			$E.on(f1,"onload", options.onSuccess);
+			f1.src = uri;
+			return f1;
+		}
+		else{
+			var f1 = document.body.appendChild($D.node("iframe")), f2 = f1.appendChild($D.node("iframe"));
+			f1.style.display = "none";
+			$E.on(f2,"onload", options.onSuccess);
+			f2.contentDocument.location.href = uri;
+			return f1;
+		};
+		
+		
+	};
+	
+
+	
 	
 	
 	
 	/**
-	 * 这是Ajax对象名字空间的一个方法
+	 * 这是load方法
 	 * 
 	 * @memberOf http
 	 * @method load
@@ -5194,7 +5247,7 @@ Jet().$package(function(J){
 		
 		var win=_open(sURL, sName, sFeatures, bReplace);
 		if(!win){
-			J.out('天啦！你的机器上竟然有软件拦截弹出窗口耶~~~');
+			J.out("天啦！你的机器上竟然有软件拦截弹出窗口耶~~~");
 			return false;
 		}
 		
