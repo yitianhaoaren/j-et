@@ -443,4 +443,21 @@ var ev = document.createEvent('HTMLEvents');
 
 
 
-=== 8. ===
+=== 8.JavaScript 在各个浏览器中执行的耐性 ===
+
+经常会遇到这样一个情况：浏览器弹出对话框，提示:
+
+脚本运行时间过长，询问“停止”还是“继续”。
+
+那究竟各个浏览器是如何判断在什么时候才弹出此对话框呢？
+
+ # IE：执行超过500W条JScript引擎语句出现提示。
+ # Firefox：执行超过10秒出现提示。
+ # Safari：执行超过5秒出现提示。
+ # Opera：无论执行多久都不会出现提示，最有耐性。
+ # Chrome：执行超过约8秒（估计值）出现提示。
+
+注：当弹出类似alert的模式对话框的时候，是不计时。
+
+扩展阅读：
+《What determines that a script is long-running?》
