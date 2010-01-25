@@ -7,15 +7,15 @@
 
     最近做的一个项目中需要ajax跨域取得数据,如果是在本域中确实没有问题，但是放到二级域和其他域下浏览器直接就弹出提示框:“该页正在
 
-1.什么引起了ajax跨域不能的问题
+ *1.什么引起了ajax跨域不能的问题*
 ajax本身实际上是通过XMLHttpRequest对象来进行数据的交互，而浏览器出于安全考虑，不允许js代码进行跨域操作，所以会警告。
 2.有什么完美的解决方案么？
 没有。解决方案有不少，但是只能是根据自己的实际情况来选择。
 具体情况有:
-一、本域和子域的相互访问: www.aa.com和book.aa.com
-二、本域和其他域的相互访问: www.aa.com和www.bb.com 用 iframe
-三、本域和其他域的相互访问: www.aa.com和www.bb.com 用 XMLHttpRequest访问代理
-四、本域和其他域的相互访问: www.aa.com和www.bb.com 用 JS创建动态脚本
+ # 本域和子域的相互访问: www.aa.com和book.aa.com
+ # 本域和其他域的相互访问: www.aa.com和www.bb.com 用 iframe
+ # 本域和其他域的相互访问: www.aa.com和www.bb.com 用 XMLHttpRequest访问代理
+ # 本域和其他域的相互访问: www.aa.com和www.bb.com 用 JS创建动态脚本
 
 解决方法：
 一、如果想做到数据的交互，那么www.aa.com和book.aa.com必须由你来开发才可以。可以将book.aa.com用iframe添加到www.aa.com的某个页面下,在www.aa.com和iframe里面都加上document.domain = "aa.com"，这样就可以统一域了，可以实现跨域访问。就和平时同一个域中镶嵌iframe一样，直接调用里面的JS就可以了。（这个办法我没有尝试，不过理论可行）
