@@ -4831,6 +4831,7 @@ Jet().$package(function(J){
 	 * @return {Object} 返回一个comet dom对象
 	 */
 	comet = function(uri, options){
+
 		uri = uri || "";
 		options = {
 			method: options.method || "GET",
@@ -4842,32 +4843,34 @@ Jet().$package(function(J){
 			contentType: options.contentType ? options.contentType : "utf-8"
 		};
 
-		
+		var connection;
 		if(J.browser.ie){
-			var hfile = new ActiveXObject("htmlfile");
-			hfile.write('<iframe name="_cometIframe" src="about:blank"></iframe>') || hfile.close();
-			hfile.parentWindow.__comet__ = window;
-			hfile.body.onload = function() {
-				options.onSuccess(hfile._cometIframe);
-			};
-			hfile._cometIframe.location.href = uri;
-			return hfile;
-		}
-		else if(J.browser.chrome){
-			var f1 = document.body.appendChild($D.node("iframe"));
-			f1.style.display = "none";
-			$E.on(f1,"onload", options.onSuccess);
-			f1.src = uri;
-			return f1;
+			var htmlfile = new ActiveXObject("htmlfile");
+			htmlfile.open();
+			htmlfile.close();
+			var iframediv = htmlfile.createElement("div");
+			htmlfile.appendChild(iframediv);
+			htmlfile.parentWindow._parent = self;
+      		iframediv.innerHTML = '<iframe id="_cometIframe" src="'+uri+'"></iframe>';
+      		
+			connection = htmlfile.getElementById("_cometIframe");
+		
 		}
 		else{
-			var f1 = document.body.appendChild($D.node("iframe")), f2 = f1.appendChild($D.node("iframe"));
-			f1.style.display = "none";
-			$E.on(f2,"onload", options.onSuccess);
-			f2.contentDocument.location.href = uri;
-			return f1;
+			connection = $D.node("iframe");
+			connection.setAttribute("id", "_cometIframe");
+			connection.setAttribute("src", uri);
+			connection.style.position = "absolute";
+			connection.style.visibility = "hidden";
+			connection.style.left = connection.style.top = "-999px";
+			connection.style.width = connection.style.height = "1px";
+			document.body.appendChild(connection);
+			self._parent = self;
 		};
-		
+
+		$E.on(connection,"load", options.onSuccess);
+
+		return connection;
 		
 	};
 	
@@ -5143,6 +5146,7 @@ Jet().$package(function(J){
 	};
 	
 	J.http.ajax = ajax;
+	J.http.comet = comet;
 	J.http.load = load;
 	J.http.loadCss = loadCss;
 	J.http.loadScript = loadScript;
