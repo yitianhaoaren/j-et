@@ -4834,11 +4834,11 @@ Jet().$package(function(J){
 
 		uri = uri || "";
 		options = {
-			method: options.method || "GET",
-			data: options.data || null,
-			arguments: options.arguments || null,
-
-			onSuccess: options.onSuccess || function(){},
+			method : options.method || "GET",
+			data : options.data || null,
+			arguments : options.arguments || null,
+			callback : options.callback || function(){},
+			onLoad : options.onLoad || function(){},
 
 			contentType: options.contentType ? options.contentType : "utf-8"
 		};
@@ -4851,7 +4851,7 @@ Jet().$package(function(J){
 			var iframediv = htmlfile.createElement("div");
 			htmlfile.appendChild(iframediv);
 			htmlfile.parentWindow._parent = self;
-      		iframediv.innerHTML = '<iframe id="_cometIframe" src="'+uri+'"></iframe>';
+      		iframediv.innerHTML = '<iframe id="_cometIframe" src="'+uri+'?callback=window.parent._parent.'+options.callback+'"></iframe>';
       		
 			connection = htmlfile.getElementById("_cometIframe");
 		
@@ -4859,7 +4859,7 @@ Jet().$package(function(J){
 		else{
 			connection = $D.node("iframe");
 			connection.setAttribute("id", "_cometIframe");
-			connection.setAttribute("src", uri);
+			connection.setAttribute("src", uri+'?callback=window.parent._parent.'+options.callback);
 			connection.style.position = "absolute";
 			connection.style.visibility = "hidden";
 			connection.style.left = connection.style.top = "-999px";
@@ -4868,7 +4868,7 @@ Jet().$package(function(J){
 			self._parent = self;
 		};
 
-		$E.on(connection,"load", options.onSuccess);
+		$E.on(connection,"load", options.onLoad);
 
 		return connection;
 		
