@@ -1797,7 +1797,9 @@ Jet().$package(function(J){
 		// JET扩展
 		toArray,
 		remove,
-		replace;
+		replace,
+		bubbleSort,
+		binarySearch;
 	
 	
 	
@@ -2220,6 +2222,56 @@ Jet().$package(function(J){
 		return false;
 	};
 	
+	// 冒泡排序,默认从小到大排序
+	bubbleSort = function(arr, compareFunc) {
+		compareFunc = compareFunc || function(num1, num2){
+			return num1 - num2;
+		};
+		//数组长度
+		var n = arr.length;
+		//交换顺序的临时变量
+		var temp;//
+		//交换标志
+		var exchange;
+		//最多做n-1趟排序
+		for (var time=0; time<n-1; time++){
+			exchange = false;
+			for (var i=n-1; i>time; i--) {
+				if (compareFunc(arr[i], arr[i - 1]) < 0) {
+				//if (arr[i] < arr[i - 1]) {
+					exchange = true;
+					temp = arr[i - 1];
+					arr[i - 1] = arr[i];
+					arr[i] = temp;
+				}
+			}
+			//若本趟排序未发生交换，提前终止算法
+			if (!exchange) {
+				break;
+			}
+		}
+		return arr;
+	};
+	
+	// 二叉搜索
+	binarySearch = function(arr, item, compareFunc){
+	    var start = 0;
+	    var end = arr.length;
+	    var current = Math.floor(arr.length/2);
+	    while(end != current){
+	        if(compareFunc(item, arr[current]) > 0){
+	            start = current + 1;
+	        }
+	        else{
+	            end = current;
+	        };
+	
+	        current = Math.floor((start + end) / 2);
+	    };
+	    return current;
+	};
+	
+	
 	
 	
     
@@ -2236,6 +2288,8 @@ Jet().$package(function(J){
 	$A.toArray = toArray;
 	$A.remove = remove;
     $A.replace = replace;
+    $A.bubbleSort = bubbleSort;
+    $A.binarySearch = binarySearch;
 	
     
 });
