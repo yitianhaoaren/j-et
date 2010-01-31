@@ -40,7 +40,6 @@
 		},
 		
 		option = {
-			console: false,
 			debug: DEBUG.SHOW_ALL
 		},
 		
@@ -52,9 +51,12 @@
 			type = type || 3;
 			if(type < option.debug){
 				if(this.console){
-					this.console.out(msg, type);
-				}else{
-					alert(msg+" - 消息类型["+type+"]");
+					if(this.console.out){
+						this.console.out(msg, type);
+					}else{
+						alert(msg+" - 消息类型["+type+"]");
+					}
+					
 				}
 			}
 			return msg;
