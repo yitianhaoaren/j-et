@@ -10,8 +10,19 @@
  * @description 
  * 
  */
- 
- 
+
+/**	
+ * @description
+ * Package: jet.console
+ *
+ * Need package:
+ * jet.core.js
+ * jet.string.js
+ * jet.http.js
+ * 
+ */
+
+
 /**
  * 10.[Browser part]: console 控制台
  */
@@ -424,18 +435,45 @@ Jet().$package(function(J){
 		}
 	});
 	
-	//alert(J.$typeof(J.console._log_record));
+
 	
-	var topNamespace = window;
-	var query = J.string.mapQuery(window.location.search);
-	//alert(query.console)
+	
+	
+	
+	
+	
+	var topNamespace = this,
+		query = J.string.mapQuery(window.location.search);
+		
 	if(query.console){
 		if(query.console == "firebug"){
-			topNamespace.console.out = function(msg){
-				topNamespace.console.log(msg);
-			};
-			J.console = topNamespace.console;
-		}else if(query.console == "true"){
+			
+			if(topNamespace.console){
+				topNamespace.console.out = function(msg){
+					topNamespace.console.log(msg);
+				};
+				J.console = topNamespace.console;
+			
+			}else{
+				// http://getfirebug.com/releases/lite/1.2/firebug-lite.js
+				$H.loadScript(J.path+"firebug/firebug-lite.js",{
+					onSuccess : function(){
+						firebug.env.height = 220;
+						// http://getfirebug.com/releases/lite/1.2/firebug-lite.css
+						firebug.env.css = "../../source/firebug/firebug-lite.css";
+						
+						topNamespace.console.out = function(msg){
+							topNamespace.console.log(msg);
+						};
+						J.console = topNamespace.console;
+
+						J.out("...控制台开启");
+						J.out("...测试成功");
+					}
+				});
+			}
+		}
+		else if(query.console == "true"){
 			$E.onDomReady(function(){
 				J.console._init();
 				J.console.show();

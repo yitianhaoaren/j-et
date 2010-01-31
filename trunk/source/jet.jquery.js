@@ -1,4 +1,12 @@
-
+/**	
+ * @description
+ * Package: jet.jquery
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
+ 
 Jet().$package(function(J){
 
 

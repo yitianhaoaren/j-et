@@ -10,7 +10,15 @@
  * @description 
  * 
  */
- 
+
+/**	
+ * @description
+ * Package: jet.i18n
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
  
 /**
  * 5.[Javascript core]: i18n 国际化扩展

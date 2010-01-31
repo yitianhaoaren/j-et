@@ -1,4 +1,12 @@
-
+/**	
+ * @description
+ * Package: jet.mini
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
+ 
 Jet().$package(function(J){
 
 	

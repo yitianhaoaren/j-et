@@ -11,7 +11,14 @@
  * 
  */
 
-
+/**	
+ * @description
+ * Package: jet.cookie
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
 
 
 /**

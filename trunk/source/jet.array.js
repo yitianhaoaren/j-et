@@ -10,8 +10,16 @@
  * @description 
  * 
  */
- 
- 
+
+/**	
+ * @description
+ * Package: jet.array
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
+
 /**
  * 4.[Javascript core]: array 数组处理
  */

@@ -1,4 +1,13 @@
-
+/**	
+ * @description
+ * Package: jet.sizzle
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
+ 
+ 
 Jet().$package(function(J){
 	var adapterSizzle;
 	

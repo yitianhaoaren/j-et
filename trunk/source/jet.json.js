@@ -8,7 +8,14 @@
  * 
  */
 
-
+/**	
+ * @description
+ * Package: jet.json
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
 
 /**
  * [Javascript core part]: JSON 扩展
