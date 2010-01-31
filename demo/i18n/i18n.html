@@ -8,7 +8,7 @@
 
 <body>
 
-	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.core.js"></script>
 	<script type="text/javascript" src="../../source/jet.i18n.js"></script>
 	<script type="text/javascript" src="../../source/jet.i18n.zh-cn.js"></script>
 
@@ -17,10 +17,10 @@
 		Jet().$package(function(J){
 
 	        J.event.onDomReady(function() {
-	            J.out("默认是英文："+J.i18n.text.helloWorld);
+				alert("默认是英文："+J.i18n.text.helloWorld);
 	            
 	            J.i18n.set("zh-cn");
-	            J.out("切换到中文："+J.i18n.text.helloWorld);
+	            alert("切换到中文："+J.i18n.text.helloWorld);
 
 	        });
 	    });

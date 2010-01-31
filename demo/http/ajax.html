@@ -9,14 +9,14 @@
 <body>
 	<div id="alert"></div>
 
-	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.core.js"></script>
 	<script type="text/javascript" src="../../source/jet.http.js"></script>
 	<script type="text/javascript">
 
 		Jet().$package(function(J){
 			
 			var sf = function(o){
-				J.out(o.responseText);
+				alert(o.responseText);
 				//J.out(o.uri);
 				//J.out(o.arguments);
 			}

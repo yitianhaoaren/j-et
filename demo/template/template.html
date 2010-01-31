@@ -12,6 +12,7 @@
 		<ul>
 			<li><%=title%></li>
 			<li><%=name%></li>
+			<li><%=email%></li>
 			<li><%=address%></li>
 			<li><%=tel%></li>
 		</ul>
@@ -20,7 +21,7 @@
 	<div id="out"></div>
 
 
-	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.core.js"></script>
 	<script type="text/javascript" src="../../source/jet.string.js"></script>
 
 	<script type="text/javascript">
@@ -35,9 +36,10 @@
 
 			html = J.string.template(html, {
 				title: "联系人薄",
-				name: "Jetyu",
-				address: "Shenzhen",
-				tel: "88888888"
+				name: "Kinvix",
+				email: "kinvix@gmail.com",
+				address: "深圳",
+				tel: "0755 - 8888 9999"
 			});
 			
 			J.dom.id("out").innerHTML=html;

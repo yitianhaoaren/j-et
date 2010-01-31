@@ -7,7 +7,7 @@
 <body>
 	<div id="alert">...</div>
 
-	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.core.js"></script>
 	<script type="text/javascript" src="../../source/jet.http.js"></script>
 	<script type="text/javascript">
 
@@ -15,8 +15,7 @@
 			var $D = J.dom;
 			
 			var sf = function(o){
-				$D.id("alert").innerHTML='Jet 2009';
-				J.out("load ok, name is "+name+" !");
+				$D.id("alert").innerHTML = name + ' 2010';
 			}
 			var config = {
 				onSuccess:sf,
