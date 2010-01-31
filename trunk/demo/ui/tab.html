@@ -29,6 +29,7 @@ ul,li { margin:0; padding:0; list-style:none; }
 	</div> 
 	
 	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.array.js"></script>
 	<script type="text/javascript" src="../../source/jet.console.js"></script>
 	<script type="text/javascript" src="../../source/jet.ui.js"></script>
 	<script>
@@ -44,6 +45,7 @@ ul,li { margin:0; padding:0; list-style:none; }
 				tab.add({trigger:$('t2'), sheet:$('s2')});
 				tab.add({trigger:$('t3'), sheet:$('s3')});
 				tab.config['triggerEvent'] = 'mouseover';
+				
 				tab.config['slideEnabled'] = true;
 				$E.addObserver(tab, "show", function(a){
 					J.out('当前的tab是：' + this.indexOf(a)+"#"+a.sheet.id);
