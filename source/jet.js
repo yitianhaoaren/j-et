@@ -2564,7 +2564,7 @@ Jet().$package(function(J){
 	 * @param {String} className class 名称
 	 */
     hasClass = function(el, className){
-		return el.className.indexOf(' ' + className + ' ');
+		return el.className.indexOf(' ' + className + ' ') !== -1;
 	};
 
 	/**
