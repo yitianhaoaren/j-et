@@ -39,7 +39,7 @@ Jet().$package(function(J){
 	Elastic：指数衰减的正弦曲线缓动；
 	Back：超过范围的三次方缓动（(s+1)*t^3 - s*t^2）；
 	Bounce：指数衰减的反弹缓动。
-	ps：以上都是自己的烂翻译，希望各位修正。
+
 
 	每个效果都分三个缓动方式（方法），分别是：
 	easeIn：从0开始加速的缓动；
@@ -201,7 +201,7 @@ Jet().$package(function(J){
 		// bounce：指数衰减的反弹缓动。
 		bounce: {
 			easeIn: function(t,b,c,d){
-				return c - tween.Bounce.easeOut(d-t, 0, c, d) + b;
+				return c - tween.bounce.easeOut(d-t, 0, c, d) + b;
 			},
 			easeOut: function(t,b,c,d){
 				if ((t/=d) < (1/2.75)) {
@@ -215,8 +215,8 @@ Jet().$package(function(J){
 				}
 			},
 			easeInOut: function(t,b,c,d){
-				if (t < d/2) return tween.Bounce.easeIn(t*2, 0, c, d) * .5 + b;
-				else return tween.Bounce.easeOut(t*2-d, 0, c, d) * .5 + c*.5 + b;
+				if (t < d/2) return tween.bounce.easeIn(t*2, 0, c, d) * .5 + b;
+				else return tween.bounce.easeOut(t*2-d, 0, c, d) * .5 + c*.5 + b;
 			}
 		}
 	}
