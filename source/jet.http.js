@@ -11,7 +11,14 @@
  * 
  */
 
-
+/**	
+ * @description
+ * Package: jet.http
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
 
 /**
  * 1.[Browser part]: http 包,含有ajax,comet,loadScript,loadCss封装

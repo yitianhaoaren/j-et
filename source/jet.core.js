@@ -8,6 +8,15 @@
  * 
  */
 
+/**	
+ * @description
+ * Package: jet
+ *
+ * Need package:
+ * no.
+ * 
+ */
+
 /**
  * 1.[JET core]: JET 微内核
  */
@@ -51,8 +60,7 @@
 			return msg;
 		};
 		
-	//this.name="pp"
-	//alert("jet:"+this.name)
+
 	try{
 		// 判断Jet名字空间是否已经存在
 		if(typeof Jet === "undefined" || (Jet.mark && Jet.mark === mark)){
@@ -1212,7 +1220,7 @@ Jet().$package(function(J){
 
 
 /**
- * 6.[Browser part]: Browser 资料分析包
+ * 3.[Browser part]: Browser 资料分析包
  */
 Jet().$package(function(J){
 	J.browserOptions = {
@@ -1601,36 +1609,7 @@ Jet().$package(function(J){
 	
 	
 	
-	// set reference
-	var topNamespace = this, 
-	    console,
-	    firebug;
 	
-	// init debug console
-	if (!topNamespace.console) {
-	    console = topNamespace.console = {
-	    	out: function() {},
-	        log: function() {},
-	        debug: function() {},
-	        info: function() {},
-	        warn: function() {},
-	        error: function() {},
-	        assert: function() {},
-	        dir: function() {},
-	        dirxml: function() {},
-	        trace: function() {},
-	        group: function() {},
-	        groupCollapsed: function() {},
-	        groupEnd: function() {},
-	        time: function() {},
-	        timeEnd: function() {},
-	        profile: function() {},
-	        profileEnd: function() {},
-	        count: function() {}
-	    };
-	} else {
-	    console = topNamespace.console;
-	}
 	
 	
 	
@@ -1659,7 +1638,7 @@ Jet().$package(function(J){
 
 
 /**
- * 7.[Browser part]: dom 扩展包
+ * 4.[Browser part]: dom 扩展包
  */
 Jet().$package(function(J){
 	var $D,
@@ -2620,7 +2599,7 @@ Jet().$package(function(J){
 
 
 /**
- * 8.[Browser part]: event 扩展包
+ * 5.[Browser part]: event 扩展包
  */
 Jet().$package(function(J){
 	var $E,
@@ -3401,8 +3380,5 @@ Jet().$package(function(J){
 	$E.notifyObservers = notifyObservers;
 	$E.removeObserver = removeObserver;
 });
-
-
-
 
 

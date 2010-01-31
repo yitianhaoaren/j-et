@@ -10,8 +10,17 @@
  * @description 
  * 
  */
- 
- 
+
+/**	
+ * @description
+ * Package: jet.string
+ * 
+ * Need package:
+ * jet.core.js
+ * 
+ */
+
+
 /**
  * 3.[Javascript core]: String 字符串处理
  */

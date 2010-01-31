@@ -10,7 +10,18 @@
  * @description 
  * 
  */
-
+ 
+ 
+/**	
+ * @description
+ * Package: jet.fx
+ * 
+ * Need package:
+ * jet.core.js
+ * 
+ */
+ 
+ 
  /**
  * fx
  */

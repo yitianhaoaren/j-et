@@ -13,7 +13,14 @@
  * 
  */
 
-
+/**	
+ * @description
+ * Package: jet.abc
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
 
 /**
  * [Javascript core part]: Javascript自身扩展

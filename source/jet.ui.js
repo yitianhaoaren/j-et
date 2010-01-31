@@ -10,8 +10,18 @@
  * @description 
  * 
  */
- 
- 
+
+
+/**	
+ * @description
+ * Package: jet.ui
+ *
+ * Need package:
+ * jet.core.js
+ * 
+ */
+
+
 /**
  * ui模块包
  */
