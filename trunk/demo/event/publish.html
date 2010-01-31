@@ -14,13 +14,14 @@
 
 
 	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.array.js"></script>
 	<script>
 		Jet().$package(function(J){
 			var $=J.dom.id;
 			var $D=J.dom;
 			var $E=J.event;
 			
-			var onMsg = new J.Publish();
+			var onMsg = new $E.Publish();
 			
 			
 			var fnA=function(){
