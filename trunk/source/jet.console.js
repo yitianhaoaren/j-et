@@ -427,14 +427,15 @@ Jet().$package(function(J){
 	//alert(J.$typeof(J.console._log_record));
 	
 	var topNamespace = window;
-	if(J.query.console){
-		
-		if(J.query.console == "firebug"){
+	var query = J.string.mapQuery(window.location.search);
+	//alert(query.console)
+	if(query.console){
+		if(query.console == "firebug"){
 			topNamespace.console.out = function(msg){
 				topNamespace.console.log(msg);
 			};
 			J.console = topNamespace.console;
-		}else if(J.query.console == "true"){
+		}else if(query.console == "true"){
 			$E.onDomReady(function(){
 				J.console._init();
 				J.console.show();
