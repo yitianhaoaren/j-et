@@ -15,9 +15,14 @@
 ./source/    [JET源代码]
     +- [assets]       [css等相关文件]
     +- [firebug]      [firebug控制台相关文件]
-    |- jet.exp.js          (JET通用扩展)
+    |- jet.core.js         (JET微内核，此文件仅含有微内核，适用于以此内核为基础开发其它框架)
+    |- jet.base.js         (JET基础包,已经包含core,基础扩展,dom,event等)
+    |- jet.array.js        (JET数组模块包)
+    |- jet.string.js       (JET字符串模块包)
+    |- jet.cookie.js       (JET cookie模块包)
+    |- jet.console.js      (JET 控制台模块包)
+    |- jet.http.js         (JET http模块包，包括ajax，comet，loadCss和loadScript)
     |- jet.i18n.js         (JET国际化)
-    |- jet.js              (JET核心)
     |- jet.cssquery.js     (JET的cssQuery选择器包)
     |- jet.fx.js           (JET的fx动画包)
     |- jet.jquery.js       (JET的jQuery模块包)
@@ -26,6 +31,8 @@
     |- jet.sizzle.js       (JET的sizzle模块包)
     |- jet.ui.js           (JET的ui模块包)
     |- jet.xpath.js        (JET的xpath模块包)
+
+    |- jet-common.js       (JET 常用包集合文件)
 
 }}}
 
