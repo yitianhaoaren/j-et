@@ -447,7 +447,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的值是 undefined 时返回 true
 	 */
 	isUndefined = function(o) {
-		return typeof o === "undefined";
+		return typeof(o) === "undefined";
 	};
 		
 	/**
@@ -1667,14 +1667,16 @@ Jet().$package(function(J){
 		recover,
 		hide,
 		
-		getScrollLeft,
-		getScrollTop,
+		
 		getScrollHeight,
 		getScrollWidth,
 		getClientHeight,
 		getClientWidth,
 		getOffsetHeight,
 		getOffsetWidth,
+		
+		getScrollLeft,
+		getScrollTop,
 		getClientXY,
 		setClientXY,
 		getXY,
