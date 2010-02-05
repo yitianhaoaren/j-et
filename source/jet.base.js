@@ -1028,11 +1028,11 @@ Jet().$package(function(J){
 	 */
 	formatDate = function(date, format){
 		/*
-		 * eg:format="YYYY-MM-dd hh:mm:ss";
+		 * eg:format="YYYY-MM-DD hh:mm:ss";
 		 */
 		var o = {
 		"M+" :  date.getMonth()+1,  //month
-		"d+" :  date.getDate(),     //day
+		"D+" :  date.getDate(),     //day
 		"h+" :  date.getHours(),    //hour
 		"m+" :  date.getMinutes(),  //minute
 		"s+" :  date.getSeconds(),	//second
@@ -1040,7 +1040,7 @@ Jet().$package(function(J){
 		"S"  :  date.getMilliseconds() //millisecond
 		}
 	
-		if(/(y+)/.test(format)){
+		if(/(Y+)/.test(format)){
 			format = format.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
 		}
 	
@@ -1941,13 +1941,15 @@ Jet().$package(function(J){
      */
     getOffsetHeight = function(el) {
     	var name = J.browser.engine.name;
+    	// Safari, Opera
     	if(name=="webkit" || name=="presto"){
     		el = el || w;
-    		return el.offsetHeight; // Safari, Opera
-    	}else{
-    		el = el || getDocumentElement();
-    		return el.offsetHeight; // IE, Gecko
     	}
+    	// IE, Gecko
+    	else{
+    		el = el || getDocumentElement();
+    	}
+    	return el.offsetHeight; 
     };
     
     /**
@@ -1958,16 +1960,17 @@ Jet().$package(function(J){
      * @param {Element} el 要获取client宽度的元素
      * @return {Number} 宽度值.
      */
-    
     getOffsetWidth = function(el) {
     	var name = J.browser.engine.name;
+    	// Safari, Opera
     	if(name==="webkit" || name==="presto"){
     		el = el || w;
-    		return el.offsetWidth; // Safari, Opera
-    	}else{
-    		el = el || getDocumentElement();
-    		return el.offsetWidth; // IE, Gecko
     	}
+    	// IE, Gecko
+    	else{
+    		el = el || getDocumentElement();
+    	}
+    	return el.offsetWidth;
     };
     
     /**
