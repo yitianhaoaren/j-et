@@ -234,7 +234,6 @@
 						func = arguments[arguments.length-1],
 						ns = topNamespace,
 						returnValue;
-					try{
 						if(typeof func === "function"){
 							if(typeof name === "string"){
 								ns = this.$namespace(name);
@@ -252,11 +251,7 @@
 						}else{
 							throw new Error("Function required");
 						}
-					}catch(e){
-						// 全局异常捕获
-						this.out("B.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
-						//this.out(e, 1);
-					}
+	
 				},
 				
 				/**
@@ -475,7 +470,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的类型是 number 时返回 true
 	 */
 	isNumber = function(o) {
-		return o && o.constructor === Number;
+		return (o === 0 || o) && o.constructor === Number;
 	};
 	
 	/**
@@ -491,7 +486,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的类型是 boolean 时返回 true
 	 */
 	isBoolean = function(o) {
-		return o && (o.constructor === Boolean);
+		return (o === false || o) && (o.constructor === Boolean);
 	};
 	
 	/**
@@ -507,7 +502,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的类型是 string 时返回 true
 	 */
 	isString = function(o) {
-		return o && (o.constructor === String);
+		return (o === "" || o) && (o.constructor === String);
 	};
 	
 	/**
@@ -553,7 +548,7 @@ Jet().$package(function(J){
 	 * @return {Boolean} 当 o 的类型是 arguments 时返回 true
 	 */
 	isArguments = function(o) {
-		return o && o.length && o.callee;
+		return o && o.callee && isNumber(o.length) ? true : false;
 	};
 	
 	/**
@@ -1175,6 +1170,7 @@ Jet().$package(function(J){
 	J.isBoolean = isBoolean;
 	J.isObject = isObject;
 	J.isArray = isArray;
+	J.isArguments = isArguments;
 	J.isFunction = isFunction;
 	J.$typeof = $typeof;
 	
@@ -2049,7 +2045,8 @@ Jet().$package(function(J){
 	 * @param {String} className class 名称
 	 */
     hasClass = function(el, className){
-		return el.className.indexOf(' ' + className + ' ') !== -1;
+	    var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
+	    return re.test(el.className);
 	};
 
 	/**
