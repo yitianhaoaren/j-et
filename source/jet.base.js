@@ -425,7 +425,6 @@ Jet().$package(function(J){
 		bind,
 		bindNoEvent,
 
-		formatDate,
 		
 
 		
@@ -1006,47 +1005,7 @@ Jet().$package(function(J){
 
 	
 	
-	/**
-	 * 让日期和时间按照指定的格式显示的方法
-	 * 
-	 * @memberOf Jet.prototype
-	 * @param {String} format 格式字符串
-	 * @return {String} 返回生成的日期时间字符串
-	 * 
-	 * @example
-	 * Jet().$package(function(J){
-	 * 	var d = new Date();
-	 * 	// 以 YYYY-MM-dd hh:mm:ss 格式输出 d 的时间字符串
-	 * 	J.formatDate(d, "YYYY-MM-dd hh:mm:ss");
-	 * };
-	 * 
-	 */
-	formatDate = function(date, format){
-		/*
-		 * eg:format="YYYY-MM-DD hh:mm:ss";
-		 */
-		var o = {
-		"M+" :  date.getMonth()+1,  //month
-		"D+" :  date.getDate(),     //day
-		"h+" :  date.getHours(),    //hour
-		"m+" :  date.getMinutes(),  //minute
-		"s+" :  date.getSeconds(),	//second
-		"q+" :  Math.floor((date.getMonth()+3)/3),  //quarter
-		"S"  :  date.getMilliseconds() //millisecond
-		}
-	
-		if(/(Y+)/.test(format)){
-			format = format.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
-		}
-	
-		for(var k in o){
-			if(new RegExp("("+ k +")").test(format)){
-				format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
-			}
-		}
-		return format;
-	};
-	
+
 	
 	
 	/**
@@ -1194,7 +1153,7 @@ Jet().$package(function(J){
 	J.bind = bind;
 	J.bindNoEvent = bindNoEvent;
 	
-	J.formatDate = formatDate;
+
 	
 	J.Class = Class;
 	
@@ -3384,5 +3343,68 @@ Jet().$package(function(J){
 	$E.notifyObservers = notifyObservers;
 	$E.removeObserver = removeObserver;
 });
+
+
+/**
+ * 6.[Date part]: date 扩展包
+ */
+Jet().$package(function(J){
+	var format;
+	
+	/**
+	 * dom 名字空间
+	 * 
+	 * @namespace
+	 * @name dom
+	 * @type Object
+	 */
+	J.date = J.date || {};
+	
+	
+		/**
+	 * 让日期和时间按照指定的格式显示的方法
+	 * 
+	 * @memberOf Jet.prototype
+	 * @param {String} format 格式字符串
+	 * @return {String} 返回生成的日期时间字符串
+	 * 
+	 * @example
+	 * Jet().$package(function(J){
+	 * 	var d = new Date();
+	 * 	// 以 YYYY-MM-dd hh:mm:ss 格式输出 d 的时间字符串
+	 * 	J.date.format(d, "YYYY-MM-dd hh:mm:ss");
+	 * };
+	 * 
+	 */
+	format = function(date, formatString){
+		/*
+		 * eg:formatString="YYYY-MM-DD hh:mm:ss";
+		 */
+		var o = {
+			"M+" : date.getMonth()+1,	//month
+			"D+" : date.getDate(),	//day
+			"h+" : date.getHours(),	//hour
+			"m+" : date.getMinutes(),	//minute
+			"s+" : date.getSeconds(),	//second
+			"q+" : Math.floor((date.getMonth()+3)/3),	//quarter
+			"S" : date.getMilliseconds()	//millisecond
+		}
+	
+		if(/(Y+)/.test(formatString)){
+			formatString = formatString.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length));
+		}
+	
+		for(var k in o){
+			if(new RegExp("("+ k +")").test(formatString)){
+				formatString = formatString.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+			}
+		}
+		return formatString;
+	};
+	
+	J.date.format = format;
+	
+});
+
 
 
