@@ -377,7 +377,7 @@
 		}
 	}catch(e){
 		// 微内核初始化失败，输出出错信息
-		out("JET 微内核初始化失败! " + "错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
+		out("JET 微内核初始化失败! " + "B.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
 	}
 })();
 

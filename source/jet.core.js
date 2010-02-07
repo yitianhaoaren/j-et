@@ -234,7 +234,6 @@
 						func = arguments[arguments.length-1],
 						ns = topNamespace,
 						returnValue;
-					try{
 						if(typeof func === "function"){
 							if(typeof name === "string"){
 								ns = this.$namespace(name);
@@ -252,11 +251,7 @@
 						}else{
 							throw new Error("Function required");
 						}
-					}catch(e){
-						// 全局异常捕获
-						this.out("B.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
-						//this.out(e, 1);
-					}
+	
 				},
 				
 				/**
@@ -382,7 +377,6 @@
 		}
 	}catch(e){
 		// 微内核初始化失败，输出出错信息
-		out("JET 微内核初始化失败! " + "错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
+		out("JET 微内核初始化失败! " + "B.错误：[" + e.name + "] "+e.message+", " + e.fileName+", 行号:"+e.lineNumber+"; stack:"+typeof e.stack, 1);
 	}
 })();
-
