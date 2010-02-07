@@ -475,7 +475,7 @@ Jet().$package(function(J){
 	};
 	
 	/**
-	 * 计算字符串的字节长度
+	 * 计算字符串的双字节长度
 	 * 
 	 * @memberOf string
 	 * @return {String} 返回自己长度
