@@ -56,7 +56,7 @@
 	//<![CDATA[
 		Jet().$package(function(J){
 			var $H = J.http;
-			J.http.loadScript("../../source/jet.exp.js");
+			J.http.loadScript("../../source/jet.ui.js");
 			//J.http.loadScript("../../source/jet.test1.js");
 			//J.http.loadScript("../../source/jet.test2.js");
 		});
@@ -77,20 +77,18 @@
 		<div class="optionButton">
 			<button id="Button_1" style="display:none;" onclick="J.Console.showHTMLCode()">HTML代码</button>
 			<button id="Button_2" style="display:none;" onclick="J.Console.showJsCode()">Javascript代码</button>
-			<button id="Button_3" onclick="Playground.runCode()">运行</button>
+			<button id="Button_3" onclick="playground.runCode()">运行</button>
 		</div>
 		<div>
 			<iframe id="CodeRunContainer" class="codeRunContainer" name="CodeRunContainer" src="about:blank"></iframe>
 		</div>
 	</div> 
 
-	<script type="text/javascript" src="../../source/jet.js"></script>
+	<script type="text/javascript" src="../../source/jet.base.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
-		Jet().$package(function(J){
-			J.http.loadScript("../../source/jet.exp.js");
-		});
-		Jet().$package("Playground",function(J){
+
+		Jet().$package("playground",function(J){
 			var $D = J.dom;
 			var CodeEditor = $D.id("CodeEditor");
 			var CodeRunContainer = window.frames["CodeRunContainer"];
