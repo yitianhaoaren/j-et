@@ -71,6 +71,9 @@
 			
 			this.getWidth = function(){
 				var width = [];
+				
+				width.push("window clientWidth: " + $D.getClientWidth());
+				
 				width.push("clientWidth: " + $D.getClientWidth(ObjectA));
 				width.push("offsetWidth: " + $D.getOffsetWidth(ObjectA));
 				width.push("scrollWidth: " + $D.getScrollWidth(ObjectA));
