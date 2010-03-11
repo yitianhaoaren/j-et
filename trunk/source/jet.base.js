@@ -1856,13 +1856,8 @@ Jet().$package(function(J){
      */
     getClientHeight = function(el) {
     	var name = J.browser.engine.name;
-    	if(name=="webkit" || name=="presto"){
-    		el = el || w;
-    		return el.innerHeight; // Safari, Opera
-    	}else{
-    		el = el || getDocumentElement();
-    		return el.clientHeight; // IE, Gecko
-    	}
+    	el = el || getDocumentElement();
+    	return el.clientHeight; // IE, Gecko
     };
     
     /**
@@ -1876,13 +1871,8 @@ Jet().$package(function(J){
     
     getClientWidth = function(el) {
     	var name = J.browser.engine.name;
-    	if(name==="webkit" || name==="presto"){
-    		el = el || w;
-    		return el.innerWidth; // Safari, Opera
-    	}else{
-    		el = el || getDocumentElement();
-    		return el.clientWidth; // IE, Gecko
-    	}
+    	el = el || getDocumentElement();
+    	return el.clientWidth; // IE, Gecko
     };
     
     
@@ -1896,14 +1886,7 @@ Jet().$package(function(J){
      */
     getOffsetHeight = function(el) {
     	var name = J.browser.engine.name;
-    	// Safari, Opera
-    	if(name=="webkit" || name=="presto"){
-    		el = el || w;
-    	}
-    	// IE, Gecko
-    	else{
-    		el = el || getDocumentElement();
-    	}
+    	el = el || getDocumentElement();
     	return el.offsetHeight; 
     };
     
@@ -1917,14 +1900,7 @@ Jet().$package(function(J){
      */
     getOffsetWidth = function(el) {
     	var name = J.browser.engine.name;
-    	// Safari, Opera
-    	if(name==="webkit" || name==="presto"){
-    		el = el || w;
-    	}
-    	// IE, Gecko
-    	else{
-    		el = el || getDocumentElement();
-    	}
+    	el = el || getDocumentElement();
     	return el.offsetWidth;
     };
     
