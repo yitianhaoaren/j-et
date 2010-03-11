@@ -147,7 +147,7 @@ Jet().$package(function(J){
 			if (typeof fun != "function") {
 				throw new TypeError();
 			}
-			var thisp = arguments[1];
+			var thisp = arguments[2];
 			for (var i = 0; i < len; i++) {
 				if (i in arr) {
 					fun.call(thisp, arr[i], i, arr);
@@ -179,7 +179,7 @@ Jet().$package(function(J){
 			  throw new TypeError();
 			}
 			var res   = [];
-			var thisp = arguments[1];
+			var thisp = arguments[2];
 			for (var i = 0; i < len; i++) {
 				if (i in arr) {
 					var val = arr[i]; // in case fun mutates this
@@ -220,7 +220,7 @@ Jet().$package(function(J){
 				throw new TypeError();
 			}
 	
-			var thisp = arguments[1];
+			var thisp = arguments[2];
 			for (var i = 0; i < len; i++) {
 				if (i in arr && fun.call(thisp, arr[i], i, arr)) {
 					return true;
@@ -255,7 +255,7 @@ Jet().$package(function(J){
 	            throw new TypeError();
 	        }
 	        var res   = new Array(len);
-	        var thisp = arguments[1];
+	        var thisp = arguments[2];
 	        for (var i = 0; i < len; i++) {
 	            if (i in arr) {
 	                res[i] = fun.call(thisp, arr[i], i, arr);
@@ -289,7 +289,7 @@ Jet().$package(function(J){
 	        if (typeof fun != "function") {
 	            throw new TypeError();
 	        }
-	        var thisp = arguments[1];
+	        var thisp = arguments[2];
 	        for (var i = 0; i < len; i++) {
 	            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
 	                return false;
@@ -326,12 +326,12 @@ Jet().$package(function(J){
 				throw new TypeError();
 			}
 			// no value to return if no initial value and an empty array
-			if (len == 0 && arguments.length == 1){
+			if (len == 0 && arguments.length == 2){
 				throw new TypeError();
 			}
 			var i = 0;
-			if (arguments.length >= 2){
-				var rv = arguments[1];
+			if (arguments.length >= 3){
+				var rv = arguments[2];
 			}
 			else{
 				do{
@@ -383,12 +383,12 @@ Jet().$package(function(J){
 				throw new TypeError();
 			}
 			// no value to return if no initial value, empty array
-			if (len == 0 && arguments.length == 1){
+			if (len == 0 && arguments.length == 2){
 				throw new TypeError();
 			}
 			var i = len - 1;
-			if (arguments.length >= 2){
-				var rv = arguments[1];
+			if (arguments.length >= 3){
+				var rv = arguments[2];
 			}
 			else{
 				do{
