@@ -73,19 +73,19 @@ Jet().$package(function(J){
 			return Array.prototype.indexOf.apply(arguments[0], args);
 		}
 		: function (arr, obj, fromIndex) {
-
-        if (fromIndex == null) {
-            fromIndex = 0;
-        } else if (fromIndex < 0) {
-            fromIndex = Math.max(0, arr.length + fromIndex);
-        }
-        for (var i = fromIndex; i < arr.length; i++) {
-            if (arr[i] === obj){
-                return i;
-            }
-        }
-        return -1;
-    };
+	
+	        if (fromIndex == null) {
+	            fromIndex = 0;
+	        } else if (fromIndex < 0) {
+	            fromIndex = Math.max(0, arr.length + fromIndex);
+	        }
+	        for (var i = fromIndex; i < arr.length; i++) {
+	            if (arr[i] === obj){
+	                return i;
+	            }
+	        }
+	        return -1;
+	    };
     
     
         
@@ -108,18 +108,18 @@ Jet().$package(function(J){
 			return Array.prototype.lastIndexOf.apply(arguments[0], args);
 		}
 		: function (arr, obj, fromIndex) {
-        if (fromIndex == null) {
-            fromIndex = arr.length - 1;
-        } else if (fromIndex < 0) {
-            fromIndex = Math.max(0, arr.length + fromIndex);
-        }
-        for (var i = fromIndex; i >= 0; i--) {
-            if (arr[i] === obj){
-                return i;
-            }
-        }
-        return -1;
-    };
+	        if (fromIndex == null) {
+	            fromIndex = arr.length - 1;
+	        } else if (fromIndex < 0) {
+	            fromIndex = Math.max(0, arr.length + fromIndex);
+	        }
+	        for (var i = fromIndex; i >= 0; i--) {
+	            if (arr[i] === obj){
+	                return i;
+	            }
+	        }
+	        return -1;
+	    };
 	
 	
 
@@ -143,17 +143,17 @@ Jet().$package(function(J){
 			return Array.prototype.forEach.apply(arguments[0], args);
 		}
 		: function(arr, fun /*, thisp*/) {
-		var len = arr.length;
-		if (typeof fun != "function") {
-			throw new TypeError();
-		}
-		var thisp = arguments[1];
-		for (var i = 0; i < len; i++) {
-			if (i in arr) {
-				fun.call(thisp, arr[i], i, arr);
+			var len = arr.length;
+			if (typeof fun != "function") {
+				throw new TypeError();
 			}
-		}
-	};
+			var thisp = arguments[1];
+			for (var i = 0; i < len; i++) {
+				if (i in arr) {
+					fun.call(thisp, arr[i], i, arr);
+				}
+			}
+		};
 	
 	/**
 	 * 用一个自定义函数来过滤数组
@@ -174,22 +174,22 @@ Jet().$package(function(J){
 			return Array.prototype.filter.apply(arguments[0], args);
 		}
 		: function(arr, fun) {
-		var len = arr.length;
-		if (typeof fun != "function") {
-		  throw new TypeError();
-		}
-		var res   = [];
-		var thisp = arguments[1];
-		for (var i = 0; i < len; i++) {
-			if (i in arr) {
-				var val = arr[i]; // in case fun mutates this
-				if (fun.call(thisp, val, i, arr)) {
-					res.push(val);
+			var len = arr.length;
+			if (typeof fun != "function") {
+			  throw new TypeError();
+			}
+			var res   = [];
+			var thisp = arguments[1];
+			for (var i = 0; i < len; i++) {
+				if (i in arr) {
+					var val = arr[i]; // in case fun mutates this
+					if (fun.call(thisp, val, i, arr)) {
+						res.push(val);
+					}
 				}
 			}
-		}
-		return res;
-	};
+			return res;
+		};
 	
 	
 	
@@ -215,20 +215,20 @@ Jet().$package(function(J){
 			return Array.prototype.some.apply(arguments[0], args);
 		}
 		: function(arr, fun /*, thisp*/) {
-		var len = arr.length;
-		if (typeof fun != "function") {
-			throw new TypeError();
-		}
-
-		var thisp = arguments[1];
-		for (var i = 0; i < len; i++) {
-			if (i in arr && fun.call(thisp, arr[i], i, arr)) {
-				return true;
+			var len = arr.length;
+			if (typeof fun != "function") {
+				throw new TypeError();
 			}
-		}
-
-		return false;
-	};
+	
+			var thisp = arguments[1];
+			for (var i = 0; i < len; i++) {
+				if (i in arr && fun.call(thisp, arr[i], i, arr)) {
+					return true;
+				}
+			}
+	
+			return false;
+		};
 	
 
 	/**
@@ -250,20 +250,20 @@ Jet().$package(function(J){
 			return Array.prototype.map.apply(arguments[0], args);
 		}
 		: function(arr, fun /*, thisp*/) {
-        var len = arr.length;
-        if (typeof fun != "function") {
-            throw new TypeError();
-        }
-        var res   = new Array(len);
-        var thisp = arguments[1];
-        for (var i = 0; i < len; i++) {
-            if (i in arr) {
-                res[i] = fun.call(thisp, arr[i], i, arr);
-            }
-        }
-
-        return res;
-    };
+	        var len = arr.length;
+	        if (typeof fun != "function") {
+	            throw new TypeError();
+	        }
+	        var res   = new Array(len);
+	        var thisp = arguments[1];
+	        for (var i = 0; i < len; i++) {
+	            if (i in arr) {
+	                res[i] = fun.call(thisp, arr[i], i, arr);
+	            }
+	        }
+	
+	        return res;
+	    };
 	
     
     /**
@@ -285,18 +285,18 @@ Jet().$package(function(J){
 			return Array.prototype.every.apply(arguments[0], args);
 		}
 		: function(arr, fun) {
-        var len = arr.length;
-        if (typeof fun != "function") {
-            throw new TypeError();
-        }
-        var thisp = arguments[1];
-        for (var i = 0; i < len; i++) {
-            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
-                return false;
-            }
-        }
-        return true;
-    };
+	        var len = arr.length;
+	        if (typeof fun != "function") {
+	            throw new TypeError();
+	        }
+	        var thisp = arguments[1];
+	        for (var i = 0; i < len; i++) {
+	            if (i in arr && !fun.call(thisp, arr[i], i, arr)) {
+	                return false;
+	            }
+	        }
+	        return true;
+	    };
 	
 	
 	
@@ -321,41 +321,41 @@ Jet().$package(function(J){
 			return Array.prototype.reduce.apply(arguments[0], args);
 		}
 		: function(arr, fun /*, initial*/){
-		var len = arr.length >>> 0;
-		if (typeof fun != "function"){
-			throw new TypeError();
-		}
-		// no value to return if no initial value and an empty array
-		if (len == 0 && arguments.length == 1){
-			throw new TypeError();
-		}
-		var i = 0;
-		if (arguments.length >= 2){
-			var rv = arguments[1];
-		}
-		else{
-			do{
-			    if (i in arr){
-			      rv = arr[i++];
-			      break;
-			    }
+			var len = arr.length >>> 0;
+			if (typeof fun != "function"){
+				throw new TypeError();
+			}
+			// no value to return if no initial value and an empty array
+			if (len == 0 && arguments.length == 1){
+				throw new TypeError();
+			}
+			var i = 0;
+			if (arguments.length >= 2){
+				var rv = arguments[1];
+			}
+			else{
+				do{
+				    if (i in arr){
+				      rv = arr[i++];
+				      break;
+				    }
+				
+				    // if array contains no values, no initial value to return
+				    if (++i >= len){
+				    	throw new TypeError();
+				    }
+				}
+				while (true);
+			}
 			
-			    // if array contains no values, no initial value to return
-			    if (++i >= len){
-			    	throw new TypeError();
-			    }
+			for (; i < len; i++){
+				if (i in arr){
+					rv = fun.call(null, rv, arr[i], i, arr);
+				}
 			}
-			while (true);
-		}
-		
-		for (; i < len; i++){
-			if (i in arr){
-				rv = fun.call(null, rv, arr[i], i, arr);
-			}
-		}
-		
-		return rv;
-	};
+			
+			return rv;
+		};
 	
 	
 	
@@ -378,41 +378,41 @@ Jet().$package(function(J){
 			return Array.prototype.reduceRight.apply(arguments[0], args);
 		}
 		: function(arr, fun /*, initial*/){
-		var len = arr.length >>> 0;
-		if (typeof fun != "function"){
-			throw new TypeError();
-		}
-		// no value to return if no initial value, empty array
-		if (len == 0 && arguments.length == 1){
-			throw new TypeError();
-		}
-		var i = len - 1;
-		if (arguments.length >= 2){
-			var rv = arguments[1];
-		}
-		else{
-			do{
+			var len = arr.length >>> 0;
+			if (typeof fun != "function"){
+				throw new TypeError();
+			}
+			// no value to return if no initial value, empty array
+			if (len == 0 && arguments.length == 1){
+				throw new TypeError();
+			}
+			var i = len - 1;
+			if (arguments.length >= 2){
+				var rv = arguments[1];
+			}
+			else{
+				do{
+					if (i in arr){
+						rv = arr[i--];
+						break;
+					}
+			
+					// if array contains no values, no initial value to return
+					if (--i < 0){
+						throw new TypeError();
+					}
+				}
+				while(true);
+			}
+			
+			for (; i >= 0; i--){
 				if (i in arr){
-					rv = arr[i--];
-					break;
-				}
-		
-				// if array contains no values, no initial value to return
-				if (--i < 0){
-					throw new TypeError();
+					rv = fun.call(null, rv, arr[i], i, arr);
 				}
 			}
-			while(true);
-		}
-		
-		for (; i >= 0; i--){
-			if (i in arr){
-				rv = fun.call(null, rv, arr[i], i, arr);
-			}
-		}
-		
-		return rv;
-	};
+			
+			return rv;
+		};
 
     
     
