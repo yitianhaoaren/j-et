@@ -88,6 +88,12 @@ Jet().$package(function(J){
 	 * @return {String} 返回与数据对象合成后的字符串
 	 * 
 	 * @example
+	 * <script type="text/html" id="user_tmpl">
+	 *   <% for ( var i = 0; i < users.length; i++ ) { %>
+	 *     <li><a href="<%=users[i].url%>"><%=users[i].name%></a></li>
+	 *   <% } %>
+	 * </script>
+	 * 
 	 * Jet().$package(function(J){
 	 * 	// 用 obj 对象的数据合并到字符串模板中
 	 * 	J.template("Hello, {name}!", {
@@ -475,7 +481,7 @@ Jet().$package(function(J){
 	};
 	
 	/**
-	 * 计算字符串的双字节长度
+	 * 计算字符串的字节长度
 	 * 
 	 * @memberOf string
 	 * @return {String} 返回自己长度
