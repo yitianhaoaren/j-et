@@ -1,5 +1,5 @@
 /**
- * [Javascript core part]: JSON 扩展
+ * [Javascript core part]: swfobject 扩展
  */
  
  
