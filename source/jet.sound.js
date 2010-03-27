@@ -10,21 +10,16 @@ var player = {
 };
 Jet().$package(function(J){
 	var $D = J.dom,
-		$E = J.event;
+		$E = J.event,
+		isInit = false;
 
 	J.sound = J.sound || {};
 
-	var node = $D.node("div", {
-		"id":"jetSound",
-		"style":"position:absolute;left:-999px;top:-999px;width:1px;height:1px;overflow:hidden;"
-	});
-	document.body.appendChild(node);
-	J.swfobject.embedSWF("player_mp3.swf", "jetSound", "300", "120", "9.0.0", "expressInstall.swf", {listener:"player",interval:500});
+	
 
 	
 	var getFlashObject = function(){
 		var node = $D.id("jetSound");
-		alert(node);
 		return node;
 	};
 
@@ -33,6 +28,16 @@ Jet().$package(function(J){
 	 * public functions
 	 */
     var play = function(filename){
+    	if(isInit){
+    		
+    	}else{
+    		var node = $D.node("div", {
+				"id":"jetSound",
+				"style":"position:absolute;left:-999px;top:-999px;width:1px;height:1px;overflow:hidden;"
+			});
+			document.body.appendChild(node);
+			J.swfobject.embedSWF("player_mp3.swf", "jetSound", "300", "120", "9.0.0", "expressInstall.swf", {listener:"player",interval:500});
+    	}
 		if(filename){
     		getFlashObject().SetVariable("method:setUrl", filename);
 		}
