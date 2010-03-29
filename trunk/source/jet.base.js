@@ -1086,7 +1086,7 @@ Jet().$package(function(J){
 			// 重载init方法，插入对父类init的调用
 			subClass.prototype.init = function(){
 				// 调用父类的构造函数
-				subClass.superClass.init.apply(this, arguments);
+				// subClass.superClass.init.apply(this, arguments);
 				// 调用此类自身的构造函数
 				option.init.apply(this, arguments);
 			};
@@ -1604,6 +1604,7 @@ Jet().$package(function(J){
 		name,
 		tagName,
 		getText,
+		getAttributeByParent,
 		node,
 		setClass,
 		getClass,
@@ -1769,7 +1770,44 @@ Jet().$package(function(J){
 		} 
 		return text || '';
 	};
-
+	
+	
+	/**
+	 * 从起始元素查找某个属性，直到找到，或者到达顶层元素位置
+	 * Returns the text content of the HTMLElement. 
+	 * 
+	 * @memberOf dom
+	 * @param {HTMLElement} element The html element. 
+	 * @return {String} The text content of the element (includes text of any descending elements).
+	 */
+	getAttributeByParent = function(attribute, startNode,  topNode){
+		var jumpOut = false;
+		var el = startNode;
+		var result;
+		do{
+			result = el.getAttribute(attribute);
+			// 如果本次循环未找到result
+			if(J.isUndefined(result) || J.isNull(result)){
+				// 如果本次循环已经到了监听的dom
+				if(el === topNode){
+					jumpOut = true;
+				}
+				// 如果本次循环还未到监听的dom，则继续向上查找
+				else {
+					el = el.parentNode;
+				}
+			}
+			// 如果找到了result
+			else{
+				jumpOut = true;
+			}
+		}
+		while(!jumpOut);
+		
+		return result;
+	};
+	
+	
 	/** 
 	 * 生成一个 DOM 节点
      * Generates an HTML element, this is not appended to a document
@@ -2485,6 +2523,7 @@ Jet().$package(function(J){
 	$D.name = name;
 	$D.tagName = tagName;
 	$D.getText = getText;
+	$D.getAttributeByParent = getAttributeByParent;
 	$D.node = node;
 	$D.setClass = setClass;
 	$D.getClass = getClass;
