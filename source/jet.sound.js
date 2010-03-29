@@ -2,7 +2,7 @@
  * [Javascript core part]: sound 扩展
  */
  
-var player = {
+Jet.mp3Player = {
 	onInit : function(){
 		//getFlashObject().SetVariable("method:setUrl", "voice_mp3/ch.mp3");
 	}
@@ -36,7 +36,7 @@ Jet().$package(function(J){
 				"style":"position:absolute;left:-999px;top:-999px;width:1px;height:1px;overflow:hidden;"
 			});
 			document.body.appendChild(node);
-			J.swfobject.embedSWF("player_mp3.swf", "jetSound", "300", "120", "9.0.0", "expressInstall.swf", {listener:"player",interval:500});
+			J.swfobject.embedSWF("player_mp3.swf", "jetSound", "0", "0", "9.0.0", "expressInstall.swf", {listener:"Jet.mp3Player"});
     	}
 		if(filename){
     		getFlashObject().SetVariable("method:setUrl", filename);
