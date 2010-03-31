@@ -3389,7 +3389,7 @@ Jet().$package(function(J){
 	 * Jet().$package(function(J){
 	 * 	var d = new Date();
 	 * 	// 以 YYYY-MM-dd hh:mm:ss 格式输出 d 的时间字符串
-	 * 	J.date.format(d, "YYYY-MM-dd hh:mm:ss");
+	 * 	J.date.format(d, "YYYY-MM-DD hh:mm:ss");
 	 * };
 	 * 
 	 */
