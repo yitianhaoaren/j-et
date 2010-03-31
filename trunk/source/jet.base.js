@@ -3210,38 +3210,42 @@ Jet().$package(function(J){
 			length,
 			index,
 			i;
+		if(handler){
+			
 		
-		// 转换成完整的事件描述字符串
-		eventType = "on" + eventType;
+			// 转换成完整的事件描述字符串
+			eventType = "on" + eventType;
+			
+			// 判断对象是否含有$events对象
+			if(!!!targetModel._$events){
+				targetModel._$events={};
+			}
+			
+			// 判断对象的$events对象是否含有eventType描述的事件类型
+			if(!targetModel._$events[eventType]){
+				//若没有则新建
+				targetModel._$events[eventType]=[];
+			}
 		
-		// 判断对象是否含有$events对象
-		if(!!!targetModel._$events){
-			targetModel._$events={};
-		}
+			handlers = targetModel._$events[eventType];
+			length = handlers.length;
+			index = -1;
 		
-		// 判断对象的$events对象是否含有eventType描述的事件类型
-		if(!targetModel._$events[eventType]){
-			//若没有则新建
-			targetModel._$events[eventType]=[];
+			// 通过循环，判断对象的handlers数组是否已经含有要添加的handler
+			for(i=0; i<length; i++){
+				if(handlers[i] === handler){
+					index = i;
+					break;
+				}		
+			}
+			// 如果没有找到，则加入此handler
+			if(index === -1){
+				handlers.push(handler);
+				//alert(handlers[handlers.length-1])
+			}
+		}else{
+			J.out(">>> 添加的观察者方法不存在："+targetModel+eventType+handler);
 		}
-	
-		handlers = targetModel._$events[eventType];
-		length = handlers.length;
-		index = -1;
-	
-		// 通过循环，判断对象的handlers数组是否已经含有要添加的handler
-		for(i=0; i<length; i++){
-			if(handlers[i] === handler){
-				index = i;
-				break;
-			}		
-		}
-		// 如果没有找到，则加入此handler
-		if(index === -1){
-			handlers.push(handler);
-			//alert(handlers[handlers.length-1])
-		}
-	
 	};
 	
 	/**
@@ -3258,17 +3262,15 @@ Jet().$package(function(J){
 	 */
 	notifyObservers = function(targetModel, eventType, argument){
 		var handlers,
-			length,
 			i;
 			
 		eventType = "on" + eventType;
 		
 		if(targetModel._$events && targetModel._$events[eventType]){
 			handlers = targetModel._$events[eventType];
-			length = handlers.length;
-			if(length > 0){
+			if(handlers.length > 0){
 				// 通过循环，执行handlers数组所包含的所有函数function
-				for(i=0; i<length; i++){
+				for(i=0; i<handlers.length; i++){
 					handlers[i].apply(targetModel, [argument]);
 				}
 				return true;
