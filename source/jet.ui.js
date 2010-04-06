@@ -610,6 +610,105 @@ Jet().$package(function(J){
 
 
 
+/**
+ * MaskLayer模块
+ */
+Jet().$package(function(J){
+	var $ = J.dom.id,
+		$D = J.dom,
+		$E = J.event;
+		
+	/**
+	 * MaskLayer 类
+	 * 
+	 * @class
+	 * @name MaskLayer
+	 */
+	J.ui.MaskLayer = new J.Class({
+
+		/**
+		 * 初始化函数
+		 * */
+		init:function(option){
+			var context = this;
+			option.zIndex = !J.isUndefined(option.zIndex) ? option.zIndex : 9000000;
+			option.appendTo = option.appendTo || $D.getDocument();
+			
+			this.container = $D.node("div", {
+				"class" : "maskLayer"
+			});
+			this.container.innerHTML = '\
+					<div class="maskBackground"></div>\
+					<div id="maskLayerBody"></div>\
+				'
+			this.setZIndex(option.zIndex);
+			option.appendTo.appendChild(this.container);
+			
+			
+			var observer = {
+				onMaskLayerClick : function(){
+					$E.notifyObservers(context, "click", context);
+				}
+			};
+			
+			$E.on(this.container, "click", observer.onMaskLayerClick);
+			
+			this.body = $D.id("maskLayerBody");
+		},
+		
+		append : function(el){
+			this.body.appendChild(el);
+		},
+		
+		show : function(){
+			$D.show(this.container);
+			$E.notifyObservers(this, "show");
+			this._isShow = true;
+		},
+		hide : function(){
+			$D.hide(this.container);
+			$E.notifyObservers(this, "hide");
+			this._isShow = false;
+		},
+		isShow : function(){
+			return this._isShow;
+		},
+		toggleShow : function(){
+			if(this.isShow()){
+				this.hide();
+			}else{
+				this.show();
+			}
+		},
+		getZIndex : function(){
+			return this._zIndex;
+		},
+		
+		setZIndex : function(zIndex){
+			$D.setStyle(this.container, "zIndex", zIndex);
+			this._zIndex = zIndex;
+		},
+		
+		setTopZIndex : function(){
+			this.setZIndex(qqweb.layout.getTopZIndex());
+		},
+		fadeIn : function(){
+			this.show();
+		},
+		
+		fadeOut : function(){
+			this.hide();
+		},
+		
+		// 关于
+		about : function(){
+			
+		}
+	});
+
+});
+
+
 
 
 

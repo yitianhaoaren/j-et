@@ -3372,7 +3372,7 @@ Jet().$package(function(J){
 	 * dom 名字空间
 	 * 
 	 * @namespace
-	 * @name dom
+	 * @name date
 	 * @type Object
 	 */
 	J.date = J.date || {};
