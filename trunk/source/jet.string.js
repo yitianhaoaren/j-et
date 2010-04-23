@@ -59,7 +59,12 @@ Jet().$package(function(J){
 		stripScripts,
 		substitute,
 		replaceAll,
-		byteLength;
+		
+		byteLength,
+		cutRight,
+		
+		isNumber,
+		isEmail;
 		
 	
 	/**
@@ -491,8 +496,26 @@ Jet().$package(function(J){
 		return string.length+(u ? u.length : 0);
 	};
 	
+	cutRight = function(string, n){
+		return string.substring(0, (string.length - n));
+	};
 	
-	
+	isNumber = function(string){
+		if (string.search(/^\d+$/) !== -1){
+			return true;
+		}
+		else{
+		   	return false;
+		}
+	};
+	isEmail = function(emailStr){
+		if (emailStr.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) !== -1){
+			return true;
+		}
+		else{
+		   	return false;
+		}
+	};
 	
     
 		
@@ -523,7 +546,13 @@ Jet().$package(function(J){
 	$S.stripScripts = stripScripts;
 	$S.substitute = substitute;
 	$S.replaceAll = replaceAll;
+	
 	$S.byteLength = byteLength;
+	$S.cutRight = cutRight;
+	
+	
+	$S.isNumber = isNumber;
+	$S.isEmail = isEmail;
 	
 
 
