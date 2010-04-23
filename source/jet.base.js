@@ -3265,15 +3265,19 @@ Jet().$package(function(J){
 			i;
 			
 		eventType = "on" + eventType;
-		
+		var flag = true;
 		if(targetModel._$events && targetModel._$events[eventType]){
 			handlers = targetModel._$events[eventType];
 			if(handlers.length > 0){
 				// 通过循环，执行handlers数组所包含的所有函数function
 				for(i=0; i<handlers.length; i++){
-					handlers[i].apply(targetModel, [argument]);
+					if(handlers[i].apply(targetModel, [argument])){
+						
+					}else{
+						flag = false;
+					}
 				}
-				return true;
+				return flag;
 			}
 		}else{
 			// throw new Error("还没有定义 [" + targetModel + "] 对象的: " + eventType + " 事件！");

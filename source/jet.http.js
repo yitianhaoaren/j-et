@@ -228,6 +228,8 @@ Jet().$package(function(J){
 			isTimeout = false,
 			isComplete = false,
 			options = options || {},
+			isDefer = options.isDefer || false,
+			options = options || {},
 			query = options.query || null,
 			arguments = options.arguments || null,
 			
@@ -291,21 +293,25 @@ Jet().$package(function(J){
 	     * @return {HTMLElement} the generated node
 	     * @private
 	     */
-	    scriptNode = function(uri, win, charset) {
+	    scriptNode = function(uri, win, charset, isDefer) {
 	        var c = charset || "utf-8";
-	        return $D.node("script", {
+	        var node = $D.node("script", {
 		                "id":		"jet_load_" + id,
-		                "defer":	"defer",
 		                "type":		"text/javascript",
 		                "charset":	c,
 		                "src":		uri
 		            }, win);
+		    if(isDefer){
+		    	node.setAttribute("defer", "defer");
+		    }
+		    
+	        return node;
 	    };
 	    
         
 	    
 	    if(type === "script"){
-            node = options.node || scriptNode(uri, win, charset);
+            node = options.node || scriptNode(uri, win, charset, isDefer);
         }else if(type === "css"){
             node = options.node || linkNode(uri, win, charset);
         }
@@ -329,7 +335,7 @@ Jet().$package(function(J){
                     	onSuccess(o);
                     	onComplete(o);
                     	if(type === "script"){
-	                		purge(id);
+	                		//purge(id);
 	                	}
                     }
                 }
@@ -403,8 +409,9 @@ Jet().$package(function(J){
                 }
             };
         }
+        
+        
         if(options.node){
-        	
         	if(type === "script"){
 	            node.src = uri;
 	        }else if(type === "css"){
