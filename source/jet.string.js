@@ -62,7 +62,7 @@ Jet().$package(function(J){
 		
 		byteLength,
 		cutRight,
-		
+		cutByBytes,
 		isNumber,
 		isEmail;
 		
@@ -492,14 +492,19 @@ Jet().$package(function(J){
 	 * @return {String} 返回自己长度
 	 */
 	byteLength = function(string){
-		var u = string.match(/[^\x00-\xff]/g);
-		return string.length+(u ? u.length : 0);
+		return string.replace(/[^\x00-\xff]/g,"aa").length;
 	};
 	
 	cutRight = function(string, n){
 		return string.substring(0, (string.length - n));
 	};
-	
+	cutByBytes = function(string,n) {
+		var s= string;
+		while(byteLength(s)>n) {
+			s= cutRight(s,1);
+		}
+		return s;
+	}
 	isNumber = function(string){
 		if (string.search(/^\d+$/) !== -1){
 			return true;
@@ -550,11 +555,10 @@ Jet().$package(function(J){
 	$S.byteLength = byteLength;
 	$S.cutRight = cutRight;
 	
-	
 	$S.isNumber = isNumber;
 	$S.isEmail = isEmail;
 	
-
+	$S.cutByBytes= cutByBytes;
 
 
 });
