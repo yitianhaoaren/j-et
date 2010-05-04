@@ -3277,12 +3277,13 @@ Jet().$package(function(J){
 						flag = false;
 					}
 				}
-				return flag;
+				//return flag;
 			}
 		}else{
 			// throw new Error("还没有定义 [" + targetModel + "] 对象的: " + eventType + " 事件！");
-			return false;
+			//return false;
 		}
+		return flag;
 	};
 	
 	

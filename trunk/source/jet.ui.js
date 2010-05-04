@@ -109,7 +109,8 @@ Jet().$package(function(J){
 				if(J.browser.ie){
 					$E.off(document.body, "selectstart", ieSelectFix);
 				}
-				$E.notifyObservers(context, "finish", {x:context._oldX, y:context._oldY});
+				J.out("end")
+				$E.notifyObservers(context, "end", {x:context._oldX, y:context._oldY});
 			};
 			
 			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
@@ -172,6 +173,7 @@ Jet().$package(function(J){
 			this.size = option.size || 5;
 			this.minWidth = option.minWidth || 0;
 			this.minHeight = option.minHeight || 0;
+			this._dragProxy = option.dragProxy;
 
 			this._left = this.getLeft();
 			this._top = this.getTop();
@@ -190,7 +192,15 @@ Jet().$package(function(J){
 				lt:"cursor:nw-resize; z-index:2; left:-5px; top:-5px; width:5px; height:5px;",
 				lb:"cursor:sw-resize; z-index:2; left:-5px; bottom:-5px; width:5px; height:5px;"
 			};
-
+			
+			this._onMousedown = function(){
+				$E.notifyObservers(context, "mousedown", {width:context._width, height:context._height});
+			};
+			this._onDragEnd = function(){
+				J.out("this._width： "+context._width);
+				$E.notifyObservers(context, "end", {width:context.getWidth(), height:context.getHeight()});
+			};
+			
 			for(var p in handleNames){
 				var tempEl = $D.node("div", {
 					"id": "window_" + this.id + "_resize_" + handleNames[p]
@@ -198,9 +208,17 @@ Jet().$package(function(J){
 
 				this.apperceiveEl.appendChild(tempEl);
 				$D.setCssText(tempEl, "position:absolute; overflow:hidden; background:url("+J.path+"assets/images/transparent.gif);" + styles[p]);
+				if(this._dragProxy){
+					$E.on(tempEl, "mousedown", this._onMousedown);
+				}else{
+					
+				}
+				
 				this["_dragController_" + handleNames[p]] = new J.ui.Drag(tempEl, false);
 
 			}
+			
+			
 
 			// 左侧
 			this._onDragLeftStart = function(xy){
@@ -311,29 +329,37 @@ Jet().$package(function(J){
 
 			$E.addObserver(this["_dragController_" + handleNames.t], "start", this._onDragTopStart);
 			$E.addObserver(this["_dragController_" + handleNames.t], "move", this._onDragTop);
+			$E.addObserver(this["_dragController_" + handleNames.t], "end", this._onDragEnd);
 
 			$E.addObserver(this["_dragController_" + handleNames.r], "start", this._onDragRightStart);
 			$E.addObserver(this["_dragController_" + handleNames.r], "move", this._onDragRight);
+			$E.addObserver(this["_dragController_" + handleNames.r], "end", this._onDragEnd);
 			
 			$E.addObserver(this["_dragController_" + handleNames.b], "start", this._onDragBottomStart);
 			$E.addObserver(this["_dragController_" + handleNames.b], "move", this._onDragBottom);
+			$E.addObserver(this["_dragController_" + handleNames.b], "end", this._onDragEnd);
 			
 			$E.addObserver(this["_dragController_" + handleNames.l], "start", this._onDragLeftStart);
 			$E.addObserver(this["_dragController_" + handleNames.l], "move", this._onDragLeft);
+			$E.addObserver(this["_dragController_" + handleNames.l], "end", this._onDragEnd);
 			
 			
 			
 			$E.addObserver(this["_dragController_" + handleNames.rb], "start", this._onDragRightBottomStart);
 			$E.addObserver(this["_dragController_" + handleNames.rb], "move", this._onDragRightBottom);
+			$E.addObserver(this["_dragController_" + handleNames.rb], "end", this._onDragEnd);
 			
 			$E.addObserver(this["_dragController_" + handleNames.rt], "start", this._onDragRightTopStart);
 			$E.addObserver(this["_dragController_" + handleNames.rt], "move", this._onDragRightTop);
+			$E.addObserver(this["_dragController_" + handleNames.rt], "end", this._onDragEnd);
 			
 			$E.addObserver(this["_dragController_" + handleNames.lt], "start", this._onDragLeftTopStart);
 			$E.addObserver(this["_dragController_" + handleNames.lt], "move", this._onDragLeftTop);
+			$E.addObserver(this["_dragController_" + handleNames.lt], "end", this._onDragEnd);
 			
 			$E.addObserver(this["_dragController_" + handleNames.lb], "start", this._onDragLeftBottomStart);
 			$E.addObserver(this["_dragController_" + handleNames.lb], "move", this._onDragLeftBottom);
+			$E.addObserver(this["_dragController_" + handleNames.lb], "end", this._onDragEnd);
 		},
 		
 		setWidth : function(w){
