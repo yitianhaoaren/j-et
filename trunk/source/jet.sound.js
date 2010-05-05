@@ -17,11 +17,8 @@ Jet().$package(function(J){
 
 	
 
+	var playerNode;
 	
-	var getFlashObject = function(){
-		var node = $D.id("jetSound");
-		return node;
-	};
 
 	
 	/**
@@ -30,7 +27,8 @@ Jet().$package(function(J){
     var play = function(filename){
     	if(isInit){
     		
-    	}else{
+    	}
+    	else{
     		var node = $D.node("div", {
 				"id":"jetSound",
 				"style":"position:absolute;left:-999px;top:-999px;width:1px;height:1px;overflow:hidden;"
@@ -38,17 +36,21 @@ Jet().$package(function(J){
 			document.body.appendChild(node);
 			J.swfobject.embedSWF("player_mp3.swf", "jetSound", "0", "0", "9.0.0", "expressInstall.swf", {listener:"Jet.mp3Player"});
     	}
+    	
+    	playerNode = $D.id("jetSound");
+    	//alert(playerNode)
+		
 		if(filename){
-    		getFlashObject().SetVariable("method:setUrl", filename);
+    		playerNode.SetVariable("method:setUrl", filename);
 		}
-        getFlashObject().SetVariable("method:play", "");
+		playerNode.SetVariable("method:play", "");
 		
     };
     var pause = function(){
-		getFlashObject().SetVariable("method:pause", "");
+		playerNode.SetVariable("method:pause", "");
     };
     var stop = function(){
-        getFlashObject().SetVariable("method:stop", "");
+        playerNode.SetVariable("method:stop", "");
     };
 	
 
