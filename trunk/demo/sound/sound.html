@@ -15,7 +15,12 @@
 	<script type="text/javascript" src="../../source/jet.sound.js"></script>
 	<script type="text/javascript">
 		Jet().$package(function(J){
-			setTimeout(function(){J.sound.play("kalimba.mp3")},0);
+			swfsound.onload = function(){
+				// alert("Callback: SWFSound Flash successfully loaded ...");
+				id_sound1 = swfsound.loadSound( './kalimba.mp3', streamAndAutoPlay = false );
+
+			}
+			J.sound.startSound(id_sound1);
 		});
 	</script>
 </body>
