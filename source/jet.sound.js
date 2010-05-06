@@ -263,7 +263,7 @@ Jet().$package(function(J){
 	
 	}();
 	
-	swfsound.embedSWF( './swfsound.swf' );
+	//swfsound.embedSWF( './swfsound.swf' );
 	J.sound = swfsound;
 
 });
