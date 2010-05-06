@@ -44,10 +44,20 @@ Jet().$package(function(J){
 		$E = J.event;
 
 	J.ui.Drag = new J.Class({
-		init:function(apperceiveEl, effectEl){
+		init:function(apperceiveEl, effectEl, option){
 			var context = this;
 			var curDragElementX, curDragElementY, dragStartX, dragStartY;
 			this.apperceiveEl = apperceiveEl;
+			option = option || {};
+			this.isLimited = option.isLimited || false;
+			if(this.isLimited){
+				this._leftMargin = option.leftMargin || 0;
+				this._topMargin = option.topMargin || 0;
+				this._rightMargin = option.rightMargin || 0;
+				this._bottomMargin = option.bottomMargin || 0;
+			}
+			
+
 			if(effectEl === false){
 				this.effectEl = false;
 			}else{
@@ -81,8 +91,25 @@ Jet().$package(function(J){
 
 				var x = curDragElementX+(e.pageX-dragStartX);
 				var y = curDragElementY+(e.pageY-dragStartY);
+				var clientWidth = $D.getClientWidth();
+				var clientHeight = $D.getClientHeight();
+				var width = parseInt($D.getStyle(effectEl,"width"));
+				var height = parseInt($D.getStyle(effectEl,"height"));
+				
 				var isMoved = false;
 				
+				
+				if(context.isLimited){
+					var tempX = clientWidth-width-context._rightMargin;
+					if(x>tempX){
+						x = tempX;
+					} 
+					tempX = context._leftMargin;
+					if(x<tempX){
+						x = tempX;
+					}
+					
+				}
 				if(context._oldX !== x){
 					context._oldX = x;
 					if(context.effectEl){
@@ -90,6 +117,20 @@ Jet().$package(function(J){
 					}
 					isMoved = true;
 				}
+				
+				J.out("context._topMargin: "+context._topMargin);
+				if(context.isLimited){
+					var tempY = clientHeight-height-context._bottomMargin;
+					if(y>tempY){
+						y = tempY;
+					} 
+					tempY = context._topMargin;
+					if(y<tempY){
+						y = tempY;
+					}
+					
+				}
+				
 				if(context._oldY !== y){
 					context._oldY = y;
 					if(context.effectEl){
@@ -97,6 +138,8 @@ Jet().$package(function(J){
 					}
 					isMoved = true;
 				}
+				
+				
 				if(isMoved){
 					$E.notifyObservers(context, "move", {x:x, y:y});
 				}
@@ -198,7 +241,12 @@ Jet().$package(function(J){
 			};
 			this._onDragEnd = function(){
 				J.out("this._width： "+context._width);
-				$E.notifyObservers(context, "end", {width:context.getWidth(), height:context.getHeight()});
+				$E.notifyObservers(context, "end", {
+					x:context.getLeft(),
+					y:context.getTop(),
+					width:context.getWidth(),
+					height:context.getHeight()
+				});
 			};
 			
 			for(var p in handleNames){
