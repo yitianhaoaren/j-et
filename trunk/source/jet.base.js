@@ -245,8 +245,11 @@
 										returnValue: returnValue
 									};
 								}
+								ns.packageName = name;
+							}else if(typeof name === "object"){
+								ns = name;
 							}
-							ns.packageName = name;
+							
 							returnValue = func.call(ns, this);
 						}else{
 							throw new Error("Function required");

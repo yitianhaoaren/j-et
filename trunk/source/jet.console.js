@@ -479,8 +479,15 @@ Jet().$package(function(J){
 				J.console.show();
 			});
 		}
+	}else{
+		J.console={
+			'log':J.emptyFunc,
+			'info':J.emptyFunc,
+			'warn':J.emptyFunc,
+			'dir':J.emptyFunc,
+			'out':J.emptyFunc
+		};
 	}
-	
 	
 	
 	

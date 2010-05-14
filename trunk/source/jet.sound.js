@@ -36,7 +36,7 @@ Jet().$package(function(J){
 	
 			embedSWF: function( path ){
 				if ( path == undefined ) {
-					path = "./swfsound.swf";
+					path = "./swf/swfsound.swf";
 				}
 				
 				var flashvars = false;
@@ -107,7 +107,8 @@ Jet().$package(function(J){
 					if ( onLoadCallbackFunctionName == undefined ) onLoadCallbackFunctionName = null;
 					if ( onID3CallbackFunctionName == undefined ) onID3CallbackFunctionName = null;
 	
-					var obj = document.getElementById( 'swfSound_Flash' );				
+					var obj = document.getElementById( 'swfSound_Flash' );	
+				
 					return obj.loadSound( mp3URL, streamingMode, onLoadCallbackFunctionName, onID3CallbackFunctionName );
 			},
 	
@@ -127,6 +128,7 @@ Jet().$package(function(J){
 					if ( loopCount == undefined ) loopCount = 1;
 	
 					var obj = document.getElementById( 'swfSound_Flash' );
+					
 					obj.startSound( id_sound, offsetSecondsFloat, loopCount, onSoundCompleteCallbackFunctionName );
 	
 					return true;
