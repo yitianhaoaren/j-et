@@ -43,6 +43,11 @@ Jet().$package(function(J){
 	var $D = J.dom,
 		$E = J.event;
 
+	var ieSelectFix = function(e) {
+		e.preventDefault();
+        //return false;
+    };
+    
 	J.ui.Drag = new J.Class({
 		init:function(apperceiveEl, effectEl, option){
 			var context = this;
@@ -65,10 +70,7 @@ Jet().$package(function(J){
 			}
 			
 			
-			var ieSelectFix = function(e) {
-				e.preventDefault();
-	            //return false;
-	        };
+			
 	        
 			this.dragStart = function(e){
 				e.preventDefault();
@@ -118,7 +120,7 @@ Jet().$package(function(J){
 					isMoved = true;
 				}
 				
-				J.out("context._topMargin: "+context._topMargin);
+				//J.out("context._topMargin: "+context._topMargin);
 				if(context.isLimited){
 					var tempY = clientHeight-height-context._bottomMargin;
 					if(y>tempY){
@@ -535,6 +537,7 @@ Jet().$package(function(J){
 				tab.trigger.style.display = 'block';
 			}
 		},
+		
 		/**
 		 * 增加tab数组
 		 * @param {array} triggers HTMLElement数组
@@ -548,6 +551,7 @@ Jet().$package(function(J){
 				}
 			}
 		},
+		
 		/**
 		 * 设置tab为当前tab并显示
 		 * @param {object} tab  tab对象 {trigger:HTMLElement,sheet:HTMLElement}
