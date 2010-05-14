@@ -30,6 +30,8 @@
     |- jet.mini.js         (JET的mini选择器包)
     |- jet.sizzle.js       (JET的sizzle模块包)
     |- jet.ui.js           (JET的ui模块包)
+    |- jet.swfobject.js    (嵌入flash的工具包)
+    |- jet.sound.js        (播放声音的模块包)
     |- jet.xpath.js        (JET的xpath模块包)
 
     |- jet-common.js       (JET 常用包集合文件)
