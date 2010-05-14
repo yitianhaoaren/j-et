@@ -9,9 +9,12 @@
 ./sdk/       [开发工具箱]
     +- [jre6]             [java虚拟机目录]
     +- [jsdoc-toolkit]    [jsdoc文档生成工具]
-    |- compress-with-yuicompressor.bat        (JET的源代码压缩脚本)
-    |- generate-doc-with-jsdos-toolkit.bat    (JET文档生成脚本)
-    |- yuicompressor-2.4.2.jar                (yuicompressor主程序)
+    |- compress-with-compiler.bat                   (JET的源代码压缩脚本-google compiler)
+    |- compress-with-yuicompressor.bat              (JET的源代码压缩脚本 - yui compressor)
+    |- generate-multi-doc-with-jsdos-toolkit.bat    (JET API文档生成脚本)
+    |- multi-doc-config.conf                        (文档生成配置文件)
+    |- compiler.jar                                 (google compiler主程序)
+    |- yuicompressor-2.4.2.jar                      (yuicompressor主程序)
 ./source/    [JET源代码]
     +- [assets]       [css等相关文件]
     +- [firebug]      [firebug控制台相关文件]
