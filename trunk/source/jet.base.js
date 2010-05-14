@@ -1232,16 +1232,55 @@ Jet().$package(function(J){
 		},
 		
 		/**
+		 * 操作系统的名称
+		 * 
     	 * @property name
 		 * @lends platform
 		 */
 		name: (window.orientation != undefined) ? 'ipod' : (pf.match(/mac|win|linux/i) || ['unknown'])[0],
 		
 		version: 0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * 
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
 		ipod: 0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * 
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
 		win: 0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * 
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
 		linux: 0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * 
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
 		mac: 0,
+		
 		/**
 		 * 设置浏览器类型和版本
 		 * 
@@ -1341,8 +1380,11 @@ Jet().$package(function(J){
 		},
 		
 		/**
-    	 * @property name
-		 * @lends browser
+		 * 用户使用的浏览器的名称，如：chrome
+		 * 
+		 * 
+		 * @description {String} 用户使用的浏览器的名称，如：chrome
+		 * @type Number
 		 */
 		name: "unknown",
 		
@@ -1353,43 +1395,48 @@ Jet().$package(function(J){
 		version: 0,
 		
 		/**
-		 * IE 浏览器
+		 * 用户使用的浏览器的版本号，如果是0表示不是此浏览器
 		 * 
-		 * @property ie
-		 * @lends browser
+		 * 
+		 * @description {Number} 用户使用的浏览器的版本号，如果是0表示不是此浏览器
+		 * @type Number
 		 */
 		ie: 0,
 		
 		/**
-		 * Firefox 浏览器
+		 * 用户使用的浏览器的版本号，如果是0表示不是此浏览器
 		 * 
-		 * @property firefox
-		 * @lends browser
+		 * 
+		 * @description {Number} 用户使用的浏览器的版本号，如果是0表示不是此浏览器
+		 * @type Number
 		 */
 		firefox: 0,
 		
 		/**
-		 * Chrome 浏览器
+		 * 用户使用的浏览器的版本号，如果是0表示不是此浏览器
 		 * 
-		 * @property chrome
-		 * @lends browser
+		 * 
+		 * @description {Number} 用户使用的浏览器的版本号，如果是0表示不是此浏览器
+		 * @type Number
 		 */
 		chrome: 0,
 		
 		
 		/**
-		 * Opera浏览器
+		 * 用户使用的浏览器的版本号，如果是0表示不是此浏览器
 		 * 
-		 * @property opera
-		 * @lends browser
+		 * 
+		 * @description {Number} 用户使用的浏览器的版本号，如果是0表示不是此浏览器
+		 * @type Number
 		 */
 		opera: 0,
 		
 		/**
-		 * Safari 浏览器
+		 * 用户使用的浏览器的版本号，如果是0表示不是此浏览器
 		 * 
-		 * @property safari
-		 * @lends browser
+		 * 
+		 * @description {Number} 用户使用的浏览器的版本号，如果是0表示不是此浏览器
+		 * @type Number
 		 */
 		safari: 0,
 		

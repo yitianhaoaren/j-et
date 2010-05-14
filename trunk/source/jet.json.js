@@ -203,9 +203,11 @@ if (!this.JSON) {
         // Format integers to have at least two digits.
         return n < 10 ? '0' + n : n;
     }
-
-    if (typeof Date.prototype.toJSON !== 'function') {
-
+	// if (typeof Date.prototype.toJSON !== 'function') {
+    if (typeof Date.prototype.toJSON !== 'function' && false) {
+		/** 
+		 * @igone
+		 */
         Date.prototype.toJSON = function (key) {
 
             return isFinite(this.valueOf()) ?
@@ -216,7 +218,9 @@ if (!this.JSON) {
                  f(this.getUTCMinutes())   + ':' +
                  f(this.getUTCSeconds())   + 'Z' : null;
         };
-
+		/** 
+		 * @igone
+		 */
         String.prototype.toJSON =
         Number.prototype.toJSON =
         Boolean.prototype.toJSON = function (key) {
