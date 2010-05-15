@@ -39,143 +39,157 @@ Jet().$package(function(J){
 /**
  * 拖拽模块
  */
-Jet().$package(function(J){
-	var $D = J.dom,
+Jet().$package(function (J) {
+    var $D = J.dom,
 		$E = J.event;
 
-	var ieSelectFix = function(e) {
-		e.preventDefault();
+    var ieSelectFix = function (e) {
+        e.preventDefault();
         //return false;
     };
-    
-	J.ui.Drag = new J.Class({
-		init:function(apperceiveEl, effectEl, option){
-			var context = this;
-			var curDragElementX, curDragElementY, dragStartX, dragStartY;
-			this.apperceiveEl = apperceiveEl;
-			option = option || {};
-			this.isLimited = option.isLimited || false;
-			if(this.isLimited){
-				this._leftMargin = option.leftMargin || 0;
-				this._topMargin = option.topMargin || 0;
-				this._rightMargin = option.rightMargin || 0;
-				this._bottomMargin = option.bottomMargin || 0;
-			}
-			
+	
+    /**
+	 * 拖拽类
+	 * 
+	 * @memberOf ui
+	 * @Class
+	 * 
+	 * @param {Element} apperceiveEl 监听拖拽动作的元素
+	 * @param {Element} effectEl 展现拖拽结果的元素
+	 * @param {Object} option 其他选项，如:isLimited,leftMargin...
+	 * @returns
+	 * 
+	 * 
+	 */
+    J.ui.Drag = new J.Class({
+        init: function (apperceiveEl, effectEl, option) {
+            var context = this;
+            var curDragElementX, curDragElementY, dragStartX, dragStartY;
+            this.apperceiveEl = apperceiveEl;
+            option = option || {};
+            this.isLimited = option.isLimited || false;
+            if (this.isLimited) {
+                this._leftMargin = option.leftMargin || 0;
+                this._topMargin = option.topMargin || 0;
+                this._rightMargin = option.rightMargin || 0;
+                this._bottomMargin = option.bottomMargin || 0;
+                J.out("leftMargin:"+this._leftMargin);
+            }
 
-			if(effectEl === false){
-				this.effectEl = false;
-			}else{
-				this.effectEl = effectEl || apperceiveEl;
-			}
-			
-			
-			
-	        
-			this.dragStart = function(e){
-				e.preventDefault();
-				e.stopPropagation();
-				curDragElementX = parseInt($D.getStyle(context.effectEl,"left")) || 0;
-				curDragElementY = parseInt($D.getStyle(context.effectEl,"top")) || 0;
-				dragStartX = e.pageX;
-				dragStartY = e.pageY;
-				$E.on(document, "mousemove", context.dragMove);
-				$E.on(document, "mouseup", context.dragStop);
-				if(J.browser.ie){
-					$E.on(document.body, "selectstart", ieSelectFix);
-				}
-				
-				
-				$E.notifyObservers(context, "start", {x:curDragElementX, y:curDragElementY});
-			};
-	
-			this.dragMove = function(e){
 
-				var x = curDragElementX+(e.pageX-dragStartX);
-				var y = curDragElementY+(e.pageY-dragStartY);
-				var clientWidth = $D.getClientWidth();
-				var clientHeight = $D.getClientHeight();
-				var width = parseInt($D.getStyle(effectEl,"width"));
-				var height = parseInt($D.getStyle(effectEl,"height"));
-				
-				var isMoved = false;
-				
-				
-				if(context.isLimited){
-					var tempX = clientWidth-width-context._rightMargin;
-					if(x>tempX){
-						x = tempX;
-					} 
-					tempX = context._leftMargin;
-					if(x<tempX){
-						x = tempX;
-					}
-					
-				}
-				if(context._oldX !== x){
-					context._oldX = x;
-					if(context.effectEl){
-						context.effectEl.style.left = x+"px";
-					}
-					isMoved = true;
-				}
-				
-				//J.out("context._topMargin: "+context._topMargin);
-				if(context.isLimited){
-					var tempY = clientHeight-height-context._bottomMargin;
-					if(y>tempY){
-						y = tempY;
-					} 
-					tempY = context._topMargin;
-					if(y<tempY){
-						y = tempY;
-					}
-					
-				}
-				
-				if(context._oldY !== y){
-					context._oldY = y;
-					if(context.effectEl){
-						context.effectEl.style.top = y+"px";
-					}
-					isMoved = true;
-				}
-				
-				
-				if(isMoved){
-					$E.notifyObservers(context, "move", {x:x, y:y});
-				}
-				
-			};
-	
-			this.dragStop = function(e){
-				$E.off(document, "mousemove", context.dragMove);
-				$E.off(document, "mouseup", context.dragStop);
-				if(J.browser.ie){
-					$E.off(document.body, "selectstart", ieSelectFix);
-				}
-				J.out("end")
-				$E.notifyObservers(context, "end", {x:context._oldX, y:context._oldY});
-			};
-			
-			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
-		},
-		lock : function() {
-			$E.off(this.apperceiveEl, "mousedown", this.dragStart);
-		},
-		unlock : function(){
-			$E.on(this.apperceiveEl, "mousedown", this.dragStart);
-		},
-		show : function(){
-			$D.show(this.apperceiveEl);
-		},
-		hide : function(){
-			$D.hide(this.apperceiveEl);
-		}
-	});
-	
-	
-	
+            if (effectEl === false) {
+                this.effectEl = false;
+            } else {
+                this.effectEl = effectEl || apperceiveEl;
+            }
+
+
+
+
+            this.dragStart = function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                curDragElementX = parseInt($D.getStyle(context.apperceiveEl, "left")+10) || 0;
+                curDragElementY = parseInt($D.getStyle(context.apperceiveEl, "top")+10) || 0;
+                dragStartX = e.pageX;
+                dragStartY = e.pageY;
+                $E.on(document, "mousemove", context.dragMove);
+                $E.on(document, "mouseup", context.dragStop);
+                if (J.browser.ie) {
+                    $E.on(document.body, "selectstart", ieSelectFix);
+                }
+
+
+                $E.notifyObservers(context, "start", { x: curDragElementX, y: curDragElementY });
+            };
+
+            this.dragMove = function (e) {
+
+                var x = curDragElementX + (e.pageX - dragStartX);
+                var y = curDragElementY + (e.pageY - dragStartY);
+                var clientWidth = $D.getClientWidth();
+                var clientHeight = $D.getClientHeight();
+                var width = parseInt($D.getStyle(effectEl, "width"));
+                var height = parseInt($D.getStyle(effectEl, "height"));
+
+                var isMoved = false;
+
+
+                if (context.isLimited) {
+                    var tempX = clientWidth - width - context._rightMargin;
+                    if (x > tempX) {
+                        x = tempX;
+                    }
+                    tempX = context._leftMargin;
+                    if (x < tempX) {
+                        x = tempX;
+                    }
+
+                }
+                if (context._oldX !== x) {
+                    context._oldX = x;
+                    if (context.effectEl) {
+                        context.effectEl.style.left = x + "px";
+                    }
+                    isMoved = true;
+                }
+
+                //J.out("context._topMargin: "+context._topMargin);
+                if (context.isLimited) {
+                    var tempY = clientHeight - height - context._bottomMargin;
+                    if (y > tempY) {
+                        y = tempY;
+                    }
+                    tempY = context._topMargin;
+                    if (y < tempY) {
+                        y = tempY;
+                    }
+
+                }
+
+                if (context._oldY !== y) {
+                    context._oldY = y;
+                    if (context.effectEl) {
+                        context.effectEl.style.top = y + "px";
+                    }
+                    isMoved = true;
+                }
+
+
+                if (isMoved) {
+                    $E.notifyObservers(context, "move", { x: x, y: y });
+                }
+
+            };
+
+            this.dragStop = function (e) {
+                $E.off(document, "mousemove", context.dragMove);
+                $E.off(document, "mouseup", context.dragStop);
+                if (J.browser.ie) {
+                    $E.off(document.body, "selectstart", ieSelectFix);
+                }
+                J.out("end")
+                $E.notifyObservers(context, "end", { x: context._oldX, y: context._oldY });
+            };
+
+            $E.on(this.apperceiveEl, "mousedown", this.dragStart);
+        },
+        lock: function () {
+            $E.off(this.apperceiveEl, "mousedown", this.dragStart);
+        },
+        unlock: function () {
+            $E.on(this.apperceiveEl, "mousedown", this.dragStart);
+        },
+        show: function () {
+            $D.show(this.apperceiveEl);
+        },
+        hide: function () {
+            $D.hide(this.apperceiveEl);
+        }
+    });
+
+
+
 });
 
 
@@ -202,7 +216,21 @@ Jet().$package(function(J){
 			lb:"lb",
 			lt:"lt"
 		};
+	
 		
+	/**
+	 * resize类
+	 * 
+	 * @memberOf ui
+	 * @Class
+	 * 
+	 * @param {Element} apperceiveEl 监听resize动作的元素
+	 * @param {Element} effectEl 展现resize结果的元素
+	 * @param {Object} option 其他选项，如:dragProxy,size,minWidth...
+	 * @returns 
+	 * 
+	 * 
+	 */
 	J.ui.Resize = new J.Class({
 		init: function(apperceiveEl, effectEl, option){
 			var context = this;
@@ -483,11 +511,18 @@ Jet().$package(function(J){
 		$D = J.dom,
 		$E = J.event;
 		
+		
 	/**
-	 * Tab 类
+	 * Tab类
 	 * 
-	 * @class
-	 * @name Tab
+	 * @memberOf ui
+	 * 
+	 * @param {Element} triggers tab head元素
+	 * @param {Element} sheets tab body元素
+	 * @param {Object} config 其他选项，如:isLimited,leftMargin...
+	 * @returns
+	 * 
+	 * 
 	 */
 	J.ui.Tab = function(triggers,sheets,config){
 		this.tabs = [];             //tab的集合
@@ -697,10 +732,15 @@ Jet().$package(function(J){
 		$E = J.event;
 		
 	/**
-	 * MaskLayer 类
+	 * MaskLayer 遮罩层类
 	 * 
-	 * @class
-	 * @name MaskLayer
+	 * @memberOf ui
+	 * @Class
+	 * 
+	 * @param {Object} option 其他选项，如:zIndex,appendTo...
+	 * @returns
+	 * 
+	 * 
 	 */
 	J.ui.MaskLayer = new J.Class({
 

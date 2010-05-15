@@ -206,7 +206,7 @@ if (!this.JSON) {
 	// if (typeof Date.prototype.toJSON !== 'function') {
     if (typeof Date.prototype.toJSON !== 'function' && false) {
 		/** 
-		 * @igone
+		 * @ignore
 		 */
         Date.prototype.toJSON = function (key) {
 
@@ -219,10 +219,16 @@ if (!this.JSON) {
                  f(this.getUTCSeconds())   + 'Z' : null;
         };
 		/** 
-		 * @igone
+		 * @ignore
 		 */
         String.prototype.toJSON =
+        /** 
+		 * @ignore
+		 */
         Number.prototype.toJSON =
+        /** 
+		 * @ignore
+		 */
         Boolean.prototype.toJSON = function (key) {
             return this.valueOf();
         };

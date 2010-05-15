@@ -478,6 +478,13 @@ Jet().$package(function(J){
 				J.console._init();
 				J.console.show();
 			});
+			
+			J.console=J.extend(J.console,{
+				'log':J.emptyFunc,
+				'info':J.emptyFunc,
+				'warn':J.emptyFunc,
+				'dir':J.emptyFunc
+			});
 		}
 	}else{
 		J.console={

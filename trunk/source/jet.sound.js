@@ -26,7 +26,10 @@ Jet().$package(function(J){
 		07.06.2009	- v1.3 - Removed Array keyword, changed visibility to top left pixel corner 
 												 (both reported by pellicierraphael@neuf.fr)
 	*/
-	
+	/**
+	 * @namespace sound 名字空间
+	 * @name sound
+	 */
 	swfsound = function()
 	{
 		// Public API
@@ -101,6 +104,16 @@ Jet().$package(function(J){
 	
 					return value: id of loaded sound
 			*/
+			/**
+			 * 加载声音文件的方法
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {String} mp3URL sound文件的路径，目前支持mp3
+			 * @param {Bool} streamingMode 是否采用流模式
+			 * @returns 
+			 * 
+			 */
 			loadSound: function( mp3URL, streamingMode, onLoadCallbackFunctionName, onID3CallbackFunctionName )
 			{
 					if ( streamingMode == undefined ) streamingMode = false;
@@ -121,6 +134,15 @@ Jet().$package(function(J){
 					loopCount ... number of loops the sound should be played
 					onSoundCompleteCallbackFunctionName ... the name of the function (as String!) that should be called when the sound playback has been completed 
 			*/
+			/**
+			 * 开始播放的声音的方法
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {Object} id_sound 要播放声音的对象
+			 * @returns
+			 * 
+			 */
 			startSound: function( id_sound, offsetSecondsFloat, loopCount, onSoundCompleteCallbackFunctionName )
 			{
 					if ( offsetSecondsFloat == undefined ) offsetSecondsFloat = 0.0;
@@ -134,7 +156,15 @@ Jet().$package(function(J){
 					return true;
 			},
 	
-	
+			/**
+			 * 停止播放的声音的方法
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {Object} id_sound 声音对象
+			 * @returns
+			 * 
+			 */
 			stopSound: function( id_sound )
 			{
 					var obj = document.getElementById( 'swfSound_Flash' );
@@ -149,6 +179,15 @@ Jet().$package(function(J){
 					==================================				
 					Added in v1.1 - pause/play toggle feature
 			*/
+			/**
+			 * 暂停播放的声音的方法
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {Object} id_sound 声音对象
+			 * @returns
+			 * 
+			 */
 			pauseSound: function( id_sound )
 			{
 					var obj = document.getElementById( 'swfSound_Flash' );
@@ -173,6 +212,16 @@ Jet().$package(function(J){
 					==================================				
 					valid values: 0 (= silent) ... 100 (= maximum volume)
 			*/
+			/**
+			 * 设置音量
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {Object} id_sound 声音对象
+			 * @param {Number} newVolume 声音大小
+			 * @returns
+			 * 
+			 */
 			setVolume: function( id_sound, newVolume )
 			{
 					var obj = document.getElementById( 'swfSound_Flash' );
@@ -181,7 +230,15 @@ Jet().$package(function(J){
 					return true;
 			},
 			
-			
+			/**
+			 * 获取音量
+			 * 
+			 * @memberOf sound
+			 * 
+			 * @param {Object} id_sound 声音对象
+			 * @returns
+			 * 
+			 */
 			getVolume: function( id_sound )
 			{
 					var obj = document.getElementById( 'swfSound_Flash' );
@@ -266,6 +323,7 @@ Jet().$package(function(J){
 	}();
 	
 	//swfsound.embedSWF( './swfsound.swf' );
+	
 	J.sound = swfsound;
 
 });
