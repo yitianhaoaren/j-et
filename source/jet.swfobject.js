@@ -11,7 +11,10 @@ Jet().$package(function(J){
 /*!	SWFObject v2.2 <http://code.google.com/p/swfobject/> 
 	is released under the MIT License <http://www.opensource.org/licenses/mit-license.php> 
 */
-
+/**
+ * @namespace swfobject 名字空间
+ * @name swfobject
+ */
 var swfobject = function() {
 	
 	var UNDEF = "undefined",
@@ -654,6 +657,20 @@ var swfobject = function() {
 			}
 		},
 		
+		/**
+		 * swfobject 嵌入flash的方法
+		 * 
+		 * @memberOf swfobject
+		 * 
+		 * @param {String} path swf文件的路径
+		 * @returns 
+		 * 
+		 * @example
+		 * Jet().$package(function(J){
+		 * 	J.swfobject.embedSWF( path, 'swfSound_Flash_div', '1', '1', '8.0.0', './expressInstall.swf', flashvars, params, attributes);
+		 * };
+		 * 
+		 */
 		embedSWF: function(swfUrlStr, replaceElemIdStr, widthStr, heightStr, swfVersionStr, xiSwfUrlStr, flashvarsObj, parObj, attObj, callbackFn) {
 			var callbackObj = {success:false, id:replaceElemIdStr};
 			if (ua.w3 && !(ua.wk && ua.wk < 312) && swfUrlStr && replaceElemIdStr && widthStr && heightStr && swfVersionStr) {
@@ -787,7 +804,7 @@ var swfobject = function() {
 }();
 
 
-
+	
 	J.swfobject = swfobject;
 
 

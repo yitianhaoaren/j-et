@@ -1338,6 +1338,10 @@ Jet().$package(function(J){
 			query: !!(document.querySelector)
 		},
 		
+		/**
+		 * 获取浏览器的插件信息
+		 * 
+		 */
 		getPlugins: function(){
 			return plug;
 		},
@@ -1373,6 +1377,8 @@ Jet().$package(function(J){
 		
 		
 		/**
+		 * 获取浏览器的userAgent信息
+		 * 
 		 * @memberOf browser
 		 */
 		getUserAgent: function(){
@@ -1476,44 +1482,43 @@ Jet().$package(function(J){
 	 */
 	engine = {
 		/**
-    	 * @property name
-		 * @lends browser.engine
+		 * 浏览器的引擎名字
+		 * 
+		 * @memberOf browser.engine
 		 */
 		name: 'unknown',
 		
 		/**
-    	 * @property version
-		 * @lends browser.engine
+		 * 浏览器的引擎版本
+		 * 
+		 * @memberOf browser.engine
 		 */
 		version: 0,
 		
 		/**
-		 * trident 引擎的浏览器
+		 * trident 引擎的版本，0表示非此引擎
 		 * 
 		 * @lends browser.engine
-		 * @property trident
 		 */
 		trident: 0,
 		
 		/**
-		 * gecko 引擎的浏览器
+		 * gecko 引擎的版本，0表示非此引擎
 		 * 
 		 * @lends browser.engine
-		 * @property gecko
 		 * 
 		 */
 		gecko: 0,
 		
 		/**
-		 * webkit 引擎的浏览器
+		 * webkit 引擎的版本，0表示非此引擎
 		 * 
 		 * @lends browser.engine
-		 * @property webkit
 		 */
 		webkit: 0,
 		
 		/**
-		 * presto 引擎的浏览器
+		 * presto 引擎的版本，0表示非此引擎
 		 * 
 		 * @lends browser.engine
 		 * @property presto
@@ -3433,10 +3438,10 @@ Jet().$package(function(J){
 	J.date = J.date || {};
 	
 	
-		/**
+	/**
 	 * 让日期和时间按照指定的格式显示的方法
 	 * 
-	 * @memberOf Jet.prototype
+	 * @memberOf date
 	 * @param {String} format 格式字符串
 	 * @return {String} 返回生成的日期时间字符串
 	 * 

@@ -54,8 +54,9 @@ Jet().$package(function(J){
 	 * @memberOf http
 	 * @method	ajax
 	 * 
-	 * @param {Object} options 一个配置对象
-	 * @return {Object} ajax 返回一个ajax对象
+	 * @param {String} uri 要加载的数据的uri
+	 * @param {Object} options 配置对象，如：isAsync,data,arguments,onSuccess,onError,onComplete,onTimeout,timeout,contentType,type
+	 * @return {Object} ajax 返回一个ajax对象，可以abort掉
 	 */
 	ajax = function(uri, options){
 		var httpRequest,
@@ -229,7 +230,6 @@ Jet().$package(function(J){
 			isComplete = false,
 			options = options || {},
 			isDefer = options.isDefer || false,
-			options = options || {},
 			query = options.query || null,
 			arguments = options.arguments || null,
 			
@@ -459,8 +459,8 @@ Jet().$package(function(J){
 	 * @memberOf http
 	 * @method loadCss
 	 * 
-	 * @param {String} uri 一个uri
-	 * @param {Object} options 一个配置对象
+	 * @param {String} uri 要加载的css的uri
+	 * @param {Object} options 配置对象，如：isDefer,query,arguments,onSuccess,onError,onComplete,onTimeout,timeout,charset
 	 * @return {Object} ajax 返回一个ajax对象
 	 */
 	loadCss = function(uri, options){
@@ -473,9 +473,9 @@ Jet().$package(function(J){
 	 * @memberOf http
 	 * @method loadScript
 	 * 
-	 * @param {String} uri 一个uri
-	 * @param {Object} options 一个配置对象
-	 * @return {Object} ajax 返回一个ajax对象
+	 * @param {String} uri 要加载的js脚本的uri
+	 * @param {Object} options 配置对象，如：isDefer,query,arguments,onSuccess,onError,onComplete,onTimeout,timeout,charset
+	 * @return {Element} 返回控制对象，可以abort掉
 	 */
 	loadScript = function(uri, options){
 		return load("script", uri, options);
