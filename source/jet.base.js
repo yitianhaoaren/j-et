@@ -1237,19 +1237,53 @@ Jet().$package(function(J){
     	 * @property name
 		 * @lends platform
 		 */
-		name: (window.orientation != undefined) ? 'ipod' : (pf.match(/mac|win|linux/i) || ['unknown'])[0],
+		name: (window.orientation != undefined) ? 'iPod' : (pf.match(/mac|win|linux/i) || ['unknown'])[0],
 		
 		version: 0,
 		
 		/**
 		 * 操作系统的版本号，如果是0表示不是此操作系统
-		 * 
+		 * iPod touch
+		 * Mozilla/5.0 (iPod; U; CPU iPhone OS 3_0 like Mac OS X; zh-cn) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16
 		 * 
 		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
 		 * @constant
 		 * @type Number
 		 */
-		ipod: 0,
+		iPod: 0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) version/4.0.4 Mobile/7B367 Safari/531.21.10
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
+		iPad:0,
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0_1 like Mac OS X; zh-cn) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A400 Safari/528.16
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
+		iPhone:0,
+		
+		
+		/**
+		 * 操作系统的版本号，如果是0表示不是此操作系统
+		 * Mozilla/5.0 (Linux; U; Android 2.0; en-us; Droid Build/ESD20) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17
+		 * 
+		 * @description {Num} 操作系统的版本号，如果是0表示不是此操作系统
+		 * @constant
+		 * @type Number
+		 */
+		android:0,
+		
+		
 		
 		/**
 		 * 操作系统的版本号，如果是0表示不是此操作系统
@@ -1301,9 +1335,12 @@ Jet().$package(function(J){
 	// 探测操作系统版本
     (s = ua.match(/windows ([\d.]+)/)) ? platform.set("win",toFixedVersion(s[1])):
     (s = ua.match(/windows nt ([\d.]+)/)) ? platform.set("win",toFixedVersion(s[1])):
+    (s = ua.match(/linux ([\d.]+)/)) ? platform.set("linux",toFixedVersion(s[1])) :
     (s = ua.match(/mac ([\d.]+)/)) ? platform.set("mac",toFixedVersion(s[1])):
-    (s = ua.match(/ipod ([\d.]+)/)) ? platform.set("ipod",toFixedVersion(s[1])):
-    (s = ua.match(/linux ([\d.]+)/)) ? platform.set("linux",toFixedVersion(s[1])) : 0;
+    (s = ua.match(/ipod ([\d.]+)/)) ? platform.set("iPod",toFixedVersion(s[1])):
+    (s = ua.match(/ipad ([\d.]+)/)) ? platform.set("iPad",toFixedVersion(s[1])):
+    (s = ua.match(/iphone ([\d.]+)/)) ? platform.set("iPhone",toFixedVersion(s[1])):
+    (s = ua.match(/android ([\d.]+)/)) ? platform.set("android",toFixedVersion(s[1])) : 0;
 	
 	/**
 	 * browser 名字空间
@@ -1943,7 +1980,7 @@ Jet().$package(function(J){
      * 获取当前视窗的高度
      * Returns the current height of the viewport.
      * 
-     * @method getViewportHeight
+     * @method getClientHeight
      * @memberOf dom
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
@@ -1956,7 +1993,7 @@ Jet().$package(function(J){
     /**
      * 获取元素的client宽度
      * Returns the current width of the viewport.
-     * @method getViewportWidth
+     * @method getClientWidth
      * @memberOf dom
      * @param {Element} el 要获取client宽度的元素
      * @return {Number} 宽度值.
@@ -1969,11 +2006,11 @@ Jet().$package(function(J){
     };
     
     
-        /**
+    /**
      * 获取当前视窗的高度
      * Returns the current height of the viewport.
      * 
-     * @method getViewportHeight
+     * @method getOffsetHeight
      * @memberOf dom
      * @return {Int} The height of the viewable area of the page (excludes scrollbars).
      */
@@ -1986,7 +2023,7 @@ Jet().$package(function(J){
     /**
      * 获取元素的client宽度
      * Returns the current width of the viewport.
-     * @method getViewportWidth
+     * @method getOffsetWidth
      * @memberOf dom
      * @param {Element} el 要获取client宽度的元素
      * @return {Number} 宽度值.
@@ -2687,6 +2724,9 @@ Jet().$package(function(J){
 		addEventListener = function(element, eventType, handler) {
 			//var id = $E._uid( );  // Generate a unique property name
 			var isExist = false;
+			if(!element){
+				J.out('targetModel undefined:'+eventType+handler);
+			}
 			if(!element._eventTypes){
 				element._eventTypes = {};
 			}
@@ -2726,7 +2766,9 @@ Jet().$package(function(J){
 						var handlers = element._eventTypes[eventType];
 						for(var i=0; i<handlers.length; i++){
 							if(handlers[i] === handler){
+								handlers[i]=null;
 								handlers.splice(i, 1);
+								break;
 							}
 						}
 					}
@@ -2754,7 +2796,6 @@ Jet().$package(function(J){
 					eventTypes = {};
 				}
 			}
-	        
 			
 		};
 	}
@@ -2996,9 +3037,13 @@ Jet().$package(function(J){
 		        // Using that info, we can detach the handler from the element.
 		        element.detachEvent("on" + h.eventType, h.wrappedEvent);
 		        // Remove one element from the element._handlers array.
+				element._handlers[i]=null;
 		        element._handlers.splice(i, 1);
 		        // And delete the handler info from the per-window _allHandlers object.
 		        delete w._allHandlers[handlerId];
+			}
+			if(element._handlers && element._handlers.length==0){
+				element._handlers=null;
 			}
 	    };
 	
@@ -3079,6 +3124,7 @@ Jet().$package(function(J){
 	            var h = w._allHandlers[id];
 	            // Use the info to detach the handler
 	            h.element.detachEvent("on" + h.eventType, h.wrappedEvent);
+				h.element._handlers=null;
 	            // Delete the handler info from the window
 	            delete w._allHandlers[id];
 	        }
@@ -3302,7 +3348,25 @@ Jet().$package(function(J){
 			J.out(">>> 添加的观察者方法不存在："+targetModel+eventType+handler);
 		}
 	};
+	/**
+	 * 
+	 * 批量为自定义Model添加事件监听器
+	 * 
+	 * @method addObservers
+	 * @memberOf event
+	 * 
+	 * @param obj 目标 model，即被观察的目标
+	 *     obj = { targetModel : {eventType:handler,eventType2:handler2...} , targetModel2: {eventType:handler,eventType2:handler2...}  }
+	 */
+	addObservers = function(obj){
+		//TODO 这里的代码是直接复制addObserver的（为避免太多函数调用耗费栈）
+		var t=obj['targetModel'];
+		var m=obj['eventMapping'];
+		for(var i in m){
+			addObserver(t,i,m[i]);
+		}
 	
+	};
 	/**
 	 * 
 	 * 触发自定义Model事件的监听器
@@ -3315,7 +3379,7 @@ Jet().$package(function(J){
 	 * @param options 触发的参数对象
 	 * @return {Boolean} 是否出发到至少一个的观察者
 	 */
-	notifyObservers = function(targetModel, eventType, argument){
+	notifyObservers = function(targetModel, eventType, argument){addInvokeTime(eventType);
 		var handlers,
 			i;
 			
@@ -3360,7 +3424,6 @@ Jet().$package(function(J){
 			handlers,
 			length,
 			events = targetModel._$events;
-		
 		if(handler){
 			
 			if(events){
@@ -3402,7 +3465,6 @@ Jet().$package(function(J){
 				delete targetModel._$events;
 			}
 		}
-
 	};
 	
 	$E.addEventListener = addEventListener;
@@ -3417,6 +3479,7 @@ Jet().$package(function(J){
 	
 	// Model 事件方法
 	$E.addObserver = addObserver;
+	$E.addObservers = addObservers;
 	$E.notifyObservers = notifyObservers;
 	$E.removeObserver = removeObserver;
 });
@@ -3484,4 +3547,78 @@ Jet().$package(function(J){
 });
 
 
+var elementHandlerMapping={};
 
+/**
+计算调用平均时间
+	增加计算机量 pushToTotal(field,d)
+	显示平均量	 getAverage(field);
+	清除数据 	 clearTotal(field)  // field为空时清除所有统计
+	
+
+**/
+function insertAt(array,index,obj){
+	array.splice(index,0,obj);
+} 
+var eventInvokes={};
+function addInvokeTime(t){
+	eventInvokes[t] = eventInvokes[t]?eventInvokes[t]+1:1;
+}
+
+var totals={};
+function pushToTotal(field,d){
+	if(!totals[field]){
+		totals[field]=[0,0];
+	}
+	totals[field][0]+=1;
+	totals[field][1]+=d;
+}
+function clearTotal(field){
+	if(!field){
+		totals={};
+	}else{
+		totals[field]=[0,0];
+	}
+}
+function getAverage(field){
+	if(!field){
+		//TODO
+	}else{
+		var t=totals[field];
+		var total = t[1];
+		var time = t[0];
+		var average = total/time;
+		Jet().out(average+" "+total+"/"+time);
+	}
+}
+function reportIt(){
+	for(var i in eventInvokes){
+		if(!isNaN(eventInvokes[i])){
+			Jet().out(i+":"+eventInvokes[i]);
+		}
+	}
+}
+function ip_s(n){
+	n=n?n:0;
+	var sorted=[];
+	for(var i in eventInvokes){
+		if(!isNaN(eventInvokes[i])){
+			var j=0;
+			for(;j<sorted.length;++j){
+				if(sorted[j].total<=eventInvokes[i]){
+					break;
+				}
+			}
+			insertAt(sorted,j,{'t':i,'total':eventInvokes[i]});
+		}
+	}
+	
+	for(var i=0;i<sorted.length;++i){
+		if(sorted[i]['total']<n)continue;
+		Jet().out(sorted[i]['t']+" : "+sorted[i]['total']);
+	}
+	sorted=null;
+}
+function ip_c(){
+	eventInvokes={};
+}

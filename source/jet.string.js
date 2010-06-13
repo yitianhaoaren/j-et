@@ -123,7 +123,7 @@ Jet().$package(function(J){
 		// load the template - and be sure to cache the result.
 		var fn = !/\W/.test(str) ?
 		  cache[str] = cache[str] ||
-			tmpl(document.getElementById(str).innerHTML) :
+			template(document.getElementById(str).innerHTML) :
 		  
 		  // Generate a reusable function that will serve as a template
 		  // generator (and which will be cached).
@@ -603,6 +603,7 @@ Jet().$package(function(J){
 	
 	//用做过滤直接放到HTML里js中的
 	var encodeScript = function(sStr) {
+		sStr+="";//确保为String
 		return sStr.replace(/[\\"']/g, function(r){ 
 			return "\\"+r; 
 		}).replace(/%/g, "\\x25").replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\x01/g, "\\x01");
