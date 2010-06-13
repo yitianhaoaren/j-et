@@ -174,7 +174,8 @@ Jet().$package(function(J){
 		//日志记录对象
 		_log_record: [],
 		
-		
+		_cmd_history:[],
+		_cmd_last_index:0,
 	
 		/**
 		 * 信息类型常量，一共五种类型<br/> <br/> DEBUG : 0 <br/> ERROR : 1 <br/> WARNING : 2
@@ -278,7 +279,8 @@ Jet().$package(function(J){
 			
 	
 			// 绑定方法
-			$E.on(this._inputEl, "keypress", this._execScript);
+			$E.on(this._inputEl, "keyup", J.bind(this._execScript,this));
+			//$E.on(this._inputEl, "keypress", J.bind(this._execScript,this));
 			$E.on(this._closeButtonEl, "click", this.hide);
 			// 输入焦点过来
 			// $E.on(this._main, "dblclick", this.focusCommandLine.bind(this));
@@ -400,10 +402,36 @@ Jet().$package(function(J){
 		 * 执行脚本
 		 */
 		_execScript : function(e) {
-			if (e.keyCode !== 13) {
-				return;
+			switch(e.keyCode){
+				case 13:
+					this._cmd_history.push(J.console._inputEl.value);
+					this._cmd_last_index=this._cmd_history.length;
+					break;
+				case 38://上一命令
+					if(this._cmd_history.length==0)return;
+					var s="";
+					if(this._cmd_last_index>0){
+						this._cmd_last_index--;
+						s=this._cmd_history[this._cmd_last_index];
+					}else{
+						this._cmd_last_index=-1;
+					}
+					J.console._inputEl.value=s;
+					return;
+				case 40://下一命令
+					if(this._cmd_history.length==0)return;
+					var s="";
+					if(this._cmd_last_index<this._cmd_history.length-1){
+						this._cmd_last_index++;
+						s=this._cmd_history[this._cmd_last_index];
+					}else{
+						this._cmd_last_index=this._cmd_history.length;
+					}
+					J.console._inputEl.value=s;
+					return;
+				default:
+					return;
 			}
-	
 			// 控制台命令
 			switch (J.console._inputEl.value) {
 				case "help" :
