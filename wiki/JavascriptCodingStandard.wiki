@@ -1,5 +1,4 @@
 #summary Javascript 代码规范
-#labels Featured
 
 = 规范理念 =
 
