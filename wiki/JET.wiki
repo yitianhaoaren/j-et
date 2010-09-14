@@ -1,5 +1,5 @@
 #summary JET 简介
-#labels Featured,JET
+#labels JET
 
 
 == 命名含义 ==
