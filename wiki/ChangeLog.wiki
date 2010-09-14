@@ -1,5 +1,4 @@
 #summary JET 更新日志
-#labels Featured
 
 
 === 2010.04.06 JET 1.1.1 ===
