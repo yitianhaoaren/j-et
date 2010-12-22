@@ -62,7 +62,10 @@ smusher imgs/*.* –service PunyPng
 
  * Mac下安装：
 第一次安装smusher失败，缺东西需要先装xcode(OS安装盘2上有)，再装行了。
-另注意punypng区分大小写 smusher macosxlogo.png –service PunyPng
+另注意punypng区分大小写
+{{{
+smusher macosxlogo.png –service PunyPng
+}}}
 
 ==dataURI：==
 
