@@ -1,6 +1,8 @@
 #summary 国内Javascript框架列表
 #labels JavascriptLibList
 
+更新：请访问我们的最新地址：http://www.alloyteam.com/?p=1009
+
 = 国内Javascript框架列表 =
 (字母顺序)
 
